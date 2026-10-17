@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>삼단논법 게시판</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.9/vis-network.min.css">
+
+<style>
+  :root{
+    --bg:#12181a;
+    --panel:#1b2325;
+    --panel-2:#212b2d;
+    --chalk:#f3f1e7;
+    --chalk-dim:#a9b6b4;
+    --accent:#e8c468;
+    --accent-dim:#b98f3a;
+    --blue:#7fb3d5;
+    --pink:#e2a6c5;
+    --danger:#e08585;
+    --danger-dim:#a94d4d;
+    --ok:#8fcb9b;
+    --line: rgba(243,241,231,0.16);
+    --radius: 10px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top left, rgba(232,196,104,0.05), transparent 45%),
+      radial-gradient(ellipse at bottom right, rgba(127,179,213,0.06), transparent 45%),
+      var(--bg);
+    color:var(--chalk);
+    font-family:'IBM Plex Sans KR', -apple-system, sans-serif;
+    min-height:100vh;
+    padding:28px 12px 64px;
+  }
+
+  .board{ max-width:820px; margin:0 auto; }
+
+  header{ margin-bottom:24px; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; letter-spacing:0.14em; font-size:12px; color:var(--accent); margin:0 0 10px; text-transform:uppercase; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(24px,5.5vw,34px); margin:0 0 8px; letter-spacing:-0.01em; }
+  .sub{ color:var(--chalk-dim); font-size:13.5px; margin:0; line-height:1.6; }
+  .hidden{ display:none !important; }
+  .off{ display:none !important; }
+
+  /* ---------- guide ---------- */
+  .guide{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:10px 14px; margin-bottom:14px; font-size:12.5px; color:var(--chalk-dim); line-height:1.65; }
+  .guide summary{ cursor:pointer; color:var(--chalk); font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.04em; }
+  .guide table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; }
+  .guide th, .guide td{ text-align:left; padding:6px 6px; border-bottom:1px dashed var(--line); vertical-align:top; }
+  .guide th{ color:var(--accent); font-weight:500; white-space:nowrap; }
+  .guide p{ margin:8px 0 2px; }
+
+  /* ---------- input groups ---------- */
+  .group{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:14px 10px 6px; margin-bottom:14px; position:relative; }
+  .group-label{ font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.08em; color:var(--chalk-dim); text-transform:uppercase; margin-bottom:6px; padding:0 4px; display:flex; align-items:center; justify-content:space-between; }
+  .group-remove{ background:none; border:none; color:var(--danger); font-family:'IBM Plex Mono', monospace; font-size:11px; cursor:pointer; opacity:0.7; letter-spacing:0.05em; }
+  .group-remove:hover{ opacity:1; text-decoration:underline; }
+
+  .row{ padding:9px 2px 10px; border-bottom:1px dashed var(--line); }
+  .row:last-child{ border-bottom:none; }
+  .row-top{ display:flex; align-items:center; gap:7px; margin-bottom:6px; min-width:0; }
+  .role-tag{ flex:0 0 auto; font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--accent); border:1px solid var(--accent-dim); border-radius:4px; padding:1px 6px; }
+  .row[data-role="결론"] .role-tag{ background:var(--accent); color:#1b1503; border-color:var(--accent); }
+  .preview{ flex:1 1 auto; min-width:0; font-size:11.5px; color:var(--chalk-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .row-main{ display:flex; flex-wrap:wrap; align-items:center; gap:5px 5px; }
+
+  select, input[type="text"], input[type="number"]{ background:transparent; border:none; color:var(--chalk); font-family:'IBM Plex Sans KR', sans-serif; outline:none; border-radius:0; appearance:none; -webkit-appearance:none; -moz-appearance:textfield; min-width:0; }
+  input[type="text"], input[type="number"]{ border-bottom:1px dashed var(--line); padding:5px 2px; font-size:13px; }
+  .row-main input[type="text"]{ flex:1 1 72px; min-width:60px; width:72px; }
+  .row-main input[type="number"]{ flex:0 0 52px; width:52px; }
+  input::placeholder{ color:rgba(169,182,180,0.45); }
+  input:focus, select:focus{ border-bottom-color:var(--accent); }
+  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+
+  select{
+    border-bottom:1px solid var(--line);
+    background-image: linear-gradient(45deg, transparent 50%, var(--chalk-dim) 50%), linear-gradient(135deg, var(--chalk-dim) 50%, transparent 50%);
+    background-position: calc(100% - 8px) 55%, calc(100% - 4px) 55%;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat:no-repeat;
+    padding:5px 15px 5px 3px;
+    font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    cursor:pointer; color:var(--chalk-dim);
+  }
+  .row-main select{ flex:0 0 auto; max-width:160px; }
+  select.kind{ flex:0 0 auto; max-width:52%; color:var(--pink); font-size:11.5px; }
+  select.quant{ color:var(--blue); font-weight:500; }
+  select.polarity{ color:var(--accent); font-weight:500; }
+  select.relSel{ color:var(--pink); }
+  option, optgroup{ background:var(--panel-2); color:var(--chalk); }
+
+  /* which fields each statement kind shows */
+  .row[data-kind="exist"] .f-q, .row[data-kind="exist"] .f-right{ display:none; }
+  .row:not([data-kind="rel"]) .f-rel{ display:none; }
+
+  /* ---------- buttons ---------- */
+  .actions{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+  .btn{ font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.03em; padding:12px 18px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--chalk); cursor:pointer; transition: border-color .15s ease, background .15s ease, color .15s ease; flex:1 1 auto; text-align:center; }
+  .btn:hover{ border-color:var(--chalk-dim); }
+  .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .btn-primary{ background:var(--accent); color:#1b1503; border-color:var(--accent); font-weight:600; flex:2 1 auto; }
+  .btn-primary:hover{ background:#f0cf7c; }
+  .btn-ghost{ color:var(--chalk-dim); }
+  .btn-secondary{ border-color:var(--blue); color:var(--blue); }
+  .btn-secondary:hover{ background:rgba(127,179,213,0.08); }
+  .btn.small{ padding:8px 12px; font-size:11.5px; flex:0 0 auto; }
+
+  /* ---------- result view ---------- */
+  .result-card, .eval-card, .stats-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px 12px; margin-bottom:14px; }
+  .result-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px; flex-wrap:wrap; }
+  .result-head h2, .eval-card h3, .stats-card h3{ font-family:'Space Grotesk', sans-serif; font-size:16px; margin:0 0 12px; font-weight:700; }
+  #network{
+    height:440px; width:100%;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/28px 28px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/28px 28px,
+      var(--panel-2);
+    border-radius:8px; border:1px solid var(--line);
+    overflow:hidden;
+    position:relative;
+  }
+  #network.diagram-mode{ cursor:grab; touch-action:none; }
+  #network.diagram-mode:active{ cursor:grabbing; }
+  #network svg{ display:block; width:100%; height:100%; }
+  .diagram-shape{ cursor:grab; }
+  .diagram-shape:active{ cursor:grabbing; }
+  .hint{ font-size:11.5px; color:var(--chalk-dim); margin:9px 2px 0; line-height:1.6; }
+
+  .legend{ display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:var(--chalk-dim); margin-top:11px; font-family:'IBM Plex Mono', monospace; align-items:center; }
+  .legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .legend i{ width:15px; height:0; display:inline-block; }
+  .legend i.ls-solid{ border-top:2px solid var(--chalk-dim); }
+  .legend i.ls-dashed{ border-top:2px dashed var(--chalk-dim); }
+  .legend i.ls-premise{ border-top:3px solid #7fb3d5; }
+  .legend i.ls-conclusion{ border-top:3px solid #e8c468; }
+  .legend i.ls-exception{ border-top:3px solid #ffffff; }
+  .legend i.ls-contradiction{ border-top:3px solid #111111; }
+  .legend em.dot{ width:11px; height:11px; border-radius:3px; display:inline-block; }
+  .legend b{ color:var(--danger); font-style:normal; }
+  .legend svg{ display:block; }
+
+  .eval-card ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .eval-card li{ font-size:13px; line-height:1.55; padding:10px 11px; border-radius:6px; border-left:3px solid var(--danger); background:rgba(224,133,133,0.08); color:var(--chalk); }
+  .eval-card li.ok{ border-left-color:var(--ok); background:rgba(143,203,155,0.08); }
+  .eval-card li.info{ border-left-color:var(--blue); background:rgba(127,179,213,0.08); }
+
+  .stats-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+  .stat-chip{
+    flex:1 1 140px; min-width:140px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    padding:12px 12px 10px;
+  }
+  .stat-chip .stat-value{ font-family:'Space Grotesk', sans-serif; font-size:22px; font-weight:700; color:var(--chalk); line-height:1.1; }
+  .stat-chip .stat-value b{ font-size:13px; font-weight:500; color:var(--chalk-dim); margin-left:2px; }
+  .stat-chip .stat-label{ font-size:11.5px; color:var(--chalk-dim); margin-top:5px; line-height:1.4; }
+  .stat-chip.warn .stat-value{ color:var(--danger); }
+  .stat-chip.ok .stat-value{ color:var(--ok); }
+  .stat-chip .stat-sub{ font-size:10.5px; color:var(--chalk-dim); margin-top:3px; font-family:'IBM Plex Mono', monospace; }
+
+  .zoom-controls{ position:absolute; right:8px; bottom:8px; display:flex; flex-direction:column; gap:4px; z-index:5; }
+  .zoom-controls button{ width:28px; height:28px; border-radius:6px; border:1px solid var(--line); background:rgba(27,35,37,0.85); color:var(--chalk); font-family:'IBM Plex Mono',monospace; font-size:15px; cursor:pointer; line-height:1; }
+  .zoom-controls button:hover{ border-color:var(--chalk-dim); }
+
+  @media (max-width:520px){ #network{ height:380px; } }
+
+  /* ---------- ad bar (Coupang Partners) ---------- */
+  #ad-bar{
+      flex:0 0 auto;
+      display:flex; flex-direction:column; align-items:center;
+      gap:4px;
+      padding:2px 0 10px 0;
+      position:relative; z-index:5;
+  }
+  .ad-disclosure{
+      font-size:10px; color:var(--chalk-dim); letter-spacing:0.01em; text-align:center;
+      padding:0 14px;
+  }
+  #ad-bar .ad-slot{
+      min-height:50px; min-width:240px;
+      display:flex; align-items:center; justify-content:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+
+  <header>
+    <p class="eyebrow">Syllogism Board · 三段論法</p>
+    <h1>삼단논법 게시판</h1>
+    <p class="sub">분류·성질·관계·존재 명제를 입력하면 그래프와 원·부채꼴 다이어그램으로 그려주고, 정언삼단논법 9형식과 관계 추론 규칙(이행·동일자 대체)에 맞는지 판정합니다.</p>
+  </header>
+
+  <!-- ============ INPUT VIEW ============ -->
+  <main id="inputView">
+    <details class="guide">
+      <summary>서술 유형 안내</summary>
+      <table>
+        <tr><th>분류</th><td>A가 B라는 부류에 속함 (아리스토텔레스의 '실체' 범주) — 사람은 동물이다</td></tr>
+        <tr><th>성질·상태·행위</th><td>A의 성질·상태 또는 대상 없는 행위 (질·자세·능동) — 칼은 위험하다, 새는 날다. 그래프에서는 '~한 것'이라는 부류(초록 노드)로 다룹니다.</td></tr>
+        <tr><th>관계</th><td>두 대상 사이의 관계 — 비교(태양은 지구보다 크다) · 공간(서울은 대한민국 안에 있다) · 부분·전체(맨틀은 지구의 일부이다) · 시간(공룡은 인류보다 먼저이다) · 소유·수량(개미는 다리를 6개 가진다) · 인과 · 동일·차이 · 행위 직접 입력(지구는 태양을 돈다)</td></tr>
+        <tr><th>존재</th><td>A가 있는지 없는지 — 유니콘은 존재하지 않는다</td></tr>
+      </table>
+      <p>양화사: <b>모든</b>(전칭) · <b>어떤</b>(특칭) · <b>개체</b>(소크라테스, 지구처럼 하나뿐인 대상 — 논리상 전칭처럼 다룹니다)</p>
+      <p>조사(은/는, 이/가, 을/를, 와/과)는 단어의 받침에 맞춰 자동으로 붙습니다. 비교·공간·시간 관계는 반대말을 같은 관계로 인식합니다(“B는 A보다 작다” = “A는 B보다 크다”).</p>
+    </details>
+    <div id="groups"></div>
+    <div class="actions">
+      <button id="addBtn" class="btn btn-ghost">+ 추가</button>
+      <button id="doneBtn" class="btn btn-primary">완료</button>
+    </div>
+    <div class="actions">
+      <button id="saveFileBtn" class="btn btn-ghost small">파일로 저장</button>
+      <button id="loadFileBtn" class="btn btn-ghost small">파일 불러오기</button>
+      <input type="file" id="loadFileInput" accept="application/json,.json" style="display:none;">
+    </div>
+  </main>
+
+  <!-- ============ RESULT VIEW ============ -->
+  <main id="resultView" class="hidden">
+
+    <div class="result-card">
+      <div class="result-head">
+        <h2 id="viewTitle">논리 그래프</h2>
+        <button id="saveImgBtn" class="btn btn-ghost small">이미지로 저장</button>
+      </div>
+      <div id="network"></div>
+      <p class="hint" id="dragHint"></p>
+      <div class="legend" id="legendBox"></div>
+    </div>
+
+    <div class="stats-card" id="statsCard">
+      <h3>그래프 통계</h3>
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+
+    <div class="eval-card">
+      <h3>논리성 평가</h3>
+      <ul id="evalList"></ul>
+    </div>
+
+    <div class="actions">
+      <button id="toggleBtn" class="btn btn-secondary">다이어그램으로 보기</button>
+      <button id="backBtn" class="btn btn-ghost">다시 입력하기</button>
+    </div>
+  </main>
+
+</div>
+
+<div class="ad-disclosure" style="margin-top:2px;">이 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+<div id="ad-bar">
+  <div class="ad-slot">
+    <script src="https://ads-partners.coupang.com/g.js"></script>
+    <script>
+        new PartnersCoupang.G({"id":1000572,"trackingCode":"AF0795367","subId":null,"template":"carousel","width":"280","height":"50"});
+    </script>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.9/standalone/umd/vis-network.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  // ===============================================================
+  // Korean particle (josa) helpers — pick 은/는, 이/가, 을/를, 와/과
+  // from whether the last syllable has a final consonant (받침).
+  // ===============================================================
+  function hasBatchim(w){
+    w = String(w || '').trim();
+    if(!w) return false;
+    var ch = w.charCodeAt(w.length - 1);
+    if(ch >= 0xAC00 && ch <= 0xD7A3) return (ch - 0xAC00) % 28 !== 0;
+    var c = w.charAt(w.length - 1);
+    if(/[0-9]/.test(c)) return '013678'.indexOf(c) !== -1;
+    return /[lmnrLMNR]/.test(c);
+  }
+  function isRieul(w){
+    w = String(w || '').trim();
+    if(!w) return false;
+    var ch = w.charCodeAt(w.length - 1);
+    return ch >= 0xAC00 && ch <= 0xD7A3 && (ch - 0xAC00) % 28 === 8;
+  }
+  function jongIndex(ch){ return (ch >= 0xAC00 && ch <= 0xD7A3) ? (ch - 0xAC00) % 28 : -1; }
+  function j(w, withB, noB){ return hasBatchim(w) ? withB : noB; }
+  function topic(w){ return j(w, '은', '는'); }
+
+  // ===============================================================
+  // Relation catalogue (Aristotle's 양·관계·장소·시간·소유 categories +
+  // the relation properties from modern logic). trans = 이행적,
+  // asym = 비대칭, sym = 대칭, conv = 반대말(역관계), primary = the
+  // canonical side of a conv pair, counted = takes an optional number.
+  // ===============================================================
+  var REL_CATS = {
+    '비교':'#e2a6c5', '공간':'#9fd3c7', '부분·전체':'#c3b1e1', '시간·순서':'#f2b880',
+    '소유·수량':'#b5d99c', '인과':'#f28f8f', '동일·차이':'#f3f1e7', '행위':'#e8c468'
+  };
+  var REL_LIST = [
+    ['bigger','비교','크다','{o}보다 크다','{o}보다 크지 않다',{trans:1,asym:1,conv:'smaller',primary:1}],
+    ['smaller','비교','작다','{o}보다 작다','{o}보다 작지 않다',{trans:1,asym:1,conv:'bigger'}],
+    ['heavier','비교','무겁다','{o}보다 무겁다','{o}보다 무겁지 않다',{trans:1,asym:1,conv:'lighter',primary:1}],
+    ['lighter','비교','가볍다','{o}보다 가볍다','{o}보다 가볍지 않다',{trans:1,asym:1,conv:'heavier'}],
+    ['longer','비교','길다','{o}보다 길다','{o}보다 길지 않다',{trans:1,asym:1,conv:'shorter',primary:1}],
+    ['shorter','비교','짧다','{o}보다 짧다','{o}보다 짧지 않다',{trans:1,asym:1,conv:'longer'}],
+    ['higher','비교','높다','{o}보다 높다','{o}보다 높지 않다',{trans:1,asym:1,conv:'lower',primary:1}],
+    ['lower','비교','낮다','{o}보다 낮다','{o}보다 낮지 않다',{trans:1,asym:1,conv:'higher'}],
+    ['more','비교','많다','{o}보다 많다','{o}보다 많지 않다',{trans:1,asym:1,conv:'fewer',primary:1}],
+    ['fewer','비교','적다','{o}보다 적다','{o}보다 적지 않다',{trans:1,asym:1,conv:'more'}],
+    ['faster','비교','빠르다','{o}보다 빠르다','{o}보다 빠르지 않다',{trans:1,asym:1,conv:'slower',primary:1}],
+    ['slower','비교','느리다','{o}보다 느리다','{o}보다 느리지 않다',{trans:1,asym:1,conv:'faster'}],
+    ['inside','공간','안','{o} 안에 있다','{o} 안에 있지 않다',{trans:1,asym:1,conv:'contains',primary:1}],
+    ['contains','공간','포함','{o}{을} 포함한다','{o}{을} 포함하지 않는다',{trans:1,asym:1,conv:'inside'}],
+    ['above','공간','위','{o} 위에 있다','{o} 위에 있지 않다',{trans:1,asym:1,conv:'below',primary:1}],
+    ['below','공간','아래','{o} 아래에 있다','{o} 아래에 있지 않다',{trans:1,asym:1,conv:'above'}],
+    ['outside','공간','밖','{o} 밖에 있다','{o} 밖에 있지 않다',{}],
+    ['near','공간','옆','{o} 옆에 있다','{o} 옆에 있지 않다',{sym:1}],
+    ['partOf','부분·전체','일부','{o}의 일부이다','{o}의 일부가 아니다',{trans:1,asym:1,conv:'hasPart',primary:1}],
+    ['hasPart','부분·전체','부분 보유','{o}{을} 부분으로 가진다','{o}{을} 부분으로 가지지 않는다',{trans:1,asym:1,conv:'partOf'}],
+    ['before','시간·순서','먼저','{o}보다 먼저이다','{o}보다 먼저가 아니다',{trans:1,asym:1,conv:'after',primary:1}],
+    ['after','시간·순서','나중','{o}보다 나중이다','{o}보다 나중이 아니다',{trans:1,asym:1,conv:'before'}],
+    ['simul','시간·순서','동시','{o}{와} 동시이다','{o}{와} 동시가 아니다',{sym:1,trans:1}],
+    ['has','소유·수량','가진다','{o}{을} 가진다','{o}{을} 가지지 않는다',{counted:1}],
+    ['causes','인과','일으킨다','{o}{을} 일으킨다','{o}{을} 일으키지 않는다',{}],
+    ['same','동일·차이','=','{o}{와} 같다','{o}{와} 같지 않다',{sym:1,trans:1,identity:1}],
+    ['diff','동일·차이','≠','{o}{와} 다르다','{o}{와} 다르지 않다',{sym:1}],
+    ['custom','행위','직접 입력','','',{custom:1}]
+  ];
+  var RELS = {}, REL_CAT_ORDER = [];
+  REL_LIST.forEach(function(a){
+    var spec = { id:a[0], cat:a[1], short:a[2], pos:a[3], neg:a[4] };
+    Object.keys(a[5]).forEach(function(k){ spec[k] = a[5][k]; });
+    spec.color = REL_CATS[spec.cat];
+    RELS[spec.id] = spec;
+    if(REL_CAT_ORDER.indexOf(spec.cat) === -1) REL_CAT_ORDER.push(spec.cat);
+  });
+
+  var VJOSA = [['eul','을/를'],['e','에'],['ege','에게'],['wa','와/과'],['eseo','에서'],['ro','(으)로'],['none','(조사 없음)']];
+  function vjosaFor(o, k){
+    switch(k){
+      case 'eul': return j(o,'을','를');
+      case 'e': return '에';
+      case 'ege': return '에게';
+      case 'wa': return j(o,'과','와');
+      case 'eseo': return '에서';
+      case 'ro': return (hasBatchim(o) && !isRieul(o)) ? '으로' : '로';
+      default: return '';
+    }
+  }
+
+  function fill(tpl, o, n){
+    return tpl.replace(/\{o\}/g, o)
+      .replace(/\{을\}/g, j(o,'을','를'))
+      .replace(/\{와\}/g, j(o,'과','와'))
+      .replace(/\{n\}/g, n);
+  }
+
+  function relPhrase(r, neg){
+    var o = r.obj || '□', spec = RELS[r.rel] || RELS.bigger;
+    if(spec.custom){
+      var v = r.verb || '□';
+      var jo = vjosaFor(o, r.vjosa);
+      return o + jo + ' ' + v + (neg ? ' (부정)' : '');
+    }
+    var tpl = neg ? spec.neg : spec.pos;
+    if(spec.counted && r.count !== '' && r.count !== undefined && r.count !== null){
+      tpl = neg ? '{o}{을} {n}개 가지지 않는다' : '{o}{을} {n}개 가진다';
+    }
+    return fill(tpl, o, r.count);
+  }
+
+  function relShort(e){
+    var s = RELS[e.rel];
+    if(!s) return '';
+    var t = s.custom ? (e.verb || '') : s.short;
+    if(s.counted && e.count !== '' && e.count !== undefined && e.count !== null) t += ' ×' + e.count;
+    return (e.neg ? '¬ ' : '') + t;
+  }
+
+  function relOptLabel(s, o){
+    if(s.custom) return '직접 입력…';
+    if(o) return fill(s.pos, o, '').slice(o.length).trim();
+    return s.pos.replace('{o}','').replace('{을}','을/를').replace('{와}','와/과').trim();
+  }
+
+  function negateProp(p){
+    if(/하다$/.test(p)) return p.replace(/하다$/, '하지 않다');
+    if(/는다$/.test(p)) return p.replace(/는다$/, '지 않는다');
+    if(/다$/.test(p) && p.length >= 2){
+      var prev = p.charCodeAt(p.length - 2);
+      if(jongIndex(prev) !== 4) return p.slice(0, -1) + '지 않다';
+    }
+    return p + ' (부정)';
+  }
+
+  // Natural-language rendering of one statement (used for previews and
+  // all evaluation messages, so particles are always right).
+  // "위험한 것" / "위험하다" are the same term: store the predicate form,
+  // so a property used later as a subject joins the same graph node.
+  function canonTerm(w){
+    w = String(w || '').trim();
+    if(/한 것$/.test(w)) return w.replace(/한 것$/, '하다');
+    if(/있는 것$/.test(w)) return w.replace(/있는 것$/, '있다');
+    if(/없는 것$/.test(w)) return w.replace(/없는 것$/, '없다');
+    return w;
+  }
+  // …and turn a predicate-form term back into a noun phrase when it has
+  // to sit in subject / noun position ("위험하다" → "위험한 것").
+  function nounOf(w){
+    if(/하다$/.test(w)) return w.replace(/하다$/, '한 것');
+    if(/있다$/.test(w)) return w.replace(/있다$/, '있는 것');
+    if(/없다$/.test(w)) return w.replace(/없다$/, '없는 것');
+    if(/다$/.test(w) && w.length >= 2) return '‘' + w + '’인 것';
+    return w;
+  }
+
+  function sentenceOf(r){
+    var s = nounOf(r.subj || '□');
+    if(r.kind === 'exist') return s + topic(s) + ' ' + (r.neg ? '존재하지 않는다' : '존재한다') + '.';
+    var q = (r.quant === '개체' || !r.quant) ? '' : r.quant + ' ';
+    var sp = r.subjNeg ? (s + j(s,'이','가') + ' 아닌 것은') : (s + topic(s));
+    var pp;
+    if(r.kind === 'rel'){ pp = relPhrase(r, r.neg); }
+    else if(r.kind === 'prop'){ var p = r.pred || '□'; pp = r.neg ? negateProp(p) : p; }
+    else { var p2 = nounOf(r.pred || '□'); pp = r.neg ? (p2 + j(p2,'이','가') + ' 아니다') : (p2 + (hasBatchim(p2) ? '이다' : '다')); }
+    return q + sp + ' ' + pp + '.';
+  }
+
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ===============================================================
+  // Input rows
+  // ===============================================================
+  var groupsEl = document.getElementById('groups');
+  var ROLES = ['전제 1','전제 2','결론'];
+  var KIND_OPTS = [
+    ['class','분류'],
+    ['prop','성질·상태·행위'],
+    ['rel','관계'],
+    ['exist','존재']
+  ];
+
+  function relOptionsHTML(){
+    return REL_CAT_ORDER.map(function(cat){
+      var items = REL_LIST.filter(function(a){ return a[1] === cat; }).map(function(a){
+        return '<option value="'+a[0]+'">'+esc(relOptLabel(RELS[a[0]], ''))+'</option>';
+      }).join('');
+      return '<optgroup label="'+esc(cat)+'">'+items+'</optgroup>';
+    }).join('');
+  }
+
+  function rowHTML(role){
+    return (
+      '<div class="row" data-kind="class" data-role="'+role+'">' +
+        '<div class="row-top">' +
+          '<span class="role-tag">'+role+'</span>' +
+          '<select class="kind" aria-label="서술 유형">' + KIND_OPTS.map(function(k){ return '<option value="'+k[0]+'">'+k[1]+'</option>'; }).join('') + '</select>' +
+          '<span class="preview"></span>' +
+        '</div>' +
+        '<div class="row-main">' +
+          '<select class="quant f-q" aria-label="양화사"><option value="모든">모든</option><option value="어떤">어떤</option><option value="개체">개체</option></select>' +
+          '<input type="text" class="wordLeft" placeholder="주어">' +
+          '<select class="subjNeg f-q" aria-label="주어 조사"><option value="pos">은/는</option><option value="neg">이/가 아닌 것은</option></select>' +
+          '<input type="text" class="wordRight f-right" placeholder="단어">' +
+          '<select class="relSel f-rel" aria-label="관계">' + relOptionsHTML() + '</select>' +
+          '<select class="vjosa f-rel f-custom off" aria-label="대상 조사">' + VJOSA.map(function(v){ return '<option value="'+v[0]+'">'+v[1]+'</option>'; }).join('') + '</select>' +
+          '<input type="text" class="verbIn f-rel f-custom off" placeholder="동사 (예: 돈다)">' +
+          '<input type="number" class="countIn f-rel f-count off" min="0" placeholder="개수">' +
+          '<select class="polarity" aria-label="긍정/부정"><option value="pos">이다</option><option value="neg">가 아니다</option></select>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function setOpt(sel, val, label){
+    var o = sel.querySelector('option[value="'+val+'"]');
+    if(o) o.textContent = label;
+  }
+
+  function updateRow(row){
+    var kind = row.querySelector('.kind').value;
+    row.dataset.kind = kind;
+    var s = row.querySelector('.wordLeft').value.trim();
+    var right = row.querySelector('.wordRight').value.trim();
+
+    var sn = row.querySelector('.subjNeg');
+    setOpt(sn, 'pos', s ? topic(s) : '은/는');
+    setOpt(sn, 'neg', s ? (j(s,'이','가') + ' 아닌 것은') : '이/가 아닌 것은');
+
+    var pol = row.querySelector('.polarity');
+    if(kind === 'class'){
+      setOpt(pol, 'pos', right ? (hasBatchim(right) ? '이다' : '다') : '(이)다');
+      setOpt(pol, 'neg', right ? (j(right,'이','가') + ' 아니다') : '이/가 아니다');
+    } else if(kind === 'exist'){
+      setOpt(pol, 'pos', '존재한다'); setOpt(pol, 'neg', '존재하지 않는다');
+    } else {
+      setOpt(pol, 'pos', '긍정'); setOpt(pol, 'neg', '부정');
+    }
+
+    var wr = row.querySelector('.wordRight');
+    wr.placeholder = kind === 'prop' ? '서술어 (예: 위험하다)' : (kind === 'rel' ? '대상' : '단어');
+
+    var relSel = row.querySelector('.relSel');
+    var spec = RELS[relSel.value];
+    row.querySelectorAll('.f-custom').forEach(function(el){ el.classList.toggle('off', !(spec && spec.custom)); });
+    row.querySelectorAll('.f-count').forEach(function(el){ el.classList.toggle('off', !(spec && spec.counted)); });
+    if(kind === 'rel'){
+      Array.prototype.forEach.call(relSel.options, function(opt){
+        opt.textContent = relOptLabel(RELS[opt.value], right);
+      });
+    }
+
+    var r = rowToRaw(row);
+    row.querySelector('.preview').textContent = (s || right) ? sentenceOf(r) : '';
+  }
+
+  function makeGroup(index, rowsData){
+    var g = document.createElement('div');
+    g.className = 'group';
+    var removeBtn = index > 1 ? '<button type="button" class="group-remove" onclick="this.closest(\'.group\').remove(); window.__renumber();">삭제</button>' : '';
+    g.innerHTML = '<div class="group-label"><span class="set-name">세트 ' + index + '</span>' + removeBtn + '</div>' +
+      ROLES.map(rowHTML).join('');
+    groupsEl.appendChild(g);
+    g.querySelectorAll('.row').forEach(function(rowEl, idx){
+      if(rowsData) setRowValues(rowEl, rowsData[idx]);
+      else updateRow(rowEl);
+    });
+    return g;
+  }
+
+  function addGroup(){
+    makeGroup(groupsEl.querySelectorAll('.group').length + 1, null);
+  }
+
+  function renumberSets(){
+    groupsEl.querySelectorAll('.group').forEach(function(g, i){
+      var n = g.querySelector('.set-name');
+      if(n) n.textContent = '세트 ' + (i + 1);
+    });
+  }
+  window.__renumber = renumberSets;
+
+  groupsEl.addEventListener('input', function(e){ var row = e.target.closest('.row'); if(row) updateRow(row); });
+  groupsEl.addEventListener('change', function(e){ var row = e.target.closest('.row'); if(row) updateRow(row); });
+
+  document.getElementById('addBtn').addEventListener('click', addGroup);
+  addGroup();
+
+  // ---------------------------------------------------------------
+  // Save / load (v2 format; v1 files from the old board still load)
+  // ---------------------------------------------------------------
+  function rowValues(row){
+    function v(sel){ var el = row.querySelector(sel); return el ? el.value : ''; }
+    return {
+      kind: v('.kind'), quant: v('.quant'), wordLeft: v('.wordLeft'), subjNeg: v('.subjNeg'),
+      wordRight: v('.wordRight'), polarity: v('.polarity'), rel: v('.relSel'),
+      vjosa: v('.vjosa'), verb: v('.verbIn'), count: v('.countIn')
+    };
+  }
+
+  function setRowValues(rowEl, r){
+    r = r || {};
+    function set(sel, val){ var el = rowEl.querySelector(sel); if(el && val !== undefined && val !== null) el.value = val; }
+    set('.kind', r.kind || 'class');
+    set('.quant', r.quant);
+    set('.wordLeft', r.wordLeft);
+    set('.wordRight', r.wordRight);
+    var sn = r.subjNeg !== undefined ? r.subjNeg : (r.particle && r.particle.indexOf('아닌') !== -1 ? 'neg' : 'pos');
+    set('.subjNeg', (sn === 'neg' || sn === true) ? 'neg' : 'pos');
+    var pol = r.polarity !== undefined ? r.polarity : (r.copula && r.copula.indexOf('아니') !== -1 ? 'neg' : 'pos');
+    set('.polarity', pol === 'neg' ? 'neg' : 'pos');
+    if(r.rel && RELS[r.rel]) set('.relSel', r.rel);
+    set('.vjosa', r.vjosa || 'eul');
+    set('.verbIn', r.verb);
+    set('.countIn', r.count);
+    updateRow(rowEl);
+  }
+
+  function exportGroupsForFile(){
+    var groups = [];
+    groupsEl.querySelectorAll('.group').forEach(function(gEl){
+      var rows = [];
+      gEl.querySelectorAll('.row').forEach(function(row){ rows.push(rowValues(row)); });
+      groups.push(rows);
+    });
+    return groups;
+  }
+
+  function importGroupsFromFile(groups){
+    if(!Array.isArray(groups) || groups.length === 0){
+      alert('올바른 형식의 파일이 아닙니다.');
+      return;
+    }
+    groupsEl.innerHTML = '';
+    groups.forEach(function(rows, i){ makeGroup(i + 1, rows || []); });
+  }
+
+  document.getElementById('saveFileBtn').addEventListener('click', function(){
+    var payload = { type:'삼단논법-게시판', version:2, savedAt:new Date().toISOString(), groups: exportGroupsForFile() };
+    var json = JSON.stringify(payload, null, 2);
+    var blob = new Blob([json], { type:'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = '삼단논법_입력.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('loadFileBtn').addEventListener('click', function(){
+    document.getElementById('loadFileInput').click();
+  });
+  document.getElementById('loadFileInput').addEventListener('change', function(e){
+    var file = e.target.files && e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(evt){
+      try{
+        var data = JSON.parse(evt.target.result);
+        var groups = Array.isArray(data) ? data : data.groups;
+        importGroupsFromFile(groups);
+      }catch(err){
+        alert('파일을 읽을 수 없습니다: ' + err.message);
+      }
+    };
+    reader.readAsText(file, 'utf-8');
+    e.target.value = '';
+  });
+
+  // ---------------------------------------------------------------
+  // Raw statement extraction.
+  // Every statement also gets a "class view" (subj ⊂ pred): for a
+  // relation "A는 B보다 크다" the pred term is the phrase "B보다 크다",
+  // so all 9 categorical moods work for every statement kind.
+  // ---------------------------------------------------------------
+  function rowToRaw(row){
+    var kind = row.dataset.kind || 'class';
+    function g(sel){ var el = row.querySelector(sel); return el ? el.value : ''; }
+    var r = { kind:kind, quant:g('.quant'), subj:canonTerm(g('.wordLeft')), subjNeg:g('.subjNeg') === 'neg',
+      neg:g('.polarity') === 'neg', pred:'', predNeg:false, rel:'', obj:'', count:'', verb:'', vjosa:'' };
+    var right = g('.wordRight').trim();
+    if(kind === 'exist'){
+      r.subjNeg = false; r.quant = '모든'; r.filled = !!r.subj;
+      return r;
+    }
+    if(kind === 'rel'){
+      r.rel = g('.relSel'); r.obj = right; r.verb = g('.verbIn').trim(); r.vjosa = g('.vjosa');
+      r.count = (RELS[r.rel] && RELS[r.rel].counted) ? g('.countIn').trim() : '';
+      r.filled = !!(r.subj && r.obj && (r.rel !== 'custom' || r.verb));
+      r.pred = r.filled ? relPhrase(r, false) : '';
+    } else {
+      r.pred = canonTerm(right);
+      r.filled = !!(r.subj && r.pred);
+    }
+    r.predNeg = r.neg;
+    return r;
+  }
+
+  function collectFlatRaw(){
+    var list = [];
+    groupsEl.querySelectorAll('.row').forEach(function(row){
+      var r = rowToRaw(row);
+      if(r.filled) list.push(r);
+    });
+    return list;
+  }
+
+  function collectGroupedRaw(){
+    var groups = [];
+    groupsEl.querySelectorAll('.group').forEach(function(gEl, idx){
+      var rows = [];
+      gEl.querySelectorAll('.row').forEach(function(row){ rows.push(rowToRaw(row)); });
+      var complete = rows.length === 3 && rows.every(function(r){ return r.filled; });
+      groups.push({ index: idx+1, rows: rows, complete: complete });
+    });
+    return groups;
+  }
+
+  function labelOf(word, neg){ return word + (neg ? '×' : ''); }
+
+  // Edges for one input group. Classification/property statements draw
+  // subj → pred (an "is-a" arrow, as before); relation statements draw
+  // subj → obj with a labelled relation arrow, so no one-off phrase node
+  // ("B보다 크다") ever appears in the graph.
+  function computeGroupEdges(group){
+    var rewriteRowIndex = -1;
+    if(group.rows.length === 3 && group.rows.every(function(r){ return r.filled; })){
+      var m = matchGroup(group.rows);
+      if(m && m.template.id === 8 && typeof m.p1RowIndex === 'number'){
+        var p1Raw = group.rows[m.p1RowIndex];
+        if(!p1Raw.subjNeg && (p1Raw.kind === 'class' || p1Raw.kind === 'prop')){ rewriteRowIndex = m.p1RowIndex; }
+      }
+    }
+    var result = [];
+    group.rows.forEach(function(r, idx){
+      if(!r.filled || r.kind === 'exist') return;
+      var e = { rowIndex:idx, role:(idx === 2 ? 'conclusion' : 'premise'), solid:(r.quant !== '어떤'),
+        rel:'isa', neg:false, count:'', verb:'', vjosa:'' };
+      if(idx === rewriteRowIndex){
+        // contrapositive of "모든 subj는 pred이다": 모든 (pred가 아닌 것)은 (subj가 아닌 것)이다
+        e.fromLabel = labelOf(r.pred, true);
+        e.toLabel = labelOf(r.subj, true);
+        e.solid = true;
+      } else if(r.kind === 'rel'){
+        e.fromLabel = labelOf(r.subj, r.subjNeg);
+        e.toLabel = r.obj;
+        e.rel = r.rel; e.neg = r.neg; e.count = r.count; e.verb = r.verb; e.vjosa = r.rel === 'custom' ? r.vjosa : '';
+      } else {
+        e.fromLabel = labelOf(r.subj, r.subjNeg);
+        e.toLabel = labelOf(r.pred, r.predNeg);
+      }
+      result.push(e);
+    });
+    return result;
+  }
+
+  function edgeKey(e){
+    return [e.fromLabel, e.toLabel, e.rel, e.neg ? 1 : 0, e.count || '', e.verb || '', e.vjosa || ''].join('\u0001');
+  }
+
+  // ---------------------------------------------------------------
+  // GRAPH data (floating network). Same-direction duplicate arrows are
+  // merged (solid wins over dashed). Line colour = role (premise /
+  // conclusion / ambiguous / contradiction) exactly as before; relation
+  // arrows additionally carry a label coloured by relation category.
+  // X / X× pairs are fused into a two-tone capsule. Property predicates
+  // ("위험하다") are green nodes; existence marks ∃ / ∅ the node.
+  // ---------------------------------------------------------------
+  var PREMISE_COLOR = '#7fb3d5';
+  var CONCLUSION_COLOR = '#e8c468';
+  var NO_ROLE_COLOR = '#ffffff';
+  var CONTRADICTION_COLOR = '#111111';
+  var PAIR_BOX_W = 52, PAIR_BOX_H = 34;
+
+  function buildGraphAndTriples(groupedRaw, flatRaw){
+    var propLabels = {};
+    groupedRaw.forEach(function(g){
+      g.rows.forEach(function(r){
+        if(r.filled && r.kind === 'prop'){ propLabels[r.pred] = 1; propLabels[r.pred + '×'] = 1; }
+      });
+    });
+
+    // 1) raw edges per group, plus whether that group closes into a triangle
+    var rawByGroup = [];
+    groupedRaw.forEach(function(group){
+      var ge = computeGroupEdges(group);
+      var middleLabel = null;
+      if(ge.length === 3){
+        var s1 = [ge[0].fromLabel, ge[0].toLabel], s2 = [ge[1].fromLabel, ge[1].toLabel];
+        s1.forEach(function(l){ if(s2.indexOf(l) !== -1) middleLabel = l; });
+      }
+      rawByGroup.push({ edges:ge, hasTriangle: !!middleLabel, middleLabel:middleLabel });
+    });
+
+    // 2) merge same-direction duplicate edges
+    var mergedMap = new Map();
+    rawByGroup.forEach(function(gInfo){
+      gInfo.edges.forEach(function(e){
+        var key = edgeKey(e);
+        if(!mergedMap.has(key)){
+          mergedMap.set(key, { fromLabel:e.fromLabel, toLabel:e.toLabel, solid:false, occurrences:[],
+            rel:e.rel, neg:e.neg, count:e.count, verb:e.verb, vjosa:e.vjosa });
+        }
+        var m = mergedMap.get(key);
+        if(e.solid) m.solid = true;
+        m.occurrences.push({ role:e.role, hasTriangle:gInfo.hasTriangle });
+      });
+    });
+
+    // 3) finalize merged edges
+    var mergedEdges = [];
+    var edgeKeyToId = {};
+    var ec = 0;
+    mergedMap.forEach(function(m, key){
+      var id = 'e' + (ec++);
+      var statsRole = m.occurrences.some(function(o){ return o.role === 'conclusion'; }) ? 'conclusion' : 'premise';
+      var triangleOccs = m.occurrences.filter(function(o){ return o.hasTriangle; });
+      var colorRole = 'ambiguous';
+      if(triangleOccs.length > 0){
+        var roles = {};
+        triangleOccs.forEach(function(o){ roles[o.role] = true; });
+        var roleKeys = Object.keys(roles);
+        if(roleKeys.length === 1) colorRole = roleKeys[0];
+      }
+      mergedEdges.push({ id:id, fromLabel:m.fromLabel, toLabel:m.toLabel, solid:m.solid,
+        statsRole:statsRole, colorRole:colorRole, rel:m.rel, neg:m.neg, count:m.count, verb:m.verb, vjosa:m.vjosa });
+      edgeKeyToId[key] = id;
+    });
+
+    // 4) contradictions: same source, solid is-a arrows to both X and X×
+    var bySource = {};
+    mergedEdges.forEach(function(e){
+      if(!e.solid || e.rel !== 'isa') return;
+      bySource[e.fromLabel] = bySource[e.fromLabel] || [];
+      bySource[e.fromLabel].push(e);
+    });
+    var contradictionIds = {};
+    Object.keys(bySource).forEach(function(src){
+      var list = bySource[src];
+      list.forEach(function(e1){
+        list.forEach(function(e2){
+          if(e1 === e2) return;
+          var base1 = e1.toLabel.replace('×',''), neg1 = e1.toLabel.indexOf('×') !== -1;
+          var base2 = e2.toLabel.replace('×',''), neg2 = e2.toLabel.indexOf('×') !== -1;
+          if(base1 === base2 && neg1 !== neg2){ contradictionIds[e1.id] = true; contradictionIds[e2.id] = true; }
+        });
+      });
+    });
+
+    // 5) nodes
+    function styleFor(label){
+      var negated = label.indexOf('×') !== -1;
+      if(negated){
+        return { color:{ background:'#e08585', border:'#a94d4d', highlight:{background:'#eaa0a0', border:'#a94d4d'} }, font:{ color:'#1b0e0e' } };
+      }
+      if(propLabels[label]){
+        return { color:{ background:'#a8d5ba', border:'#5f9c75', highlight:{background:'#bfe3cd', border:'#5f9c75'} }, font:{ color:'#0f1c14' } };
+      }
+      return { color:{ background:'#e8c468', border:'#b98f3a', highlight:{background:'#f0d484', border:'#b98f3a'} }, font:{ color:'#14181a' } };
+    }
+    var nodeMap = new Map(), nodes = [];
+    function ensureNode(label){
+      if(!nodeMap.has(label)){
+        var id = nodeMap.size + 1;
+        nodeMap.set(label, id);
+        var style = styleFor(label);
+        nodes.push({ id:id, key:label, label:label, shape:'ellipse',
+          font:Object.assign({face:'IBM Plex Mono', size:16}, style.font),
+          borderWidth:2, margin:10, color:style.color });
+      }
+      return nodeMap.get(label);
+    }
+    mergedEdges.forEach(function(e){ ensureNode(e.fromLabel); ensureNode(e.toLabel); });
+
+    var exist = {};
+    (flatRaw || []).forEach(function(r){
+      if(r.kind === 'exist' && r.filled){
+        exist[r.subj] = exist[r.subj] || {};
+        exist[r.subj][r.neg ? 'no' : 'yes'] = true;
+        ensureNode(r.subj);
+      }
+    });
+
+    var keyToNode = {};
+    nodes.forEach(function(n){ keyToNode[n.key] = n; });
+    var pairs = [];
+    nodes.forEach(function(n){
+      if(n.key.indexOf('×') !== -1) return;
+      var negNode = keyToNode[n.key + '×'];
+      if(negNode){ pairs.push({ baseId:n.id, negId:negNode.id, baseNode:n, negNode:negNode }); }
+    });
+    pairs.forEach(function(p){
+      [p.baseNode, p.negNode].forEach(function(n){
+        n.shape = 'box';
+        n.shapeProperties = { borderRadius:0 };
+        n.widthConstraint = { minimum:PAIR_BOX_W, maximum:PAIR_BOX_W };
+        n.heightConstraint = { minimum:PAIR_BOX_H, maximum:PAIR_BOX_H };
+        n.margin = 4;
+      });
+      p.negNode.physics = false;
+    });
+
+    nodes.forEach(function(n){
+      var ex = exist[n.key];
+      if(!ex) return;
+      n.label = (ex.no ? '∅ ' : '∃ ') + n.key;
+      if(ex.no){ n.shapeProperties = Object.assign({}, n.shapeProperties || {}, { borderDashes:[5,4] }); }
+    });
+
+    // 6) final vis.js edges
+    var visEdges = mergedEdges.map(function(e){
+      var color;
+      if(contradictionIds[e.id]) color = CONTRADICTION_COLOR;
+      else if(e.colorRole === 'conclusion') color = CONCLUSION_COLOR;
+      else if(e.colorRole === 'premise') color = PREMISE_COLOR;
+      else color = NO_ROLE_COLOR;
+      var o = { id:e.id, from:nodeMap.get(e.fromLabel), to:nodeMap.get(e.toLabel),
+        dashes: !e.solid, arrows:'to',
+        color:{ color:color, highlight:color },
+        width: contradictionIds[e.id] ? 3 : 2,
+        smooth:{ type:'continuous' } };
+      if(e.rel !== 'isa'){
+        var spec = RELS[e.rel];
+        o.label = relShort(e);
+        o.font = { face:'IBM Plex Mono', size:12, color:(spec ? spec.color : '#f3f1e7'),
+          strokeWidth:4, strokeColor:'#212b2d', align:'middle' };
+        if(spec && spec.sym) o.arrows = 'to, from';
+      }
+      return o;
+    });
+
+    // 7) triples for the double-click show/hide behaviour
+    var triples = [];
+    rawByGroup.forEach(function(gInfo){
+      if(!gInfo.hasTriangle || gInfo.edges.length !== 3) return;
+      var eid1 = edgeKeyToId[edgeKey(gInfo.edges[0])];
+      var eid2 = edgeKeyToId[edgeKey(gInfo.edges[1])];
+      var eid3 = edgeKeyToId[edgeKey(gInfo.edges[2])];
+      if(!eid1 || !eid2 || !eid3) return;
+      triples.push({ middleNodeId: nodeMap.get(gInfo.middleLabel),
+        premiseEdgeIds:[eid1, eid2], conclusionEdgeId:eid3, midHidden:false, conclHidden:false });
+    });
+
+    return { nodes:nodes, edges:visEdges, triples:triples, pairs:pairs, mergedEdges:mergedEdges };
+  }
+
+  // ---------------------------------------------------------------
+  // Whole-graph statistics
+  // ---------------------------------------------------------------
+  function countComponents(nodes, edges){
+    var adj = {};
+    nodes.forEach(function(n){ adj[n.id] = []; });
+    edges.forEach(function(e){ adj[e.from].push(e.to); adj[e.to].push(e.from); });
+    var seen = {}, count = 0;
+    nodes.forEach(function(n){
+      if(seen[n.id]) return;
+      count++;
+      var queue = [n.id]; seen[n.id] = true;
+      while(queue.length){
+        var cur = queue.shift();
+        adj[cur].forEach(function(nb){ if(!seen[nb]){ seen[nb] = true; queue.push(nb); } });
+      }
+    });
+    return count;
+  }
+
+  function countWeakBridges(nodes, edges){
+    var adj = {};
+    nodes.forEach(function(n){ adj[n.id] = []; });
+    edges.forEach(function(e){
+      adj[e.from].push({ to:e.to, eid:e.id });
+      adj[e.to].push({ to:e.from, eid:e.id });
+    });
+    var visited = {}, disc = {}, low = {}, subtreeSize = {};
+    var timer = 0;
+    var candidates = [];
+    function dfs(u, parentEdgeId, root){
+      visited[u] = true;
+      disc[u] = low[u] = timer++;
+      subtreeSize[u] = 1;
+      adj[u].forEach(function(edge){
+        if(edge.eid === parentEdgeId) return;
+        if(!visited[edge.to]){
+          dfs(edge.to, edge.eid, root);
+          subtreeSize[u] += subtreeSize[edge.to];
+          low[u] = Math.min(low[u], low[edge.to]);
+          if(low[edge.to] > disc[u]){
+            candidates.push({ eid:edge.eid, smallerSide:subtreeSize[edge.to], root:root });
+          }
+        } else {
+          low[u] = Math.min(low[u], disc[edge.to]);
+        }
+      });
+    }
+    nodes.forEach(function(n){ if(!visited[n.id]) dfs(n.id, null, n.id); });
+    var weak = 0;
+    candidates.forEach(function(c){
+      var componentTotal = subtreeSize[c.root];
+      var otherSide = componentTotal - c.smallerSide;
+      if(c.smallerSide >= 2 && otherSide >= 2) weak++;
+    });
+    return weak;
+  }
+
+  function countPremiseConclusion(mergedEdges){
+    var premise = 0, conclusion = 0;
+    mergedEdges.forEach(function(e){
+      if(e.statsRole === 'conclusion') conclusion++; else premise++;
+    });
+    return { premise:premise, conclusion:conclusion };
+  }
+
+  function analyzeTriangles(groupedRaw){
+    var noTriangle = 0, dashedOnly = 0, xOnly = 0, totalDefective = 0;
+    groupedRaw.forEach(function(group){
+      var filledCount = group.rows.filter(function(r){ return r.filled; }).length;
+      if(filledCount === 0) return;
+      var defective = false;
+      var edges = computeGroupEdges(group);
+      if(filledCount !== 3 || edges.length !== 3){
+        noTriangle++; defective = true;
+      } else {
+        var labelSet = {};
+        edges.forEach(function(e){ labelSet[e.fromLabel] = 1; labelSet[e.toLabel] = 1; });
+        var distinct = Object.keys(labelSet);
+        if(distinct.length !== 3){
+          noTriangle++; defective = true;
+        } else {
+          if(edges.every(function(e){ return !e.solid; })){ dashedOnly++; defective = true; }
+          if(distinct.every(function(l){ return l.indexOf('×') !== -1; })){ xOnly++; defective = true; }
+        }
+      }
+      if(defective) totalDefective++;
+    });
+    return { noTriangle:noTriangle, dashedOnly:dashedOnly, xOnly:xOnly, total:totalDefective };
+  }
+
+  function computeGraphStats(bundle, groupedRaw){
+    var pc = countPremiseConclusion(bundle.mergedEdges);
+    return {
+      components: countComponents(bundle.nodes, bundle.edges),
+      weakBridges: countWeakBridges(bundle.nodes, bundle.edges),
+      premise: pc.premise,
+      conclusion: pc.conclusion,
+      totalArrows: pc.premise + pc.conclusion,
+      ratio: pc.conclusion > 0 ? (pc.premise / pc.conclusion) : null,
+      defects: analyzeTriangles(groupedRaw)
+    };
+  }
+
+  function renderGraphStats(stats){
+    var grid = document.getElementById('statsGrid');
+    if(!grid) return;
+    var ratioText = stats.ratio === null ? 'N/A' : (stats.ratio.toFixed(2) + ' : 1');
+    grid.innerHTML =
+      '<div class="stat-chip' + (stats.components > 1 ? ' warn' : ' ok') + '">' +
+        '<div class="stat-value">' + stats.components + '<b>개</b></div>' +
+        '<div class="stat-label">분리된 그룹(연결 요소)</div>' +
+      '</div>' +
+      '<div class="stat-chip' + (stats.weakBridges > 0 ? ' warn' : '') + '">' +
+        '<div class="stat-value">' + stats.weakBridges + '<b>개</b></div>' +
+        '<div class="stat-label">약한 연결 — 화살표 하나로만 이어진 다리</div>' +
+      '</div>' +
+      '<div class="stat-chip">' +
+        '<div class="stat-value">' + stats.totalArrows + '<b>개</b></div>' +
+        '<div class="stat-label">전체 화살표</div>' +
+        '<div class="stat-sub">가정 ' + stats.premise + ' · 결론 ' + stats.conclusion + '</div>' +
+      '</div>' +
+      '<div class="stat-chip">' +
+        '<div class="stat-value">' + ratioText + '</div>' +
+        '<div class="stat-label">결론 화살표 대비 가정 화살표 비율</div>' +
+      '</div>' +
+      '<div class="stat-chip' + (stats.defects.total > 0 ? ' warn' : ' ok') + '">' +
+        '<div class="stat-value">' + stats.defects.total + '<b>개</b></div>' +
+        '<div class="stat-label">논리적으로 결함이 있는 삼각형</div>' +
+        '<div class="stat-sub">미형성 ' + stats.defects.noTriangle + ' · 점선만 ' + stats.defects.dashedOnly + ' · X만 ' + stats.defects.xOnly + '</div>' +
+      '</div>';
+  }
+
+  // ---------------------------------------------------------------
+  // 9 valid categorical syllogism templates
+  // ---------------------------------------------------------------
+  var TEMPLATES = [
+    {id:1, s1:{t:'A',s:'M',p:'P'}, s2:{t:'A',s:'S',p:'M'}, c:{t:'A',s:'S',p:'P'}, desc:'모든 M은 P이다 · 모든 S는 M이다 → 모든 S는 P이다'},
+    {id:2, s1:{t:'A',s:'M',p:'P'}, s2:{t:'A',s:'M',p:'S'}, c:{t:'I',s:'S',p:'P'}, desc:'모든 M은 P이다 · 모든 M은 S이다 → 어떤 S는 P이다'},
+    {id:3, s1:{t:'A',s:'P',p:'M'}, s2:{t:'A',s:'M',p:'S'}, c:{t:'I',s:'S',p:'P'}, desc:'모든 P는 M이다 · 모든 M은 S이다 → 어떤 S는 P이다'},
+    {id:4, s1:{t:'E',s:'M',p:'P'}, s2:{t:'A',s:'S',p:'M'}, c:{t:'E',s:'S',p:'P'}, desc:'모든 M은 P가 아니다 · 모든 S는 M이다 → 모든 S는 P가 아니다'},
+    {id:5, s1:{t:'E',s:'M',p:'P'}, s2:{t:'A',s:'M',p:'S'}, c:{t:'O',s:'S',p:'P'}, desc:'모든 M은 P가 아니다 · 모든 M은 S이다 → 어떤 S는 P가 아니다'},
+    {id:6, s1:{t:'A',s:'M',p:'P'}, s2:{t:'I',s:'S',p:'M'}, c:{t:'I',s:'S',p:'P'}, desc:'모든 M은 P이다 · 어떤 S는 M이다 → 어떤 S는 P이다'},
+    {id:7, s1:{t:'E',s:'M',p:'P'}, s2:{t:'I',s:'S',p:'M'}, c:{t:'O',s:'S',p:'P'}, desc:'모든 M은 P가 아니다 · 어떤 S는 M이다 → 어떤 S는 P가 아니다'},
+    {id:8, s1:{t:'A',s:'P',p:'M'}, s2:{t:'O',s:'S',p:'M'}, c:{t:'O',s:'S',p:'P'}, desc:'모든 P는 M이다 · 어떤 S는 M이 아니다 → 어떤 S는 P가 아니다'},
+    {id:9, s1:{t:'O',s:'M',p:'P'}, s2:{t:'A',s:'M',p:'S'}, c:{t:'O',s:'S',p:'P'}, desc:'어떤 M은 P가 아니다 · 모든 M은 S이다 → 어떤 S는 P가 아니다'}
+  ];
+
+  var SHAPES_TABLE = {
+    1:{M:'circle',S:'circle',P:'fan'},
+    2:{M:'circle',S:'fan',P:'fan'},
+    3:{M:'circle',S:'fan',P:'circle'},
+    4:{M:'circle',S:'circle',P:'fan'},
+    5:{M:'circle',S:'fan',P:'fan'},
+    6:{M:'circle',S:'fan',P:'fan'},
+    7:{M:'circle',S:'fan',P:'fan'},
+    8:{M:'circle',S:'fan',P:'fan'},
+    9:{M:'circle',S:'fan',P:'fan'}
+  };
+  var LAYOUT_TABLE = {
+    1:{type:'chain', order:['P','M','S'], negRoles:[]},
+    2:{type:'chain', order:['P','S','M'], negRoles:[]},
+    3:{type:'chain', order:['S','M','P'], negRoles:[]},
+    4:{type:'chain', order:['P','M','S'], negRoles:['P']},
+    5:{type:'chain', order:['P','S','M'], negRoles:['P']},
+    6:{type:'chain', order:['P','M','S'], negRoles:[]},
+    7:{type:'chain', order:['P','M','S'], negRoles:['P']},
+    8:{type:'chain', order:['P','M','S'], negRoles:['P','M']},
+    9:{type:'chain', order:['S','M','P'], negRoles:['P']}
+  };
+
+  // 개체(singular) statements behave like universals in traditional logic
+  function typeOf(r){ return r.quant === '어떤' ? (r.predNeg ? 'O' : 'I') : (r.predNeg ? 'E' : 'A'); }
+
+  function normalizeStatement(r){
+    if(r.kind === 'exist' || !r.pred) return null;
+    if(!r.subjNeg) return r;
+    if(r.quant !== '어떤' && r.predNeg){
+      return { quant:'모든', subj:r.pred, subjNeg:false, pred:r.subj, predNeg:false };
+    }
+    if(r.quant === '어떤' && !r.predNeg){
+      return { quant:'어떤', subj:r.pred, subjNeg:false, pred:r.subj, predNeg:true };
+    }
+    return null;
+  }
+
+  function matchGroup(rows){
+    if(rows.length !== 3) return null;
+    var normRows = rows.map(normalizeStatement);
+    if(normRows.some(function(r){ return r === null; })) return null;
+    var c = normRows[2];
+    var premiseOrders = [[0,1],[1,0]];
+    for(var ti=0; ti<TEMPLATES.length; ti++){
+      var T = TEMPLATES[ti];
+      for(var oi=0; oi<premiseOrders.length; oi++){
+        var i1 = premiseOrders[oi][0], i2 = premiseOrders[oi][1];
+        var p1 = normRows[i1], p2 = normRows[i2];
+        var roleMap = {}, wordMap = {};
+        var assign = function(word, role){
+          if(!word) return false;
+          if(roleMap[word] && roleMap[word] !== role) return false;
+          if(wordMap[role] && wordMap[role] !== word) return false;
+          roleMap[word] = role; wordMap[role] = word;
+          return true;
+        };
+        var ok = typeOf(p1) === T.s1.t && assign(p1.subj, T.s1.s) && assign(p1.pred, T.s1.p);
+        if(ok) ok = typeOf(p2) === T.s2.t && assign(p2.subj, T.s2.s) && assign(p2.pred, T.s2.p);
+        if(ok) ok = typeOf(c) === T.c.t && assign(c.subj, T.c.s) && assign(c.pred, T.c.p);
+        if(ok && wordMap.M && wordMap.S && wordMap.P){
+          var uniq = {}; uniq[wordMap.M]=1; uniq[wordMap.S]=1; uniq[wordMap.P]=1;
+          if(Object.keys(uniq).length === 3){
+            return { template:T, roleToWord:wordMap, p1RowIndex:i1, p2RowIndex:i2 };
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  // ---------------------------------------------------------------
+  // Relational inference rules
+  // ---------------------------------------------------------------
+  function qRank(q){ return q === '어떤' ? 0 : 1; }
+
+  // Rewrite "B는 A보다 작다" as "A는 B보다 크다" (only for universal /
+  // singular subjects, where swapping subject and object is safe).
+  function relCanon(r){
+    var v = { kind:'rel', rel:r.rel, subj:r.subj, subjNeg:r.subjNeg, obj:r.obj, quant:r.quant, neg:r.neg,
+      count:r.count || '', verb:r.verb || '', vjosa:r.vjosa || '' };
+    var s = RELS[v.rel];
+    if(s && s.conv && !s.primary && v.quant !== '어떤' && !v.subjNeg){
+      var t = v.subj; v.subj = v.obj; v.obj = t; v.rel = s.conv;
+    }
+    return v;
+  }
+  function relVariants(r){
+    var v = relCanon(r), out = [v], s = RELS[v.rel];
+    if(s && s.sym && v.quant !== '어떤' && !v.subjNeg){
+      out.push(Object.assign({}, v, { subj:v.obj, obj:v.subj }));
+    }
+    return out;
+  }
+
+  // aRb · bRc → aRc for a transitive relation R
+  function matchTransitive(rows){
+    if(rows.length !== 3 || !rows.every(function(r){ return r.kind === 'rel' && r.filled; })) return null;
+    var orders = [[0,1],[1,0]];
+    for(var oi=0; oi<orders.length; oi++){
+      var PV = relVariants(rows[orders[oi][0]]), QV = relVariants(rows[orders[oi][1]]), CV = relVariants(rows[2]);
+      for(var a=0; a<PV.length; a++) for(var b=0; b<QV.length; b++) for(var c=0; c<CV.length; c++){
+        var P = PV[a], Q = QV[b], C = CV[c];
+        if(P.rel !== Q.rel || P.rel !== C.rel) continue;
+        var s = RELS[P.rel];
+        if(!s || !s.trans || s.custom) continue;
+        if(P.neg || Q.neg || C.neg) continue;
+        if(P.obj !== Q.subj || C.subj !== P.subj || C.obj !== Q.obj) continue;
+        if(Q.subjNeg || Q.quant === '어떤' || C.subjNeg !== P.subjNeg) continue;
+        if(qRank(C.quant) > qRank(P.quant)) continue;
+        if(P.subj === P.obj || Q.subj === Q.obj || P.subj === Q.obj) continue;
+        return { rel:P.rel, a:labelOf(P.subj, P.subjNeg), b:P.obj, c:Q.obj };
+      }
+    }
+    return null;
+  }
+
+  function stmtKey(r){
+    if(r.kind === 'rel'){
+      var v = relCanon(r), s = RELS[v.rel], x = v.subj, y = v.obj;
+      if(s && s.sym && v.quant !== '어떤' && !v.subjNeg && y < x){ var t = x; x = y; y = t; }
+      return ['rel', qRank(v.quant), v.rel, x, v.subjNeg ? 1 : 0, y, v.neg ? 1 : 0, v.count, v.verb, v.vjosa].join('|');
+    }
+    return ['cp', r.kind, qRank(r.quant), r.subj, r.subjNeg ? 1 : 0, r.pred, r.neg ? 1 : 0].join('|');
+  }
+  function substitute(r, from, to){
+    var c = Object.assign({}, r);
+    if(c.subj === from) c.subj = to;
+    if(c.kind === 'rel'){ if(c.obj === from) c.obj = to; c.pred = relPhrase(c, false); }
+    else if(c.kind === 'class' && c.pred === from) c.pred = to;
+    return c;
+  }
+  // x = y · (…x…) → (…y…)   (Leibniz: identicals are interchangeable)
+  function matchIdentity(rows){
+    if(rows.length !== 3 || !rows.every(function(r){ return r.filled; })) return null;
+    var orders = [[0,1],[1,0]];
+    for(var oi=0; oi<orders.length; oi++){
+      var P = rows[orders[oi][0]], Q = rows[orders[oi][1]], C = rows[2];
+      if(P.kind !== 'rel' || P.rel !== 'same' || P.neg || P.subjNeg || P.quant === '어떤') continue;
+      var x = P.subj, y = P.obj, ck = stmtKey(C);
+      if(stmtKey(Q) === ck) continue;
+      if(stmtKey(substitute(Q, x, y)) === ck || stmtKey(substitute(Q, y, x)) === ck){
+        return { x:x, y:y, q:Q, c:C };
+      }
+    }
+    return null;
+  }
+
+  function evaluateGroupSyllogism(group){
+    if(!group.complete) return { status:'incomplete', groupIndex:group.index };
+    var m = matchGroup(group.rows);
+    if(m){
+      var id = m.template.id;
+      var layout = LAYOUT_TABLE[id];
+      var shapes = SHAPES_TABLE[id];
+      var itemFor = function(role){
+        var neg = layout.negRoles.indexOf(role) !== -1;
+        return { role:role, label: labelOf(m.roleToWord[role], neg), shape: shapes[role] };
+      };
+      return { status:'valid', groupIndex:group.index, templateId:id, ruleName:'형식 ' + id,
+        templateDesc:m.template.desc, diagramType:layout.type, items:layout.order.map(itemFor) };
+    }
+    var t = matchTransitive(group.rows);
+    if(t){
+      var s = RELS[t.rel];
+      return { status:'valid', groupIndex:group.index, templateId:'이행', ruleName:'이행 관계',
+        templateDesc:'X' + topic('X') + ' ' + fill(s.pos,'Y','') + ' · Y' + topic('Y') + ' ' + fill(s.pos,'Z','') + ' → X' + topic('X') + ' ' + fill(s.pos,'Z','') + ' (‘' + s.short + '’는 이행적 관계)',
+        diagramType:'relchain', nodes:[t.a, t.b, t.c], relLabel:s.short, relColor:s.color };
+    }
+    var idm = matchIdentity(group.rows);
+    if(idm){
+      return { status:'valid', groupIndex:group.index, templateId:'동일', ruleName:'동일자 대체',
+        templateDesc:'X와 Y가 같으면, X에 대해 참인 것은 Y에 대해서도 참이다',
+        diagramType:'identity', x:idm.x, y:idm.y, lines:[sentenceOf(idm.q), sentenceOf(idm.c)] };
+    }
+    return { status:'invalid', groupIndex:group.index };
+  }
+
+  // ---------------------------------------------------------------
+  // Contradiction, cycle, relation and existence checks (global)
+  // ---------------------------------------------------------------
+  function findContradictions(rawList){
+    var issues = [];
+    var map = {};
+    rawList.forEach(function(r){
+      if(r.kind === 'exist') return;
+      var key = labelOf(r.subj, r.subjNeg) + '\u0001' + r.pred;
+      map[key] = map[key] || [];
+      map[key].push(r);
+    });
+    Object.keys(map).forEach(function(key){
+      var list = map[key];
+      var hasA=false, hasE=false, hasI=false, hasO=false;
+      list.forEach(function(r){
+        var all = (r.quant !== '어떤');
+        if(all && !r.neg) hasA = true;
+        if(all && r.neg) hasE = true;
+        if(!all && !r.neg) hasI = true;
+        if(!all && r.neg) hasO = true;
+      });
+      var base = list[0];
+      function variant(q, neg){ return sentenceOf(Object.assign({}, base, { quant:q, neg:neg, predNeg:neg })); }
+      var uq = base.quant === '개체' ? '개체' : '모든';
+      if(hasA && hasO) issues.push('모순: "' + variant(uq, false) + '"와 "' + variant('어떤', true) + '"는 함께 성립할 수 없습니다.');
+      if(hasE && hasI) issues.push('모순: "' + variant(uq, true) + '"와 "' + variant('어떤', false) + '"는 함께 성립할 수 없습니다.');
+    });
+    return issues;
+  }
+
+  function findCycles(rawList){
+    var adj = {};
+    rawList.forEach(function(r){
+      if(r.kind !== 'class' && r.kind !== 'prop') return;
+      var from = labelOf(r.subj, r.subjNeg), to = labelOf(r.pred, r.predNeg);
+      adj[from] = adj[from] || [];
+      adj[from].push(to);
+    });
+    var issues = [];
+    var visited = {}, onStack = {}, reported = {};
+    function dfs(node, path){
+      visited[node] = true; onStack[node] = true; path.push(node);
+      (adj[node] || []).forEach(function(next){
+        if(!visited[next]){ dfs(next, path.slice()); }
+        else if(onStack[next]){
+          var start = path.indexOf(next);
+          var cyclePath = path.slice(start).concat(next);
+          var key = cyclePath.slice().sort().join('>');
+          if(!reported[key]){ reported[key] = true; issues.push('순환 논리: ' + cyclePath.join(' → ') + ' 로 되돌아오는 고리가 있습니다.'); }
+        }
+      });
+      onStack[node] = false;
+    }
+    Object.keys(adj).forEach(function(n){ if(!visited[n]) dfs(n, []); });
+    return issues;
+  }
+
+  function findRelationIssues(flat){
+    var issues = [], derived = [];
+    var uni = flat.filter(function(r){ return r.kind === 'rel' && r.filled && !r.neg && !r.subjNeg && r.quant !== '어떤'; }).map(relCanon);
+
+    function relSentence(rid, a, b, q){
+      return sentenceOf({ kind:'rel', quant:q || '개체', subj:a, subjNeg:false, obj:b, rel:rid, neg:false, count:'', verb:'', vjosa:'' });
+    }
+
+    var byRel = {};
+    uni.forEach(function(v){
+      var s = RELS[v.rel];
+      if(!s || !s.asym) return;
+      (byRel[v.rel] = byRel[v.rel] || []).push(v);
+    });
+    Object.keys(byRel).forEach(function(rid){
+      var s = RELS[rid], list = byRel[rid], adj = {}, direct = {}, quantOf = {};
+      list.forEach(function(v){
+        (adj[v.subj] = adj[v.subj] || []).push(v.obj);
+        direct[v.subj + '\u0001' + v.obj] = true;
+        if(!quantOf[v.subj]) quantOf[v.subj] = v.quant;
+      });
+      if(!s.trans){
+        list.forEach(function(v){
+          if(direct[v.obj + '\u0001' + v.subj] && v.subj < v.obj){
+            issues.push('모순: "' + relSentence(rid, v.subj, v.obj) + '"와 "' + relSentence(rid, v.obj, v.subj) + '"는 함께 성립할 수 없습니다 (비대칭 관계).');
+          }
+        });
+        return;
+      }
+      var reported = {}, relDerived = [];
+      Object.keys(adj).forEach(function(start){
+        var parent = {}, dist = {}, queue = [start];
+        dist[start] = 0;
+        while(queue.length){
+          var cur = queue.shift();
+          (adj[cur] || []).forEach(function(nx){
+            if(nx === start){
+              var back = [], p = cur;
+              while(p !== start && p !== undefined){ back.push(p); p = parent[p]; }
+              var path = [start].concat(back.reverse()).concat([start]);
+              var key = path.slice(0, -1).sort().join('|');
+              if(!reported[key]){
+                reported[key] = true;
+                issues.push('모순(순환 비교): ' + path.join(' → ') + ' — ‘' + s.short + '’ 관계는 비대칭·이행적이라 자기 자신으로 되돌아올 수 없습니다.');
+              }
+              return;
+            }
+            if(dist[nx] === undefined){ dist[nx] = dist[cur] + 1; parent[nx] = cur; queue.push(nx); }
+          });
+        }
+        Object.keys(dist).forEach(function(t){
+          if(dist[t] >= 2 && !direct[start + '\u0001' + t]){
+            relDerived.push(relSentence(rid, start, t, quantOf[start]));
+          }
+        });
+      });
+      // a cyclic (contradictory) chain proves anything — don't list "facts" from it
+      if(Object.keys(reported).length === 0){
+        relDerived.forEach(function(d){ if(derived.length < 12) derived.push(d); });
+      }
+    });
+
+    var counts = {};
+    uni.forEach(function(v){
+      if(v.rel === 'has' && v.count !== ''){
+        var k = v.subj + '\u0001' + v.obj;
+        (counts[k] = counts[k] || {})[v.count] = true;
+      }
+    });
+    Object.keys(counts).forEach(function(k){
+      var cs = Object.keys(counts[k]);
+      if(cs.length > 1){
+        var p = k.split('\u0001');
+        issues.push('모순: ' + p[0] + topic(p[0]) + ' ' + p[1] + j(p[1],'을','를') + ' 가진 개수가 ' + cs.map(function(c){ return c + '개'; }).join(', ') + '로 서로 다르게 서술되었습니다.');
+      }
+    });
+
+    var ex = {};
+    flat.forEach(function(r){
+      if(r.kind === 'exist' && r.filled){ (ex[r.subj] = ex[r.subj] || {})[r.neg ? 'no' : 'yes'] = true; }
+    });
+    Object.keys(ex).forEach(function(sub){
+      if(ex[sub].yes && ex[sub].no) issues.push('모순: ' + sub + topic(sub) + ' 존재한다는 서술과 존재하지 않는다는 서술이 함께 있습니다.');
+      if(ex[sub].no){
+        flat.forEach(function(r){
+          if(r.kind !== 'exist' && r.quant === '어떤' && !r.subjNeg && r.subj === sub){
+            issues.push('모순: "' + sentenceOf(r) + '"는 ' + sub + j(sub,'이','가') + ' 적어도 하나 존재함을 뜻하므로, "' + sub + topic(sub) + ' 존재하지 않는다"와 충돌합니다.');
+          }
+        });
+      }
+    });
+
+    return { issues:issues, derived:derived };
+  }
+
+  function renderEvalList(groupResults, contradictions, cycles, relInfo){
+    var ul = document.getElementById('evalList');
+    ul.innerHTML = '';
+    function addLi(text, cls){
+      var li = document.createElement('li');
+      li.textContent = text;
+      if(cls) li.className = cls;
+      ul.appendChild(li);
+    }
+    var anyProblem = false;
+    groupResults.forEach(function(g){
+      if(g.status === 'valid'){
+        addLi('세트 ' + g.groupIndex + ': 올바른 추론입니다 (' + g.ruleName + ' — ' + g.templateDesc + ')', 'ok');
+      } else if(g.status === 'invalid'){
+        anyProblem = true;
+        addLi('세트 ' + g.groupIndex + ': 정언삼단논법 9형식, 이행 관계 추론, 동일자 대체 중 어느 것과도 일치하지 않습니다 — 틀린 논법입니다.', null);
+      }
+    });
+    contradictions.forEach(function(msg){ anyProblem = true; addLi(msg, null); });
+    cycles.forEach(function(msg){ anyProblem = true; addLi(msg, null); });
+    relInfo.issues.forEach(function(msg){ anyProblem = true; addLi(msg, null); });
+    if(!anyProblem){ addLi('발견된 논리적 결함이 없습니다. 모든 세트가 인정된 추론 규칙에 부합합니다.', 'ok'); }
+    if(relInfo.derived.length){
+      addLi('입력하지 않았지만 이행 관계로 도출되는 사실: ' + relInfo.derived.join(' / '), 'info');
+    }
+  }
+
+  // =================================================================
+  // DIAGRAM: nested circle / fan (부채꼴) shapes with spring physics
+  // =================================================================
+  var CELL_W = 260, CELL_H = 300;
+  var BETA = 46 * Math.PI / 180;
+  var MARGIN = 0.82;
+  var SPRING_K = 0.16;
+  var HOME_K = 0.09;
+  var DAMPING = 0.72;
+  var SETTLE_EPS = 0.04;
+  var SETTLE_MAX_TICKS = 240;
+
+  function childFrame(parent, childType){
+    if(parent.type === 'circle'){
+      if(childType === 'circle'){
+        return { type:'circle', x:parent.x, y:parent.y, r:parent.r*MARGIN };
+      }
+      return { type:'fan', x:parent.x, y:parent.y, r:parent.r*MARGIN, beta:BETA };
+    }
+    if(childType === 'circle'){
+      var R = parent.r, beta = parent.beta;
+      var d = (R/(1+Math.sin(beta))) * MARGIN;
+      var rho = (R*Math.sin(beta)/(1+Math.sin(beta))) * MARGIN;
+      return { type:'circle', x:parent.x+d, y:parent.y, r:rho };
+    }
+    return { type:'fan', x:parent.x, y:parent.y, r:parent.r*MARGIN, beta:parent.beta*0.82 };
+  }
+
+  function clampCircleInCircle(cx,cy,cr, px,py,pr){
+    var dx = cx-px, dy = cy-py, dist = Math.hypot(dx,dy);
+    var maxDist = Math.max(0, pr-cr);
+    if(dist > maxDist){
+      if(dist < 1e-6) return { x:px+maxDist, y:py };
+      var k = maxDist/dist;
+      return { x:px+dx*k, y:py+dy*k };
+    }
+    return { x:cx, y:cy };
+  }
+  function clampInFan(cx,cy,cr, parent){
+    var lx = cx-parent.x, ly = cy-parent.y;
+    var sB = Math.sin(parent.beta), cB = Math.cos(parent.beta);
+    for(var i=0;i<5;i++){
+      var d1 = lx*sB - ly*cB;
+      if(d1 < cr){ var def1 = cr-d1; lx += def1*sB; ly += -def1*cB; }
+      var d2 = lx*sB + ly*cB;
+      if(d2 < cr){ var def2 = cr-d2; lx += def2*sB; ly += def2*cB; }
+      var dist = Math.hypot(lx,ly);
+      var maxDist = Math.max(0, parent.r-cr);
+      if(dist > maxDist){
+        if(dist < 1e-6){ lx = maxDist; ly = 0; }
+        else { var k = maxDist/dist; lx *= k; ly *= k; }
+      }
+    }
+    return { x:parent.x+lx, y:parent.y+ly };
+  }
+  function clampChildInParent(cx,cy,cr, parent){
+    return parent.type === 'circle' ? clampCircleInCircle(cx,cy,cr, parent.x,parent.y,parent.r) : clampInFan(cx,cy,cr, parent);
+  }
+
+  function buildFrames(groupResult){
+    var frames = [];
+    var items = groupResult.items;
+    var root = { type:'fan', x:64, y:150, r:78, beta:BETA, label:items[0].label, role:items[0].role, parent:-1, vx:0, vy:0 };
+    root.homeX = root.x; root.homeY = root.y;
+    frames.push(root);
+    var prev = root;
+    for(var i=1;i<items.length;i++){
+      var f = childFrame(prev, items[i].shape);
+      f.label = items[i].label; f.role = items[i].role; f.parent = frames.length-1; f.vx=0; f.vy=0;
+      f.idealDX = f.x - prev.x; f.idealDY = f.y - prev.y;
+      frames.push(f);
+      prev = f;
+    }
+    return frames;
+  }
+
+  function fanPathD(x,y,r,beta){
+    var a1 = -beta, a2 = beta;
+    var p1 = [x + r*Math.cos(a1), y + r*Math.sin(a1)];
+    var p2 = [x + r*Math.cos(a2), y + r*Math.sin(a2)];
+    var largeArc = (2*beta > Math.PI) ? 1 : 0;
+    return 'M '+x.toFixed(1)+','+y.toFixed(1)+' L '+p1[0].toFixed(1)+','+p1[1].toFixed(1)+
+      ' A '+r.toFixed(1)+','+r.toFixed(1)+' 0 '+largeArc+' 1 '+p2[0].toFixed(1)+','+p2[1].toFixed(1)+' Z';
+  }
+
+  function frameShapeSVG(f, idx){
+    var negated = f.label.indexOf('×') !== -1;
+    var isCircle = (f.type === 'circle');
+    var stroke = negated ? '#e08585' : (isCircle ? '#e8c468' : '#7fb3d5');
+    var fill = negated ? 'rgba(224,133,133,0.16)' : (isCircle ? 'rgba(232,196,104,0.20)' : 'rgba(127,179,213,0.20)');
+    var shapeMarkup;
+    if(isCircle){
+      shapeMarkup = '<circle cx="'+f.x.toFixed(1)+'" cy="'+f.y.toFixed(1)+'" r="'+f.r.toFixed(1)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+    } else {
+      shapeMarkup = '<path d="'+fanPathD(f.x,f.y,f.r,f.beta)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2" stroke-linejoin="round"/>';
+    }
+    var hasChild = f.hasChild;
+    var lx, ly;
+    if(isCircle){
+      lx = f.x; ly = hasChild ? (f.y - f.r*0.6) : f.y;
+    } else {
+      lx = hasChild ? (f.x - f.r*0.28) : (f.x + f.r*0.42);
+      ly = f.y - (hasChild ? f.r*0.12 : 0);
+    }
+    var label = '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="'+(negated?'#e08585':'#f3f1e7')+'" style="pointer-events:none;">'+esc(f.label)+'</text>';
+    return '<g class="diagram-shape" data-fidx="'+idx+'">' + shapeMarkup + label + '</g>';
+  }
+
+  function renderFramesInto(gEl, frames){
+    var html = '';
+    frames.forEach(function(f, i){ f.hasChild = frames.some(function(o){ return o.parent === i; }); });
+    frames.forEach(function(f, i){ html += frameShapeSVG(f, i); });
+    gEl.innerHTML = html;
+  }
+
+  function physicsTick(frames, draggedIdx, desired){
+    if(draggedIdx !== null && draggedIdx !== undefined){
+      frames[draggedIdx].x = desired.x; frames[draggedIdx].y = desired.y;
+      frames[draggedIdx].vx = 0; frames[draggedIdx].vy = 0;
+    }
+    var fx = frames.map(function(){ return 0; });
+    var fy = frames.map(function(){ return 0; });
+
+    frames.forEach(function(f, i){
+      if(f.parent === -1){
+        if(i === draggedIdx) return;
+        fx[i] += (f.homeX - f.x) * HOME_K;
+        fy[i] += (f.homeY - f.y) * HOME_K;
+      } else {
+        var p = frames[f.parent];
+        var childX = (i === draggedIdx) ? desired.x : f.x;
+        var childY = (i === draggedIdx) ? desired.y : f.y;
+        if(i !== draggedIdx){
+          fx[i] += ((p.x + f.idealDX) - f.x) * SPRING_K;
+          fy[i] += ((p.y + f.idealDY) - f.y) * SPRING_K;
+        }
+        if(f.parent !== draggedIdx){
+          fx[f.parent] += ((childX - f.idealDX) - p.x) * SPRING_K;
+          fy[f.parent] += ((childY - f.idealDY) - p.y) * SPRING_K;
+        }
+      }
+    });
+
+    frames.forEach(function(f, i){
+      if(i === draggedIdx) return;
+      f.vx = (f.vx + fx[i]) * DAMPING;
+      f.vy = (f.vy + fy[i]) * DAMPING;
+      f.x += f.vx; f.y += f.vy;
+    });
+
+    frames.forEach(function(f){
+      if(f.parent === -1) return;
+      var p = frames[f.parent];
+      var res = clampChildInParent(f.x, f.y, f.r, p);
+      f.x = res.x; f.y = res.y;
+    });
+    frames.forEach(function(f){
+      if(f.parent !== -1) return;
+      f.x = Math.max(f.r*0.2, Math.min(CELL_W - f.r*0.2, f.x));
+      f.y = Math.max(f.r*0.2, Math.min(CELL_H - 40 - f.r*0.2, f.y));
+    });
+  }
+
+  function maxSpeed(frames){
+    var m = 0;
+    frames.forEach(function(f){ m = Math.max(m, Math.hypot(f.vx||0, f.vy||0)); });
+    return m;
+  }
+
+  var activeSim = null;
+  var simRunning = false;
+
+  function tickPhysics(){
+    if(!activeSim){ simRunning = false; return; }
+    var entry = activeSim.entry, frames = entry.frames;
+    var draggedIdx = activeSim.dragging ? activeSim.frameIdx : null;
+    physicsTick(frames, draggedIdx, activeSim.desired);
+    renderFramesInto(entry.el, frames);
+
+    if(!activeSim.dragging){
+      activeSim.settleTicks = (activeSim.settleTicks||0) + 1;
+      if(maxSpeed(frames) < SETTLE_EPS || activeSim.settleTicks > SETTLE_MAX_TICKS){
+        activeSim = null; simRunning = false; return;
+      }
+    }
+    requestAnimationFrame(tickPhysics);
+  }
+
+  function startSim(entry, frameIdx, desired){
+    activeSim = { entry:entry, frameIdx:frameIdx, desired:desired, dragging:true, settleTicks:0 };
+    if(!simRunning){ simRunning = true; requestAnimationFrame(tickPhysics); }
+  }
+
+  // ---- relation-rule diagrams (chain of boxes + labelled arrows) ----
+  function trunc(s, n){ s = String(s); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+
+  function diagBox(label, x, y, w){
+    var h = 30;
+    return '<rect x="'+(x-w/2)+'" y="'+(y-h/2)+'" width="'+w+'" height="'+h+'" rx="8" fill="rgba(232,196,104,0.18)" stroke="#e8c468" stroke-width="1.6"/>' +
+      '<text x="'+x+'" y="'+y+'" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="#f3f1e7">'+esc(trunc(label, 12))+'</text>';
+  }
+
+  function relChainMarkup(g){
+    var cx = CELL_W/2 - 22, ys = [40, 118, 196], bw = 116, bh = 30, col = g.relColor || '#f3f1e7';
+    var out = '';
+    [0,1].forEach(function(i){
+      var a = ys[i] + bh/2 + 2, b = ys[i+1] - bh/2 - 4;
+      out += '<line x1="'+cx+'" y1="'+a+'" x2="'+cx+'" y2="'+b+'" stroke="#7fb3d5" stroke-width="2" marker-end="url(#mkBlue)"/>' +
+        '<text x="'+(cx-9)+'" y="'+((a+b)/2)+'" text-anchor="end" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+col+'">'+esc(g.relLabel)+'</text>';
+    });
+    var x1 = cx + bw/2;
+    out += '<path d="M '+(x1+2)+','+ys[0]+' C '+(x1+64)+','+ys[0]+' '+(x1+64)+','+ys[2]+' '+(x1+6)+','+ys[2]+'" fill="none" stroke="#e8c468" stroke-width="2" marker-end="url(#mkGold)"/>' +
+      '<text x="'+(x1+52)+'" y="'+ys[1]+'" text-anchor="start" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+col+'">'+esc(g.relLabel)+'</text>';
+    g.nodes.forEach(function(n, i){ out += diagBox(n, cx, ys[i], bw); });
+    return out;
+  }
+
+  function identityMarkup(g){
+    var cx = CELL_W/2, y = 62;
+    return diagBox(g.x, cx - 62, y, 100) +
+      '<text x="'+cx+'" y="'+y+'" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="18" fill="#f3f1e7">=</text>' +
+      diagBox(g.y, cx + 62, y, 100) +
+      '<text x="'+cx+'" y="140" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11" fill="#7fb3d5">'+esc(trunc(g.lines[0], 30))+'</text>' +
+      '<text x="'+cx+'" y="170" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="#a9b6b4">⇓</text>' +
+      '<text x="'+cx+'" y="200" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11" fill="#e8c468">'+esc(trunc(g.lines[1], 30))+'</text>';
+  }
+
+  var diagramState = null;
+
+  function buildDiagramInto(container, groupResults){
+    activeSim = null; simRunning = false;
+    container.innerHTML = '';
+    container.classList.add('diagram-mode');
+    var n = groupResults.length;
+    if(n === 0){
+      container.innerHTML = '<p class="hint" style="padding:20px;">표시할 세트가 없습니다.</p>';
+      return;
+    }
+    var cols = n <= 1 ? 1 : (n === 2 ? 2 : Math.min(3, Math.ceil(Math.sqrt(n))));
+    var rows = Math.ceil(n / cols);
+    var W = cols * CELL_W, H = rows * CELL_H;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('xmlns', svgNS);
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('width', W); svg.setAttribute('height', H);
+
+    var defs = document.createElementNS(svgNS, 'defs');
+    defs.innerHTML =
+      '<marker id="mkBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7fb3d5"/></marker>' +
+      '<marker id="mkGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e8c468"/></marker>';
+    svg.appendChild(defs);
+
+    var bgRect = document.createElementNS(svgNS,'rect');
+    bgRect.setAttribute('x',0); bgRect.setAttribute('y',0);
+    bgRect.setAttribute('width',W); bgRect.setAttribute('height',H);
+    bgRect.setAttribute('fill','#212b2d');
+    bgRect.setAttribute('class','diagram-bg');
+    svg.appendChild(bgRect);
+
+    var viewport = document.createElementNS(svgNS,'g');
+    viewport.setAttribute('id','diagramViewport');
+    svg.appendChild(viewport);
+
+    var entries = [];
+
+    groupResults.forEach(function(g, i){
+      var col = i % cols, row = Math.floor(i / cols);
+      var ox = col * CELL_W, oy = row * CELL_H;
+      var cellG = document.createElementNS(svgNS,'g');
+      cellG.setAttribute('transform','translate('+ox+','+oy+')');
+      viewport.appendChild(cellG);
+
+      var cx = CELL_W/2;
+      if(g.status === 'valid'){
+        if(g.diagramType === 'relchain' || g.diagramType === 'identity'){
+          var relG = document.createElementNS(svgNS,'g');
+          relG.innerHTML = g.diagramType === 'relchain' ? relChainMarkup(g) : identityMarkup(g);
+          cellG.appendChild(relG);
+        } else {
+          var shapesG = document.createElementNS(svgNS,'g');
+          cellG.appendChild(shapesG);
+          var frames = buildFrames(g);
+          renderFramesInto(shapesG, frames);
+          entries.push({ el:shapesG, frames:frames });
+        }
+
+        var cap1 = document.createElementNS(svgNS,'text');
+        cap1.setAttribute('x',cx); cap1.setAttribute('y',260); cap1.setAttribute('text-anchor','middle');
+        cap1.setAttribute('font-family','IBM Plex Mono, monospace'); cap1.setAttribute('font-size','12'); cap1.setAttribute('fill','#8fcb9b');
+        cap1.textContent = '세트 ' + g.groupIndex + ' · ' + g.ruleName;
+        cellG.appendChild(cap1);
+
+        var cap2 = document.createElementNS(svgNS,'text');
+        cap2.setAttribute('x',cx); cap2.setAttribute('y',278); cap2.setAttribute('text-anchor','middle');
+        cap2.setAttribute('font-family','IBM Plex Sans KR, sans-serif'); cap2.setAttribute('font-size','10'); cap2.setAttribute('fill','#a9b6b4');
+        cap2.textContent = trunc(g.templateDesc, 44);
+        cellG.appendChild(cap2);
+      } else if(g.status === 'invalid'){
+        cellG.innerHTML =
+          '<rect x="26" y="55" width="'+(CELL_W-52)+'" height="130" rx="10" fill="rgba(224,133,133,0.07)" stroke="#e08585" stroke-width="1.5" stroke-dasharray="6 5"/>' +
+          '<text x="'+cx+'" y="115" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="24" fill="#e08585">×</text>' +
+          '<text x="'+cx+'" y="145" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" fill="#e08585">인정된 추론 형식이 아닙니다</text>' +
+          '<text x="'+cx+'" y="260" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#e08585">세트 '+g.groupIndex+'</text>';
+      } else {
+        cellG.innerHTML =
+          '<rect x="26" y="55" width="'+(CELL_W-52)+'" height="130" rx="10" fill="rgba(169,182,180,0.05)" stroke="#a9b6b4" stroke-width="1.5" stroke-dasharray="4 4"/>' +
+          '<text x="'+cx+'" y="125" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" fill="#a9b6b4">입력이 완료되지 않았습니다</text>' +
+          '<text x="'+cx+'" y="260" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#a9b6b4">세트 '+g.groupIndex+' (미완성)</text>';
+      }
+    });
+
+    container.appendChild(svg);
+
+    diagramState = { scale:1, panX:0, panY:0 };
+    function applyTransform(){
+      viewport.setAttribute('transform','translate('+diagramState.panX+','+diagramState.panY+') scale('+diagramState.scale+')');
+    }
+    applyTransform();
+    function clampScale(s){ return Math.max(0.4, Math.min(3, s)); }
+
+    svg.addEventListener('wheel', function(e){
+      e.preventDefault();
+      var factor = e.deltaY > 0 ? 0.9 : 1.1;
+      diagramState.scale = clampScale(diagramState.scale * factor);
+      applyTransform();
+    }, { passive:false });
+
+    var panning = false, panStart = null, panOrigin = null;
+    bgRect.addEventListener('pointerdown', function(e){
+      panning = true;
+      panStart = { x:e.clientX, y:e.clientY };
+      panOrigin = { x:diagramState.panX, y:diagramState.panY };
+      svg.setPointerCapture(e.pointerId);
+    });
+    svg.addEventListener('pointermove', function(e){
+      if(!panning) return;
+      diagramState.panX = panOrigin.x + (e.clientX - panStart.x);
+      diagramState.panY = panOrigin.y + (e.clientY - panStart.y);
+      applyTransform();
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(evt){
+      svg.addEventListener(evt, function(){ panning = false; });
+    });
+
+    var zc = document.createElement('div');
+    zc.className = 'zoom-controls';
+    zc.innerHTML = '<button type="button" data-z="in">+</button><button type="button" data-z="out">−</button><button type="button" data-z="reset">⤾</button>';
+    container.appendChild(zc);
+    zc.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      if(btn.dataset.z === 'in') diagramState.scale = clampScale(diagramState.scale*1.2);
+      else if(btn.dataset.z === 'out') diagramState.scale = clampScale(diagramState.scale/1.2);
+      else { diagramState.scale=1; diagramState.panX=0; diagramState.panY=0; }
+      applyTransform();
+    });
+
+    function localPoint(evt, refEl){
+      var pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      var ctm = refEl.getScreenCTM();
+      if(!ctm) return {x:0,y:0};
+      var loc = pt.matrixTransform(ctm.inverse());
+      return { x:loc.x, y:loc.y };
+    }
+
+    entries.forEach(function(entry){
+      var shapesG = entry.el, frames = entry.frames;
+      var dragOffset = null;
+
+      shapesG.addEventListener('pointerdown', function(e){
+        var target = e.target.closest('.diagram-shape');
+        if(!target) return;
+        e.stopPropagation();
+        var fidx = parseInt(target.getAttribute('data-fidx'), 10);
+        var p = localPoint(e, shapesG);
+        dragOffset = { x:p.x - frames[fidx].x, y:p.y - frames[fidx].y };
+        startSim(entry, fidx, { x:frames[fidx].x, y:frames[fidx].y });
+        shapesG.setPointerCapture(e.pointerId);
+      });
+
+      shapesG.addEventListener('pointermove', function(e){
+        if(!activeSim || activeSim.entry !== entry || !activeSim.dragging) return;
+        e.stopPropagation();
+        var p = localPoint(e, shapesG);
+        activeSim.desired = { x:p.x - dragOffset.x, y:p.y - dragOffset.y };
+      });
+
+      ['pointerup','pointercancel'].forEach(function(evt){
+        shapesG.addEventListener(evt, function(){
+          if(activeSim && activeSim.entry === entry){
+            activeSim.dragging = false;
+            activeSim.settleTicks = 0;
+          }
+        });
+      });
+    });
+  }
+
+  function legendIcon(shape){
+    if(shape === 'circle'){ return '<circle cx="8" cy="8" r="7" fill="rgba(232,196,104,0.25)" stroke="#e8c468" stroke-width="1.5"/>'; }
+    return '<path d="'+fanPathD(8,8,7,BETA)+'" fill="rgba(127,179,213,0.25)" stroke="#7fb3d5" stroke-width="1.5"/>';
+  }
+
+  // ---------------------------------------------------------------
+  // Network / diagram view rendering & switching
+  // ---------------------------------------------------------------
+  var network = null;
+  var currentGraphBundle = null;
+  var currentNodesDS = null, currentEdgesDS = null;
+  var currentGroupResults = null;
+  var isDiagram = false;
+
+  var graphOptions = {
+    nodes:{ shape:'ellipse', font:{ face:'IBM Plex Mono', size:16 }, borderWidth:2 },
+    edges:{ arrows:{ to:{ enabled:true, scaleFactor:0.7 } }, smooth:{ type:'continuous' } },
+    physics:{ enabled:true, solver:'forceAtlas2Based',
+      forceAtlas2Based:{ gravitationalConstant:-70, springLength:140, springConstant:0.06, avoidOverlap:0.6 },
+      stabilization:{ iterations:180 } },
+    interaction:{ dragNodes:true, dragView:true, zoomView:true, hover:true }
+  };
+
+  function renderGraphView(){
+    var container = document.getElementById('network');
+    container.classList.remove('diagram-mode');
+    container.innerHTML = '';
+    currentNodesDS = new vis.DataSet(currentGraphBundle.nodes);
+    currentEdgesDS = new vis.DataSet(currentGraphBundle.edges);
+    network = new vis.Network(container, { nodes:currentNodesDS, edges:currentEdgesDS }, graphOptions);
+
+    if(currentGraphBundle.pairs && currentGraphBundle.pairs.length){
+      network.on('afterDrawing', function(){
+        var baseIds = currentGraphBundle.pairs.map(function(p){ return p.baseId; });
+        var positions = network.getPositions(baseIds);
+        currentGraphBundle.pairs.forEach(function(p){
+          var basePos = positions[p.baseId];
+          if(basePos){ network.moveNode(p.negId, basePos.x + PAIR_BOX_W, basePos.y); }
+        });
+      });
+    }
+
+    network.on('doubleClick', function(params){
+      if(params.nodes && params.nodes.length === 1){
+        var nid = params.nodes[0];
+        currentGraphBundle.triples.forEach(function(t){
+          if(t.middleNodeId === nid){
+            t.conclHidden = !t.conclHidden;
+            currentEdgesDS.update({ id:t.conclusionEdgeId, hidden:t.conclHidden });
+          }
+        });
+      } else if(params.edges && params.edges.length === 1 && (!params.nodes || params.nodes.length === 0)){
+        var eid = params.edges[0];
+        currentGraphBundle.triples.forEach(function(t){
+          if(t.conclusionEdgeId === eid){
+            t.midHidden = !t.midHidden;
+            currentNodesDS.update({ id:t.middleNodeId, hidden:t.midHidden });
+            currentEdgesDS.update([
+              { id:t.premiseEdgeIds[0], hidden:t.midHidden },
+              { id:t.premiseEdgeIds[1], hidden:t.midHidden }
+            ]);
+          }
+        });
+      }
+    });
+
+    document.getElementById('dragHint').textContent =
+      '노드를 드래그해서 위치를 옮길 수 있습니다. 라벨 없는 화살표는 "A는 B이다/~하다"(포함), 라벨 있는 화살표는 두 대상 사이의 관계입니다. X/X× 쌍은 하나의 캡슐처럼 붙어 움직입니다. 가운데(중간 개념) 노드를 더블클릭하면 결론 화살표를, 결론 화살표를 더블클릭하면 중간 노드를 숨기거나 다시 보이게 할 수 있습니다.';
+    var catChips = REL_CAT_ORDER.map(function(cat){
+      return '<span><em class="dot" style="background:'+REL_CATS[cat]+'"></em>'+cat+'</span>';
+    }).join('');
+    document.getElementById('legendBox').innerHTML =
+      '<span><i class="ls-solid"></i> 모든·개체</span>' +
+      '<span><i class="ls-dashed"></i> 어떤 (특칭)</span>' +
+      '<span><i class="ls-premise"></i> 가정 화살표</span>' +
+      '<span><i class="ls-conclusion"></i> 결론 화살표</span>' +
+      '<span><i class="ls-exception"></i> 역할 불명 (삼각형 미형성)</span>' +
+      '<span><i class="ls-contradiction"></i> 모순 (같은 노드에서 X·X× 모두로 전칭)</span>' +
+      '<span><em class="dot" style="background:#e8c468"></em>개념</span>' +
+      '<span><em class="dot" style="background:#a8d5ba"></em>성질·상태·행위</span>' +
+      '<span><b>×</b> 부정(아니다)</span>' +
+      '<span>∃ 존재 · ∅ 비존재</span>' +
+      '<span style="width:100%;margin-top:2px;">관계 라벨 색:</span>' + catChips +
+      '<span>¬ 부정된 관계</span>';
+  }
+
+  function renderDiagramView(){
+    if(network){ network.destroy(); network = null; }
+    var container = document.getElementById('network');
+    buildDiagramInto(container, currentGroupResults);
+    document.getElementById('dragHint').textContent =
+      '도형을 드래그하면 자석처럼 서로 끌어당기며 나머지 도형도 함께 따라 움직입니다 (안쪽 도형은 바깥 도형을 절대 벗어나지 않습니다). 관계 추론 세트는 상자와 화살표의 사슬로 그립니다. 휠이나 우측 하단 버튼으로 확대·축소, 빈 공간 드래그로 화면 이동이 가능합니다.';
+    document.getElementById('legendBox').innerHTML =
+      '<span><svg width="16" height="16">' + legendIcon('circle') + '</svg> 원 = 전칭(모든)</span>' +
+      '<span><svg width="16" height="16">' + legendIcon('fan') + '</svg> 부채꼴 = 특칭(어떤)</span>' +
+      '<span><i class="ls-premise"></i> 전제 관계</span>' +
+      '<span><i class="ls-conclusion"></i> 도출된 관계</span>' +
+      '<span><b>×</b> 부정(아니다)</span>';
+  }
+
+  function renderCurrentView(){
+    if(isDiagram){ renderDiagramView(); } else { renderGraphView(); }
+  }
+
+  // ---------------------------------------------------------------
+  // View switching / main actions
+  // ---------------------------------------------------------------
+  var inputView = document.getElementById('inputView');
+  var resultView = document.getElementById('resultView');
+
+  document.getElementById('doneBtn').addEventListener('click', function(){
+    var flat = collectFlatRaw();
+    if(flat.length === 0){ alert('최소 한 문장 이상 입력해주세요.'); return; }
+    var grouped = collectGroupedRaw();
+    currentGraphBundle = buildGraphAndTriples(grouped, flat);
+    currentGroupResults = grouped.map(evaluateGroupSyllogism);
+
+    var contradictions = findContradictions(flat);
+    var cycles = findCycles(flat);
+    var relInfo = findRelationIssues(flat);
+
+    isDiagram = false;
+    inputView.classList.add('hidden');
+    resultView.classList.remove('hidden');
+    document.getElementById('viewTitle').textContent = '논리 그래프';
+    document.getElementById('toggleBtn').textContent = '다이어그램으로 보기';
+
+    renderCurrentView();
+    renderGraphStats(computeGraphStats(currentGraphBundle, grouped));
+    renderEvalList(currentGroupResults, contradictions, cycles, relInfo);
+  });
+
+  document.getElementById('toggleBtn').addEventListener('click', function(){
+    isDiagram = !isDiagram;
+    document.getElementById('viewTitle').textContent = isDiagram ? '논리 다이어그램' : '논리 그래프';
+    document.getElementById('toggleBtn').textContent = isDiagram ? '그래프로 보기' : '다이어그램으로 보기';
+    renderCurrentView();
+  });
+
+  document.getElementById('backBtn').addEventListener('click', function(){
+    resultView.classList.add('hidden');
+    inputView.classList.remove('hidden');
+  });
+
+  document.getElementById('saveImgBtn').addEventListener('click', function(){
+    if(isDiagram){
+      var svgEl = document.querySelector('#network svg');
+      if(!svgEl){ alert('저장할 다이어그램이 없습니다.'); return; }
+      var xml = new XMLSerializer().serializeToString(svgEl);
+      var w = parseInt(svgEl.getAttribute('width'), 10) || 800;
+      var h = parseInt(svgEl.getAttribute('height'), 10) || 600;
+      var img = new Image();
+      var svgData = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(xml)));
+      img.onload = function(){
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        triggerDownload(canvas.toDataURL('image/png'), '삼단논법_다이어그램.png');
+      };
+      img.onerror = function(){ alert('이미지 저장에 실패했습니다.'); };
+      img.src = svgData;
+    } else {
+      if(!network){ return; }
+      try{
+        var canvas2 = network.canvas.frame.canvas;
+        triggerDownload(canvas2.toDataURL('image/png'), '삼단논법_그래프.png');
+      }catch(err){ alert('이미지 저장에 실패했습니다: ' + err.message); }
+    }
+  });
+
+  function triggerDownload(url, filename){
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  // test hook (harmless in production)
+  window.__board = { addGroup:addGroup, setRowValues:setRowValues, collectGroupedRaw:collectGroupedRaw,
+    collectFlatRaw:collectFlatRaw, evaluateGroupSyllogism:evaluateGroupSyllogism, buildGraphAndTriples:buildGraphAndTriples,
+    findContradictions:findContradictions, findRelationIssues:findRelationIssues, sentenceOf:sentenceOf, groupsEl:groupsEl, importGroupsFromFile:importGroupsFromFile };
+
+})();
+</script>
+</body>
+</html>
