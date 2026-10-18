@@ -1264,7 +1264,8 @@
   function pct(p){ return Math.round(p * 100); }
   function fmtPct(p){ return p >= 0.995 ? '99% 이상' : (p <= 0.005 ? '1% 미만' : pct(p) + '%'); }
   function fmtRange(c){
-    var a = c.lo <= 0.005 ? '1% 미만' : pct(c.lo) + '%', b = c.hi >= 0.995 ? '99% 이상' : pct(c.hi) + '%';
+    function f(p){ return p >= 0.995 ? '99% 이상' : (p <= 0.005 ? '1% 미만' : pct(p) + '%'); }
+    var a = f(c.lo), b = f(c.hi);
     return a === b ? a : a + '–' + b;
   }
 
