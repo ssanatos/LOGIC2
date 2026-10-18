@@ -511,8 +511,12 @@
   function negateProp(p){
     if(/하다$/.test(p)) return p.replace(/하다$/, '하지 않다');
     if(/는다$/.test(p)) return p.replace(/는다$/, '지 않는다');
-    // noun + 이다: ~것이다 → ~것이 아니다, ~때문이다 → ~때문이 아니다
+    // noun + 이다: ~것이다 → ~것이 아니다, 모순이다 → 모순이 아니다 (받침 있는 명사 + 이다)
+    if(/적이다$/.test(p)) return p.replace(/이다$/, '이지 않다');
     if(/(것|때문|탓|덕분|뿐|셈|편|중)이다$/.test(p)) return p.replace(/이다$/, '이 아니다');
+    if(/[가-힣]이다$/.test(p) && p.length >= 3 && jongIndex(p.charCodeAt(p.length - 3)) > 0) return p.replace(/이다$/, '이 아니다');
+    // ~할 수 있다 → ~할 수 없다
+    if(/수 있다$/.test(p)) return p.replace(/수 있다$/, '수 없다');
     // past tense: 줄었다 → 줄지 않았다, 했다 → 하지 않았다, 커졌다 → 커지지 않았다
     if(/했다$/.test(p)) return p.replace(/했다$/, '하지 않았다');
     if(/(되었|됐)다$/.test(p)) return p.replace(/(되었|됐)다$/, '되지 않았다');
