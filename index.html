@@ -1498,7 +1498,7 @@
     // universal conclusion with counter-evidence
     if(inp.claim && inp.claim.type === 'universal'){
       var against = inp.evidence.filter(function(e){ return e.dir === 'against' && e.lr !== 'decisive'; });
-      if(against.length) statusFlags.push('전칭 결론(모든)에 반대 근거 ' + against.length + '개가 있습니다 — 그것이 결론에 맞지 않는 사례(반례)라면 반례 하나로 전칭은 무너지므로 변별력을 ‘결정적’으로 매기거나, 결론을 ‘어떤’이나 통계적 결론으로 낮추세요.');
+      if(against.length) if(!(inp.sample && inp.sample.n > 0)) statusFlags.push('전칭 결론(모든)에 반대 근거 ' + against.length + '개가 있습니다 — 그것이 결론에 맞지 않는 사례(반례)라면 반례 하나로 전칭은 무너집니다. 관찰한 사례라면 ① 표본에 ‘관찰 n개 중 맞는 사례 k개’로 넣으세요(반례가 있으면 반박으로 계산합니다). 아니면 결론을 ‘어떤’이나 통계적 결론으로 낮추세요.');
     }
     var mid = inductCore(inp, 'mid'), lo = inductCore(inp, 'lo'), hi = inductCore(inp, 'hi');
     var cred = { mid:mid.p, lo:Math.min(lo.p, mid.p, hi.p), hi:Math.max(lo.p, mid.p, hi.p) };
