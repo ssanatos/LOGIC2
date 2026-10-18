@@ -292,7 +292,7 @@
         <tr><th>정의·동치</th><td>두 개념이 같은 것을 가리킴 — 포유류는 곧 젖을 먹여 새끼를 기르는 동물이다. 양쪽 방향 포함(≡)이므로 어느 쪽으로든 바꿔 쓸 수 있습니다.</td></tr>
         <tr><th>오직 ~만</th><td>양화사 ‘오직’ — 오직 사람만 글을 쓴다 = 모든 글을 쓰는 것은 사람이다. 그래프에는 이 논리적 방향(쓰다 → 사람)으로 그립니다.</td></tr>
         <tr><th>조건 · 선언</th><td>문장 위쪽의 형식을 ‘조건’이나 ‘선언’으로 바꾸면 명제 칸이 두 개가 됩니다. 각 명제는 그래프에서 상자 하나가 되고, 조건은 ‘이면’ 화살표, 선언은 ‘또는’ 마름모로 잇습니다. 판정 규칙: 전건 긍정 · 후건 부정 · 가언 삼단논법 · 선언 삼단논법. 후건 긍정, 전건 부정, 선언지 긍정은 오류로 지적합니다. 두 명제의 주어가 같은 일반 명사(모든 새가 ~이면 ~)이면 ‘그 주어의 각 대상마다’로 읽습니다.</td></tr>
-        <tr><th>귀납 세트</th><td>세트 이름 옆에서 ‘귀납 세트’를 고르면, 전제 두 칸 대신 결론 하나와 근거 입력판이 나옵니다. 귀납 결론은 참·거짓 대신 <b>신뢰도</b>(참일 확률)를 계산합니다 — 표본은 베타 분포로, 다른 증거는 우도비로, 배경지식은 사전 확률에 곱하는 배수로 반영하는 베이즈 갱신입니다. 이와 따로 ①–⑦ 기준별 <b>추론 품질</b> 점수를 매깁니다. 귀납 결론을 다른 연역 세트의 전제로 쓰면, 그 연역 결론의 신뢰도 하한도 계산합니다.</td></tr>
+        <tr><th>귀납 세트</th><td>세트 이름 옆에서 ‘귀납 세트’를 고르면, 전제 두 칸 대신 결론 하나와 근거 입력판이 나옵니다. 귀납 결론은 참·거짓 대신 <b>신뢰도</b>(참일 확률)를 계산합니다 — 표본은 베타 분포로, 다른 증거는 우도비로, 배경지식은 사전 확률에 곱하는 배수로 반영하는 베이즈 갱신입니다. 이와 따로 ①–⑧ 기준별 <b>추론 품질</b> 점수를 매깁니다. ⑧ 재현성은 증거마다 매기며, 독립적으로 재현되지 않은 소규모 연구나 일화는 반론이 없어도 무게를 깎습니다. 귀납 결론을 다른 연역 세트의 전제로 쓰면, 그 연역 결론의 신뢰도 하한도 계산합니다.</td></tr>
         <tr><th>수식어</th><td>이름이 없는 개념은 <b>머리 명사 + 수식어</b>로 조립합니다. “바람에 흔들리는 꽃” = 머리 ‘꽃’ + 수식어 ‘흔들리는’(개념: 흔들리다 · 대상: 바람 · 조사: 에). 그래프에서는 회색 점(●) 하나가 되고, 꽃·흔들리다·바람으로 뻗은 회색 선이 그 정의를 나타냅니다. 수식어가 붙은 개념은 머리 명사와 각 수식어 모두에 포함되므로(교집합), “칼은 위험한 도구다”에서 “칼은 위험하다”와 “칼은 도구다”를 그대로 꺼내 쓸 수 있습니다. 수식어 순서가 달라도 같은 개념으로 합쳐집니다.</td></tr>
       </table>
       <p>양화사: <b>모든</b>(전칭) · <b>어떤</b>(특칭) · <b>개체</b>(소크라테스, 지구처럼 하나뿐인 대상 — 논리상 전칭처럼 다룹니다)</p>
@@ -1191,6 +1191,17 @@
       even:     { label:'반반이다 (≈50%)', p:0.50 },
       unlikely: { label:'아마 아닐 것이다 (≈30%)', p:0.30 }
     },
+    // ⑧ robustness of each piece of evidence. A single small study tends to
+    //    overstate its effect (winner's curse, publication bias), so its
+    //    likelihood ratio counts for less — before anyone publishes a
+    //    failed replication. 'none' = not rated (old files: no discount).
+    robust: {
+      none:       { label:'재현성 미평가', f:1,    lo:1,    hi:1,   score:null },
+      replicated: { label:'독립 재현됨 / 사전등록 대규모', f:1,    lo:0.9,  hi:1,   score:100 },
+      large:      { label:'단일 대규모 연구', f:0.8,  lo:0.6,  hi:0.9, score:70 },
+      small:      { label:'단일 소규모 연구', f:0.3,  lo:0.15, hi:0.5, score:30 },
+      anecdote:   { label:'일화·사례', f:0.1,  lo:0.05, hi:0.2, score:5 }
+    },
     // ⑦ testability (does not change credence; an unfalsifiable claim
     //    makes every piece of evidence non-discriminating, LR = 1)
     testability: {
@@ -1214,7 +1225,8 @@
   };
   var CRITERIA = [
     ['rep','① 표본의 대표성'], ['scope','② 결론 범위의 적절성'], ['disc','③ 증거의 변별력'],
-    ['total','④ 총증거'], ['bg','⑤ 배경지식과의 정합성'], ['calib','⑥ 보정된 확신'], ['test','⑦ 검증 가능성']
+    ['total','④ 총증거'], ['bg','⑤ 배경지식과의 정합성'], ['calib','⑥ 보정된 확신'], ['test','⑦ 검증 가능성'],
+    ['rob','⑧ 재현성과 검정력']
   ];
 
   // ---- numerics: log-gamma, regularized incomplete beta, beta quantile ----
@@ -1330,7 +1342,9 @@
         var lv = C.lr[e.lr] || C.lr.none, forSide = e.dir !== 'against';
         var lr = scn === 'mid' ? lv.mid : ((scn === 'lo') === forSide ? lv.lo : lv.hi);
         if(unfals) lr = 1;
-        out.terms.push((forSide ? 1 : -1) * Math.log(lr) / list.length);
+        var rb = C.robust[e.rob] || C.robust.none;
+        var rf = scn === 'mid' ? rb.f : ((scn === 'lo') === forSide ? rb.lo : rb.hi);
+        out.terms.push((forSide ? 1 : -1) * Math.log(lr) * rf / list.length);
       });
     });
 
@@ -1432,6 +1446,23 @@
       if(over) flags.push('결론을 근거보다 강하게 확신하고 있습니다.');
     }
 
+    // ⑧ robustness of the supporting evidence
+    var rated = supporting.filter(function(e){ return e.rob && e.rob !== 'none' && C.robust[e.rob]; });
+    if(!rated.length){
+      set('rob', null, '증거의 재현성을 평가하지 않았습니다.');
+    } else {
+      var rs = rated.reduce(function(x, e){ return x + C.robust[e.rob].score; }, 0) / rated.length;
+      var weak = rated.filter(function(e){ return e.rob === 'small' || e.rob === 'anecdote'; }).length;
+      var rnote = '지지 증거 ' + rated.length + '개의 평균 견고성.';
+      if(weak === rated.length){
+        rnote += ' 지지 증거가 모두 단일 소규모 연구나 일화입니다 — 반론이 없어도 효과가 부풀려졌을 수 있습니다.';
+        flags.push('결론이 독립적으로 재현되지 않은 소규모 연구나 일화에만 기대고 있습니다.');
+      } else if(weak){
+        rnote += ' 그중 ' + weak + '개는 단일 소규모 연구나 일화입니다.';
+      }
+      set('rob', rs, rnote);
+    }
+
     // ⑦ testability
     var te = C.testability[inp.testability] || C.testability.predicts;
     set('test', te.score, te.label + '.');
@@ -1455,7 +1486,7 @@
   function inductHTML(){
     var C = INDUCT_CFG;
     return '<div class="induct" data-hassample="0" data-scopeauto="0" data-stat="0">' +
-      '<p class="ind-intro">귀납 결론은 참·거짓 대신 신뢰도로 평가합니다. 위 ‘결론’ 칸에 결론을 쓰고, 아래에 근거를 채우세요. 번호는 평가 기준 ①–⑦입니다.</p>' +
+      '<p class="ind-intro">귀납 결론은 참·거짓 대신 신뢰도로 평가합니다. 위 ‘결론’ 칸에 결론을 쓰고, 아래에 근거를 채우세요. 번호는 평가 기준 ①–⑧입니다.</p>' +
       '<div class="ind-sec"><span class="ind-t">① 표본 <small>결론 부류에서 관찰한 사례</small></span><div class="ind-f">' +
         '관찰 <input type="number" class="i-n" min="0" placeholder="n">개 중 결론에 맞는 사례 <input type="number" class="i-k" min="0" placeholder="k">개' +
         '<select class="i-method" aria-label="추출 방식">' + optsFrom(C.sampling, 'unknown') + '</select>' +
@@ -1464,7 +1495,7 @@
         '<select class="i-scope" aria-label="결론 범위"><option value="auto">결론 문장 그대로</option><option value="stat">통계적 결론 — 비율로 주장</option></select>' +
         '<span class="i-theta-u">적어도</span><input type="number" class="i-theta" min="1" max="99" placeholder="%" value="50"><span class="i-theta-u">%가 그렇다</span>' +
       '</div><div class="ind-f need-scopeman" style="margin-top:5px"><select class="i-scopeman" aria-label="범위 판단">' + optsFrom(C.scopeManual, 'matched') + '</select></div></div>' +
-      '<div class="ind-sec"><span class="ind-t">③ 증거와 변별력 <small>대안 가설에서도 나왔을 증거인가</small></span><div class="ind-f">' +
+      '<div class="ind-sec"><span class="ind-t">③ 증거와 변별력 · ⑧ 재현성 <small>대안 가설에서도 나왔을 증거인가 · 독립적으로 재현된 연구인가</small></span><div class="ind-f">' +
         '<input type="text" class="i-alt" placeholder="대안 가설 — 결론이 틀렸다면 무엇이 대신 참인가?">' +
       '</div><div class="i-evs"></div><div class="mod-actions"><button type="button" class="mod-add i-ev-add">+ 증거</button></div></div>' +
       '<div class="ind-sec"><span class="ind-t">④ 총증거</span><div class="ind-f"><select class="i-total" aria-label="총증거">' + optsFrom(C.total, 'partial') + '</select></div></div>' +
@@ -1480,6 +1511,7 @@
       '<input type="text" class="e-text" placeholder="증거 (예: 무작위 대조시험에서 효과)">' +
       '<select class="e-dir" aria-label="방향"><option value="for">지지</option><option value="against">반대</option></select>' +
       '<select class="e-lr" aria-label="변별력">' + optsFrom(INDUCT_CFG.lr, 'weak') + '</select>' +
+      '<select class="e-rob" aria-label="재현성">' + optsFrom(INDUCT_CFG.robust, 'none') + '</select>' +
       '<input type="text" class="e-src" placeholder="출처">' +
       '<button type="button" class="m-del i-ev-del" aria-label="증거 삭제">×</button>' +
     '</div>';
@@ -1492,6 +1524,7 @@
       ev.querySelector('.e-text').value = d.text || '';
       ev.querySelector('.e-dir').value = d.dir === 'against' ? 'against' : 'for';
       if(INDUCT_CFG.lr[d.lr]) ev.querySelector('.e-lr').value = d.lr;
+      if(INDUCT_CFG.robust[d.rob]) ev.querySelector('.e-rob').value = d.rob;
       ev.querySelector('.e-src').value = d.src || '';
       ev.dataset.dir = ev.querySelector('.e-dir').value;
     }
@@ -1502,7 +1535,7 @@
     var evs = [];
     gEl.querySelectorAll('.i-ev').forEach(function(ev){
       evs.push({ text:ev.querySelector('.e-text').value, dir:ev.querySelector('.e-dir').value,
-        lr:ev.querySelector('.e-lr').value, src:ev.querySelector('.e-src').value });
+        lr:ev.querySelector('.e-lr').value, rob:ev.querySelector('.e-rob').value, src:ev.querySelector('.e-src').value });
     });
     return { scope:v('.i-scope'), theta:v('.i-theta'), n:v('.i-n'), k:v('.i-k'), method:v('.i-method'), base:v('.i-base'),
       alt:v('.i-alt'), evidence:evs, total:v('.i-total'), bg:v('.i-bg'), mech:v('.i-mech'),
