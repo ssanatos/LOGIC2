@@ -63,6 +63,63 @@
   .group-label{ font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.08em; color:var(--chalk-dim); text-transform:uppercase; margin-bottom:6px; padding:0 4px; display:flex; align-items:center; justify-content:space-between; }
   .group-remove{ background:none; border:none; color:var(--danger); font-family:'IBM Plex Mono', monospace; font-size:11px; cursor:pointer; opacity:0.7; letter-spacing:0.05em; }
   .group-remove:hover{ opacity:1; text-decoration:underline; }
+  .group-label .gl-left{ display:flex; align-items:center; gap:8px; }
+  select.g-mode{ color:var(--ok); font-size:11px; letter-spacing:0; text-transform:none; font-family:'IBM Plex Mono', monospace; max-width:none; }
+  .group[data-mode="induct"]{ border-color:rgba(143,203,155,0.35); }
+  .group[data-mode="induct"] .row[data-role="전제 1"], .group[data-mode="induct"] .row[data-role="전제 2"]{ display:none; }
+  .group:not([data-mode="induct"]) .induct{ display:none; }
+
+  /* inductive panel */
+  .induct{ margin:4px 2px 8px; padding:10px 10px 6px; border-top:1px dashed var(--line); }
+  .ind-intro{ font-size:11.5px; color:var(--chalk-dim); line-height:1.6; margin:0 0 8px; }
+  .ind-sec{ padding:7px 0 8px; border-bottom:1px dashed var(--line); }
+  .ind-sec:last-of-type{ border-bottom:none; }
+  .ind-t{ display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ok); margin-bottom:5px; }
+  .ind-t small{ color:var(--chalk-dim); font-family:'IBM Plex Sans KR', sans-serif; margin-left:4px; }
+  .ind-f{ display:flex; flex-wrap:wrap; align-items:center; gap:5px 7px; font-size:12px; color:var(--chalk-dim); }
+  .ind-f select{ max-width:100%; flex:0 1 auto; }
+  .ind-f input[type="text"]{ flex:1 1 140px; min-width:100px; }
+  .ind-f input[type="number"]{ flex:0 0 58px; width:58px; }
+  .i-ev{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; padding:5px 7px; margin-top:5px; border-left:2px solid var(--ok); background:rgba(143,203,155,0.06); border-radius:4px; }
+  .i-ev .e-text{ flex:1 1 160px; min-width:120px; font-size:12.5px; }
+  .i-ev .e-src{ flex:0 1 80px; min-width:60px; width:80px; font-size:12px; }
+  .i-ev select{ font-size:11.5px; }
+  .i-ev .e-dir{ color:var(--ok); }
+  .i-ev[data-dir="against"]{ border-left-color:var(--danger); background:rgba(224,133,133,0.06); }
+  .i-ev[data-dir="against"] .e-dir{ color:var(--danger); }
+  .induct[data-hassample="1"] .need-nosample{ display:none; }
+  .induct[data-scopeauto="1"] .need-scopeman{ display:none; }
+  .induct:not([data-stat="1"]) .i-theta, .induct:not([data-stat="1"]) .i-theta-u{ display:none; }
+  .i-type{ font-size:11px; color:var(--blue); }
+  .i-live{ margin-top:8px; padding:9px 10px; border-radius:6px; background:var(--panel-2); border:1px solid var(--line); font-size:12.5px; line-height:1.6; }
+  .i-live b{ color:var(--chalk); font-family:'Space Grotesk', sans-serif; font-size:15px; }
+  .i-live .warn{ color:var(--danger); display:block; font-size:11.5px; }
+
+  /* inductive result card */
+  .induct-card{ background:var(--panel); border:1px solid rgba(143,203,155,0.35); border-radius:var(--radius); padding:16px 12px; margin-bottom:14px; }
+  .induct-card h3{ font-family:'Space Grotesk', sans-serif; font-size:16px; margin:0 0 4px; font-weight:700; }
+  .induct-card .card-sub{ font-size:11.5px; color:var(--chalk-dim); margin:0 0 12px; line-height:1.6; }
+  .ind-item{ padding:12px 0 14px; border-top:1px dashed var(--line); }
+  .ind-head{ font-size:13px; line-height:1.5; margin-bottom:9px; }
+  .ind-head .tag{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ok); border:1px solid rgba(143,203,155,0.5); border-radius:4px; padding:1px 6px; margin-right:6px; }
+  .ind-head .ctype{ display:block; font-size:11px; color:var(--blue); margin-top:3px; }
+  .ind-cred{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .cred-bar{ position:relative; flex:1 1 auto; height:12px; border-radius:6px; background:var(--panel-2); border:1px solid var(--line); }
+  .cred-bar .band{ position:absolute; top:0; bottom:0; background:rgba(143,203,155,0.35); border-radius:6px; }
+  .cred-bar .mark{ position:absolute; top:-3px; bottom:-3px; width:3px; margin-left:-1.5px; background:var(--ok); border-radius:2px; }
+  .cred-num{ flex:0 0 auto; text-align:right; font-family:'Space Grotesk', sans-serif; font-size:22px; font-weight:700; line-height:1.1; }
+  .cred-num small{ display:block; font-family:'IBM Plex Sans KR', sans-serif; font-size:11px; font-weight:400; color:var(--chalk-dim); }
+  .ind-quality{ font-size:12.5px; color:var(--chalk-dim); margin-bottom:8px; }
+  .ind-quality b{ color:var(--chalk); font-family:'Space Grotesk', sans-serif; font-size:15px; }
+  .crit{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px; }
+  .crit li{ display:grid; grid-template-columns: minmax(0,1fr) 72px 30px; gap:4px 8px; align-items:center; font-size:12px; }
+  .crit .cn{ color:var(--chalk); min-width:0; }
+  .crit .cb{ height:6px; border-radius:3px; background:var(--panel-2); overflow:hidden; }
+  .crit .cb i{ display:block; height:100%; border-radius:3px; }
+  .crit .cs{ text-align:right; font-family:'IBM Plex Mono', monospace; font-size:11.5px; }
+  .crit p{ grid-column:1 / -1; margin:0; font-size:11px; color:var(--chalk-dim); line-height:1.5; }
+  .ind-flag{ font-size:12px; color:var(--danger); margin-top:8px; line-height:1.5; }
+  .ind-sugg{ font-size:12px; color:var(--accent); margin-top:6px; line-height:1.5; }
 
   .row{ padding:9px 2px 10px; border-bottom:1px dashed var(--line); }
   .row:last-child{ border-bottom:none; }
@@ -97,9 +154,33 @@
   select.relSel{ color:var(--pink); }
   option, optgroup{ background:var(--panel-2); color:var(--chalk); }
 
+  /* modifiers (수식어) */
+  .mods{ display:flex; flex-direction:column; gap:5px; margin-top:6px; }
+  .mods:empty{ display:none; }
+  .mod{ display:flex; flex-wrap:wrap; align-items:center; gap:4px 5px; padding:5px 7px; border-left:2px solid var(--pink); background:rgba(226,166,197,0.06); border-radius:4px; }
+  .mod-tag{ flex:0 0 auto; font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--pink); }
+  .mod input[type="text"]{ flex:1 1 64px; min-width:54px; width:64px; font-size:12.5px; }
+  .mod select{ flex:0 0 auto; font-size:11.5px; }
+  .m-del{ background:none; border:none; color:var(--danger); cursor:pointer; font-size:15px; line-height:1; padding:0 2px; opacity:0.75; }
+  .m-del:hover{ opacity:1; }
+  .mod-actions{ display:flex; gap:8px; margin-top:7px; flex-wrap:wrap; }
+  .mod-add{ background:none; border:1px dashed var(--line); color:var(--chalk-dim); font-family:'IBM Plex Mono', monospace; font-size:10.5px; padding:3px 8px; border-radius:5px; cursor:pointer; }
+  .mod-add:hover{ border-color:var(--pink); color:var(--pink); }
+  .clause[data-kind="exist"] .f-modright, .clause[data-kind="prop"] .f-modright,
+  .clause[data-kind="exist"] .mods-right, .clause[data-kind="prop"] .mods-right{ display:none; }
+
   /* which fields each statement kind shows */
-  .row[data-kind="exist"] .f-q, .row[data-kind="exist"] .f-right{ display:none; }
-  .row:not([data-kind="rel"]) .f-rel{ display:none; }
+  .clause[data-kind="exist"] .f-q, .clause[data-kind="exist"] .f-right{ display:none; }
+  .clause:not([data-kind="rel"]) .f-rel{ display:none; }
+  .clause[data-kind="def"] .polarity{ display:none; }
+
+  /* 단순 / 조건 / 선언 */
+  .row[data-form="simple"] .clause[data-slot="1"]{ display:none; }
+  .clause-head{ display:flex; align-items:center; gap:7px; margin-bottom:5px; }
+  .clause-tag{ flex:0 0 auto; font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--blue); }
+  .clause-tag:empty{ display:none; }
+  .row:not([data-form="simple"]) .clause{ border-left:2px solid var(--blue); padding:4px 0 4px 9px; margin-top:7px; }
+  select.form{ flex:0 0 auto; max-width:52%; color:var(--blue); font-size:11.5px; }
 
   /* ---------- buttons ---------- */
   .actions{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
@@ -208,6 +289,11 @@
         <tr><th>성질·상태·행위</th><td>A의 성질·상태 또는 대상 없는 행위 (질·자세·능동) — 칼은 위험하다, 새는 날다. 그래프에서는 '~한 것'이라는 부류(초록 노드)로 다룹니다.</td></tr>
         <tr><th>관계</th><td>두 대상 사이의 관계 — 비교(태양은 지구보다 크다) · 공간(서울은 대한민국 안에 있다) · 부분·전체(맨틀은 지구의 일부이다) · 시간(공룡은 인류보다 먼저이다) · 소유·수량(개미는 다리를 6개 가진다) · 인과 · 동일·차이 · 행위 직접 입력(지구는 태양을 돈다)</td></tr>
         <tr><th>존재</th><td>A가 있는지 없는지 — 유니콘은 존재하지 않는다</td></tr>
+        <tr><th>정의·동치</th><td>두 개념이 같은 것을 가리킴 — 포유류는 곧 젖을 먹여 새끼를 기르는 동물이다. 양쪽 방향 포함(≡)이므로 어느 쪽으로든 바꿔 쓸 수 있습니다.</td></tr>
+        <tr><th>오직 ~만</th><td>양화사 ‘오직’ — 오직 사람만 글을 쓴다 = 모든 글을 쓰는 것은 사람이다. 그래프에는 이 논리적 방향(쓰다 → 사람)으로 그립니다.</td></tr>
+        <tr><th>조건 · 선언</th><td>문장 위쪽의 형식을 ‘조건’이나 ‘선언’으로 바꾸면 명제 칸이 두 개가 됩니다. 각 명제는 그래프에서 상자 하나가 되고, 조건은 ‘이면’ 화살표, 선언은 ‘또는’ 마름모로 잇습니다. 판정 규칙: 전건 긍정 · 후건 부정 · 가언 삼단논법 · 선언 삼단논법. 후건 긍정, 전건 부정, 선언지 긍정은 오류로 지적합니다. 두 명제의 주어가 같은 일반 명사(모든 새가 ~이면 ~)이면 ‘그 주어의 각 대상마다’로 읽습니다.</td></tr>
+        <tr><th>귀납 세트</th><td>세트 이름 옆에서 ‘귀납 세트’를 고르면, 전제 두 칸 대신 결론 하나와 근거 입력판이 나옵니다. 귀납 결론은 참·거짓 대신 <b>신뢰도</b>(참일 확률)를 계산합니다 — 표본은 베타 분포로, 다른 증거는 우도비로, 배경지식은 사전 확률에 곱하는 배수로 반영하는 베이즈 갱신입니다. 이와 따로 ①–⑦ 기준별 <b>추론 품질</b> 점수를 매깁니다. 귀납 결론을 다른 연역 세트의 전제로 쓰면, 그 연역 결론의 신뢰도 하한도 계산합니다.</td></tr>
+        <tr><th>수식어</th><td>이름이 없는 개념은 <b>머리 명사 + 수식어</b>로 조립합니다. “바람에 흔들리는 꽃” = 머리 ‘꽃’ + 수식어 ‘흔들리는’(개념: 흔들리다 · 대상: 바람 · 조사: 에). 그래프에서는 회색 점(●) 하나가 되고, 꽃·흔들리다·바람으로 뻗은 회색 선이 그 정의를 나타냅니다. 수식어가 붙은 개념은 머리 명사와 각 수식어 모두에 포함되므로(교집합), “칼은 위험한 도구다”에서 “칼은 위험하다”와 “칼은 도구다”를 그대로 꺼내 쓸 수 있습니다. 수식어 순서가 달라도 같은 개념으로 합쳐집니다.</td></tr>
       </table>
       <p>양화사: <b>모든</b>(전칭) · <b>어떤</b>(특칭) · <b>개체</b>(소크라테스, 지구처럼 하나뿐인 대상 — 논리상 전칭처럼 다룹니다)</p>
       <p>조사(은/는, 이/가, 을/를, 와/과)는 단어의 받침에 맞춰 자동으로 붙습니다. 비교·공간·시간 관계는 반대말을 같은 관계로 인식합니다(“B는 A보다 작다” = “A는 B보다 크다”).</p>
@@ -240,6 +326,12 @@
     <div class="stats-card" id="statsCard">
       <h3>그래프 통계</h3>
       <div class="stats-grid" id="statsGrid"></div>
+    </div>
+
+    <div class="induct-card hidden" id="inductCard">
+      <h3>귀납 추론 평가</h3>
+      <p class="card-sub">신뢰도는 결론이 참일 확률이고, 추론 품질은 논증을 얼마나 잘 했는지입니다. 둘은 다릅니다 — 엉성한 논증의 결론도 참일 수 있습니다. 막대의 연한 띠는 입력한 평가의 불확실성을 반영한 범위입니다.</p>
+      <div id="inductList"></div>
     </div>
 
     <div class="eval-card">
@@ -362,11 +454,30 @@
       .replace(/\{n\}/g, n);
   }
 
-  function relPhrase(r, neg){
+  // dictionary-form verb → present tense, for display only
+  // (유혹하다→유혹한다, 살다→산다, 가다→간다, 먹다→먹는다)
+  // already present tense ("돈다", "먹는다")? then leave it alone
+  function isPresentForm(v){
+    if(/는다$/.test(v)) return true;
+    return v.length >= 2 && /다$/.test(v) && jongIndex(v.charCodeAt(v.length - 2)) === 4;
+  }
+  function conjVerb(v){
+    if(!/다$/.test(v) || v.length < 2 || isPresentForm(v)) return v;
+    var stem = v.slice(0, -1), ch = stem.charCodeAt(stem.length - 1), jg = jongIndex(ch);
+    if(/하$/.test(stem)) return stem.slice(0, -1) + '한다';
+    if(jg === 0) return stem.slice(0, -1) + String.fromCharCode(ch + 4) + '다';
+    if(jg === 8) return stem.slice(0, -1) + String.fromCharCode(ch - 8 + 4) + '다';
+    if(jg > 0) return stem + '는다';
+    return v;
+  }
+  function negVerb(v){ return (/다$/.test(v) && !isPresentForm(v)) ? v.slice(0, -1) + '지 않는다' : v + ' (부정)'; }
+
+  function relPhrase(r, neg, display){
     var o = r.obj || '□', spec = RELS[r.rel] || RELS.bigger;
     if(spec.custom){
       var v = r.verb || '□';
       var jo = vjosaFor(o, r.vjosa);
+      if(display && /다$/.test(v)) return o + jo + ' ' + (neg ? negVerb(v) : conjVerb(v));
       return o + jo + ' ' + v + (neg ? ' (부정)' : '');
     }
     var tpl = neg ? spec.neg : spec.pos;
@@ -421,16 +532,95 @@
     return w;
   }
 
-  function sentenceOf(r){
+  function sentenceOf(r){ return clauseSentence(r) + '.'; }
+  function clauseSentence(r){
+    if(isCompound(r) && perIndividual(r)){
+      // shared general subject: say it once ("모든 동물은 ‘…’ 또는 ‘…’")
+      var pa = clauseParts(r.a), pb = clauseParts(r.b);
+      return r.kind === 'cond'
+        ? pa.head.replace(/[은는]$/, '') + ' 각각에 대해, ‘' + pa.pred + '’이면 ‘' + pb.pred + '’'
+        : pa.head.replace(/[은는]$/, '') + topic(pa.head.replace(/[은는]$/, '')) + ' ‘' + pa.pred + '’ 또는 ‘' + pb.pred + '’';
+    }
+    if(r.kind === 'cond') return '만약 ‘' + clauseSentence(r.a) + '’이면, ‘' + clauseSentence(r.b) + '’';
+    if(r.kind === 'disj') return '‘' + clauseSentence(r.a) + '’ 또는 ‘' + clauseSentence(r.b) + '’';
+    var parts = clauseParts(r);
+    return parts.head + ' ' + parts.pred;
+  }
+  // { head: "모든 동물은", pred: "척추동물이다" }
+  function clauseParts(r){
+    if(r.orig) return clauseParts(r.orig);
     var s = nounOf(r.subj || '□');
-    if(r.kind === 'exist') return s + topic(s) + ' ' + (r.neg ? '존재하지 않는다' : '존재한다') + '.';
-    var q = (r.quant === '개체' || !r.quant) ? '' : r.quant + ' ';
-    var sp = r.subjNeg ? (s + j(s,'이','가') + ' 아닌 것은') : (s + topic(s));
+    if(r.kind === 'exist') return { head:s + topic(s), pred:(r.neg ? '존재하지 않는다' : '존재한다') };
+    var only = r.quant === '오직';
+    var q = (r.quant === '개체' || !r.quant || only) ? '' : r.quant + ' ';
+    var sp = only ? ('오직 ' + (r.subjNeg ? s + j(s,'이','가') + ' 아닌 것만' : s + '만'))
+                  : (r.subjNeg ? (s + j(s,'이','가') + ' 아닌 것은') : (s + topic(s)));
     var pp;
-    if(r.kind === 'rel'){ pp = relPhrase(r, r.neg); }
+    if(r.kind === 'rel'){ pp = relPhrase(r, r.neg, true); }
     else if(r.kind === 'prop'){ var p = r.pred || '□'; pp = r.neg ? negateProp(p) : p; }
-    else { var p2 = nounOf(r.pred || '□'); pp = r.neg ? (p2 + j(p2,'이','가') + ' 아니다') : (p2 + (hasBatchim(p2) ? '이다' : '다')); }
-    return q + sp + ' ' + pp + '.';
+    else {
+      var p2 = nounOf(r.pred || '□');
+      pp = r.neg ? (p2 + j(p2,'이','가') + ' 아니다') : (p2 + (hasBatchim(p2) ? '이다' : '다'));
+      if(r.kind === 'def') pp = '곧 ' + pp;
+    }
+    return { head:q + sp, pred:pp };
+  }
+
+  // ===============================================================
+  // Modifiers → compound concepts (교차점 노드).
+  // "바람에 흔들리는 꽃" = head 꽃 ∩ (흔들리다 with 바람-에). A compound is
+  // identified by its head + the SET of modifier keys, so the same
+  // modifiers in a different order give the same node.
+  // ===============================================================
+  var MJOSA = [['none','(조사)'],['e','에'],['ege','에게'],['eul','을/를'],['i','이/가'],['wa','와/과'],['boda','보다'],['eseo','에서'],['ro','(으)로'],['ui','의']];
+  function mjosaFor(o, k){
+    switch(k){
+      case 'e': return '에';
+      case 'ege': return '에게';
+      case 'eul': return j(o,'을','를');
+      case 'i': return j(o,'이','가');
+      case 'wa': return j(o,'과','와');
+      case 'boda': return '보다';
+      case 'eseo': return '에서';
+      case 'ro': return (hasBatchim(o) && !isRieul(o)) ? '으로' : '로';
+      case 'ui': return '의';
+      default: return '';
+    }
+  }
+  // adnominal form → dictionary form suggestion (사람이 고칠 수 있음)
+  function guessBase(s){
+    s = String(s || '').trim();
+    if(!s) return '';
+    if(/지 않[는은]$/.test(s)) return s.replace(/지 않[는은]$/, '다');
+    if(/[는은]$/.test(s) && s.length >= 2) return s.slice(0, -1) + '다';
+    var ch = s.charCodeAt(s.length - 1), jg = jongIndex(ch);
+    if(jg === 4 || jg === 8) return s.slice(0, -1) + String.fromCharCode(ch - jg) + '다';
+    return s;
+  }
+  function modBase(m){ return m.base || m.surf; }
+  function modKey(m){ return [modBase(m), m.obj || '', m.obj ? m.josa : '', m.neg ? 1 : 0].join('|'); }
+  function modPhrase(m){ return (m.obj ? m.obj + mjosaFor(m.obj, m.josa) + ' ' : '') + (m.surf || modBase(m)); }
+  // the class a modifier puts the compound into (for inference)
+  function modTerm(m){
+    var t = m.obj ? (m.obj + mjosaFor(m.obj, m.josa) + ' ' + modBase(m)) : modBase(m);
+    return m.neg ? t + '×' : t;
+  }
+  var COMPOUNDS = {};        // label -> { head, mods }
+  var COMPOUND_BY_KEY = {};  // structural key -> label (first spelling wins)
+  function resetCompounds(){ COMPOUNDS = {}; COMPOUND_BY_KEY = {}; }
+  function buildTerm(head, mods){
+    head = String(head || '').trim();
+    if(!head) return '';
+    if(!mods || !mods.length) return head;
+    var seen = {}, ms = [];
+    mods.forEach(function(m){ var k = modKey(m); if(!seen[k]){ seen[k] = 1; ms.push(m); } });
+    ms.sort(function(a, b){ var ka = modKey(a), kb = modKey(b); return ka < kb ? -1 : (ka > kb ? 1 : 0); });
+    var key = head + '{' + ms.map(modKey).join(';') + '}';
+    if(COMPOUND_BY_KEY[key]) return COMPOUND_BY_KEY[key];
+    var label = ms.map(modPhrase).join(' ') + ' ' + head;
+    COMPOUND_BY_KEY[key] = label;
+    COMPOUNDS[label] = { head:head, mods:ms };
+    return label;
   }
 
   function esc(s){
@@ -438,7 +628,9 @@
   }
 
   // ===============================================================
-  // Input rows
+  // Input rows. A row is one statement: its 형식 (단순 / 조건 / 선언) is
+  // chosen at the top, and each 명제 칸 (.clause) holds one atomic
+  // statement — a 단순 row uses one clause, 조건·선언 rows use two.
   // ===============================================================
   var groupsEl = document.getElementById('groups');
   var ROLES = ['전제 1','전제 2','결론'];
@@ -446,8 +638,11 @@
     ['class','분류'],
     ['prop','성질·상태·행위'],
     ['rel','관계'],
-    ['exist','존재']
+    ['exist','존재'],
+    ['def','정의·동치']
   ];
+  var FORM_OPTS = [['simple','단순 명제'], ['cond','조건 · A이면 B'], ['disj','선언 · A이거나 B']];
+  var CLAUSE_TAGS = { cond:['만약 (전건)', '그러면 (후건)'], disj:['선언지 1', '또는 (선언지 2)'] };
 
   function relOptionsHTML(){
     return REL_CAT_ORDER.map(function(cat){
@@ -458,27 +653,84 @@
     }).join('');
   }
 
-  function rowHTML(role){
+  function clauseHTML(slot){
     return (
-      '<div class="row" data-kind="class" data-role="'+role+'">' +
-        '<div class="row-top">' +
-          '<span class="role-tag">'+role+'</span>' +
+      '<div class="clause" data-kind="class" data-slot="'+slot+'">' +
+        '<div class="clause-head">' +
+          '<span class="clause-tag"></span>' +
           '<select class="kind" aria-label="서술 유형">' + KIND_OPTS.map(function(k){ return '<option value="'+k[0]+'">'+k[1]+'</option>'; }).join('') + '</select>' +
-          '<span class="preview"></span>' +
         '</div>' +
         '<div class="row-main">' +
-          '<select class="quant f-q" aria-label="양화사"><option value="모든">모든</option><option value="어떤">어떤</option><option value="개체">개체</option></select>' +
+          '<select class="quant f-q" aria-label="양화사"><option value="모든">모든</option><option value="어떤">어떤</option><option value="개체">개체</option><option value="오직">오직 ~만</option></select>' +
           '<input type="text" class="wordLeft" placeholder="주어">' +
           '<select class="subjNeg f-q" aria-label="주어 조사"><option value="pos">은/는</option><option value="neg">이/가 아닌 것은</option></select>' +
           '<input type="text" class="wordRight f-right" placeholder="단어">' +
           '<select class="relSel f-rel" aria-label="관계">' + relOptionsHTML() + '</select>' +
           '<select class="vjosa f-rel f-custom off" aria-label="대상 조사">' + VJOSA.map(function(v){ return '<option value="'+v[0]+'">'+v[1]+'</option>'; }).join('') + '</select>' +
-          '<input type="text" class="verbIn f-rel f-custom off" placeholder="동사 (예: 돈다)">' +
+          '<input type="text" class="verbIn f-rel f-custom off" placeholder="동사 기본형 (예: 돌다)">' +
           '<input type="number" class="countIn f-rel f-count off" min="0" placeholder="개수">' +
           '<select class="polarity" aria-label="긍정/부정"><option value="pos">이다</option><option value="neg">가 아니다</option></select>' +
         '</div>' +
+        '<div class="mods mods-subj"></div>' +
+        '<div class="mods mods-right"></div>' +
+        '<div class="mod-actions">' +
+          '<button type="button" class="mod-add" data-side="subj">+ 주어 수식어</button>' +
+          '<button type="button" class="mod-add f-modright" data-side="right">+ 술어 수식어</button>' +
+        '</div>' +
       '</div>'
     );
+  }
+
+  function rowHTML(role){
+    return (
+      '<div class="row" data-form="simple" data-role="'+role+'">' +
+        '<div class="row-top">' +
+          '<span class="role-tag">'+role+'</span>' +
+          '<select class="form" aria-label="명제 형식">' + FORM_OPTS.map(function(f){ return '<option value="'+f[0]+'">'+f[1]+'</option>'; }).join('') + '</select>' +
+          '<span class="preview"></span>' +
+        '</div>' +
+        clauseHTML(0) + clauseHTML(1) +
+      '</div>'
+    );
+  }
+
+  function modHTML(side){
+    return '<div class="mod" data-side="'+side+'">' +
+      '<span class="mod-tag">'+(side === 'subj' ? '주어 수식' : '술어 수식')+'</span>' +
+      '<input type="text" class="m-obj" placeholder="대상 (선택)">' +
+      '<select class="m-josa" aria-label="대상 조사">' + MJOSA.map(function(x){ return '<option value="'+x[0]+'">'+x[1]+'</option>'; }).join('') + '</select>' +
+      '<input type="text" class="m-surf" placeholder="수식어 (예: 흔들리는)">' +
+      '<input type="text" class="m-base" placeholder="개념 (예: 흔들리다)">' +
+      '<select class="m-neg" aria-label="긍정/부정"><option value="pos">긍정</option><option value="neg">부정</option></select>' +
+      '<button type="button" class="m-del" aria-label="수식어 삭제">×</button>' +
+    '</div>';
+  }
+
+  function addModLine(cl, side, data){
+    var box = cl.querySelector('.mods-' + side);
+    box.insertAdjacentHTML('beforeend', modHTML(side));
+    var md = box.lastElementChild;
+    if(data){
+      md.querySelector('.m-obj').value = data.obj || '';
+      md.querySelector('.m-josa').value = data.josa || 'none';
+      md.querySelector('.m-surf').value = data.surf || '';
+      md.querySelector('.m-base').value = data.base || guessBase(data.surf);
+      if(data.base && data.base !== guessBase(data.surf)) md.querySelector('.m-base').dataset.manual = '1';
+      md.querySelector('.m-neg').value = data.neg ? 'neg' : 'pos';
+    }
+    return md;
+  }
+
+  function readModVals(cl, side){
+    var out = [];
+    cl.querySelectorAll('.mods-' + side + ' .mod').forEach(function(md){
+      var surf = md.querySelector('.m-surf').value.trim();
+      var base = md.querySelector('.m-base').value.trim();
+      if(!surf && !base) return;
+      out.push({ surf:surf, base:base || guessBase(surf), obj:md.querySelector('.m-obj').value.trim(),
+        josa:md.querySelector('.m-josa').value, neg:md.querySelector('.m-neg').value === 'neg' });
+    });
+    return out;
   }
 
   function setOpt(sel, val, label){
@@ -486,17 +738,18 @@
     if(o) o.textContent = label;
   }
 
-  function updateRow(row){
-    var kind = row.querySelector('.kind').value;
-    row.dataset.kind = kind;
-    var s = row.querySelector('.wordLeft').value.trim();
-    var right = row.querySelector('.wordRight').value.trim();
+  function updateClause(cl){
+    var kind = cl.querySelector('.kind').value;
+    cl.dataset.kind = kind;
+    var s = cl.querySelector('.wordLeft').value.trim();
+    var right = cl.querySelector('.wordRight').value.trim();
+    var only = cl.querySelector('.quant').value === '오직';
 
-    var sn = row.querySelector('.subjNeg');
-    setOpt(sn, 'pos', s ? topic(s) : '은/는');
-    setOpt(sn, 'neg', s ? (j(s,'이','가') + ' 아닌 것은') : '이/가 아닌 것은');
+    var sn = cl.querySelector('.subjNeg');
+    setOpt(sn, 'pos', only ? '만' : (s ? topic(s) : '은/는'));
+    setOpt(sn, 'neg', (s ? j(s,'이','가') : '이/가') + (only ? ' 아닌 것만' : ' 아닌 것은'));
 
-    var pol = row.querySelector('.polarity');
+    var pol = cl.querySelector('.polarity');
     if(kind === 'class'){
       setOpt(pol, 'pos', right ? (hasBatchim(right) ? '이다' : '다') : '(이)다');
       setOpt(pol, 'neg', right ? (j(right,'이','가') + ' 아니다') : '이/가 아니다');
@@ -506,34 +759,58 @@
       setOpt(pol, 'pos', '긍정'); setOpt(pol, 'neg', '부정');
     }
 
-    var wr = row.querySelector('.wordRight');
-    wr.placeholder = kind === 'prop' ? '서술어 (예: 위험하다)' : (kind === 'rel' ? '대상' : '단어');
+    var wr = cl.querySelector('.wordRight');
+    wr.placeholder = kind === 'prop' ? '서술어 (예: 위험하다)' : (kind === 'rel' ? '대상' : (kind === 'def' ? '같은 개념 (곧 ~이다)' : '단어'));
 
-    var relSel = row.querySelector('.relSel');
+    var relSel = cl.querySelector('.relSel');
     var spec = RELS[relSel.value];
-    row.querySelectorAll('.f-custom').forEach(function(el){ el.classList.toggle('off', !(spec && spec.custom)); });
-    row.querySelectorAll('.f-count').forEach(function(el){ el.classList.toggle('off', !(spec && spec.counted)); });
+    cl.querySelectorAll('.f-custom').forEach(function(el){ el.classList.toggle('off', !(spec && spec.custom)); });
+    cl.querySelectorAll('.f-count').forEach(function(el){ el.classList.toggle('off', !(spec && spec.counted)); });
     if(kind === 'rel'){
       Array.prototype.forEach.call(relSel.options, function(opt){
         opt.textContent = relOptLabel(RELS[opt.value], right);
       });
     }
 
-    var r = rowToRaw(row);
-    row.querySelector('.preview').textContent = (s || right) ? sentenceOf(r) : '';
+    var mr = cl.querySelector('.mod-add[data-side="right"]');
+    if(mr) mr.textContent = kind === 'rel' ? '+ 대상 수식어' : '+ 술어 수식어';
+    cl.querySelectorAll('.mods-right .mod-tag').forEach(function(t){ t.textContent = kind === 'rel' ? '대상 수식' : '술어 수식'; });
+    cl.querySelectorAll('.mod').forEach(function(md){
+      var o = md.querySelector('.m-obj').value.trim(), js = md.querySelector('.m-josa');
+      MJOSA.forEach(function(x){ setOpt(js, x[0], (o && x[0] !== 'none') ? mjosaFor(o, x[0]) : x[1]); });
+    });
   }
 
-  function makeGroup(index, rowsData){
+  function updateRow(row){
+    var form = row.querySelector('.form').value;
+    row.dataset.form = form;
+    row.querySelectorAll('.clause').forEach(function(cl, i){
+      updateClause(cl);
+      cl.querySelector('.clause-tag').textContent = form === 'simple' ? '' : CLAUSE_TAGS[form][i];
+    });
+    var typed = Array.prototype.some.call(row.querySelectorAll('.wordLeft, .wordRight'), function(el){ return el.value.trim(); });
+    row.querySelector('.preview').textContent = typed ? sentenceOf(rowToRaw(row)) : '';
+  }
+
+  // data: an array of rows (v1–v3 files) or { mode, rows, induct } (v4)
+  function makeGroup(index, data){
+    var rowsData = Array.isArray(data) ? data : (data && data.rows) || null;
+    var mode = (data && !Array.isArray(data) && data.mode === 'induct') ? 'induct' : 'deduct';
     var g = document.createElement('div');
     g.className = 'group';
+    g.dataset.mode = mode;
     var removeBtn = index > 1 ? '<button type="button" class="group-remove" onclick="this.closest(\'.group\').remove(); window.__renumber();">삭제</button>' : '';
-    g.innerHTML = '<div class="group-label"><span class="set-name">세트 ' + index + '</span>' + removeBtn + '</div>' +
-      ROLES.map(rowHTML).join('');
+    g.innerHTML = '<div class="group-label"><span class="gl-left"><span class="set-name">세트 ' + index + '</span>' +
+      '<select class="g-mode" aria-label="세트 종류"><option value="deduct">연역 세트</option><option value="induct">귀납 세트</option></select></span>' + removeBtn + '</div>' +
+      ROLES.map(rowHTML).join('') + inductHTML();
     groupsEl.appendChild(g);
+    g.querySelector('.g-mode').value = mode;
     g.querySelectorAll('.row').forEach(function(rowEl, idx){
       if(rowsData) setRowValues(rowEl, rowsData[idx]);
       else updateRow(rowEl);
     });
+    if(data && !Array.isArray(data) && data.induct) setInductValues(g, data.induct);
+    updateInductLive(g);
     return g;
   }
 
@@ -549,28 +826,84 @@
   }
   window.__renumber = renumberSets;
 
-  groupsEl.addEventListener('input', function(e){ var row = e.target.closest('.row'); if(row) updateRow(row); });
-  groupsEl.addEventListener('change', function(e){ var row = e.target.closest('.row'); if(row) updateRow(row); });
+  groupsEl.addEventListener('input', function(e){
+    var t = e.target;
+    if(t.classList.contains('m-surf')){
+      var md = t.closest('.mod'), b = md.querySelector('.m-base');
+      if(b.dataset.manual !== '1'){
+        b.value = guessBase(t.value);
+        if(/지 않[는은]$/.test(t.value.trim())) md.querySelector('.m-neg').value = 'neg';
+      }
+    }
+    if(t.classList.contains('m-base')) t.dataset.manual = t.value.trim() ? '1' : '';
+    var row = t.closest('.row'); if(row) updateRow(row);
+    var gEl = t.closest('.group'); if(gEl) updateInductLive(gEl);
+  });
+  groupsEl.addEventListener('click', function(e){
+    var evAdd = e.target.closest('.i-ev-add');
+    if(evAdd){
+      var gA = evAdd.closest('.group'), ev = addEvidence(gA, null);
+      updateInductLive(gA);
+      ev.querySelector('.e-text').focus();
+      return;
+    }
+    var evDel = e.target.closest('.i-ev-del');
+    if(evDel){
+      var gD = evDel.closest('.group');
+      evDel.closest('.i-ev').remove();
+      updateInductLive(gD);
+      return;
+    }
+    var add = e.target.closest('.mod-add');
+    if(add){
+      var md = addModLine(add.closest('.clause'), add.dataset.side, null);
+      updateRow(add.closest('.row'));
+      md.querySelector('.m-surf').focus();
+      return;
+    }
+    var del = e.target.closest('.m-del');
+    if(del){
+      var row2 = del.closest('.row');
+      del.closest('.mod').remove();
+      updateRow(row2);
+    }
+  });
+  groupsEl.addEventListener('change', function(e){
+    if(e.target.classList.contains('g-mode')){
+      var gm = e.target.closest('.group');
+      gm.dataset.mode = e.target.value;
+      updateInductLive(gm);
+      return;
+    }
+    var row = e.target.closest('.row'); if(row) updateRow(row);
+    var gEl = e.target.closest('.group'); if(gEl) updateInductLive(gEl);
+  });
 
   document.getElementById('addBtn').addEventListener('click', addGroup);
-  addGroup();
 
   // ---------------------------------------------------------------
-  // Save / load (v2 format; v1 files from the old board still load)
+  // Save / load (v3: rows carry form + clauses; v1/v2 files still load)
   // ---------------------------------------------------------------
-  function rowValues(row){
-    function v(sel){ var el = row.querySelector(sel); return el ? el.value : ''; }
+  function clauseValues(cl){
+    function v(sel){ var el = cl.querySelector(sel); return el ? el.value : ''; }
     return {
       kind: v('.kind'), quant: v('.quant'), wordLeft: v('.wordLeft'), subjNeg: v('.subjNeg'),
       wordRight: v('.wordRight'), polarity: v('.polarity'), rel: v('.relSel'),
-      vjosa: v('.vjosa'), verb: v('.verbIn'), count: v('.countIn')
+      vjosa: v('.vjosa'), verb: v('.verbIn'), count: v('.countIn'),
+      mods: { subj: readModVals(cl, 'subj'), right: readModVals(cl, 'right') }
     };
   }
+  function rowValues(row){
+    var form = row.querySelector('.form').value, cls = row.querySelectorAll('.clause');
+    var clauses = [clauseValues(cls[0])];
+    if(form !== 'simple') clauses.push(clauseValues(cls[1]));
+    return { form:form, clauses:clauses };
+  }
 
-  function setRowValues(rowEl, r){
+  function setClauseValues(cl, r){
     r = r || {};
-    function set(sel, val){ var el = rowEl.querySelector(sel); if(el && val !== undefined && val !== null) el.value = val; }
-    set('.kind', r.kind || 'class');
+    function set(sel, val){ var el = cl.querySelector(sel); if(el && val !== undefined && val !== null) el.value = val; }
+    set('.kind', KIND_OPTS.some(function(k){ return k[0] === r.kind; }) ? r.kind : 'class');
     set('.quant', r.quant);
     set('.wordLeft', r.wordLeft);
     set('.wordRight', r.wordRight);
@@ -582,6 +915,19 @@
     set('.vjosa', r.vjosa || 'eul');
     set('.verbIn', r.verb);
     set('.countIn', r.count);
+    cl.querySelectorAll('.mods').forEach(function(b){ b.innerHTML = ''; });
+    if(r.mods){
+      (r.mods.subj || []).forEach(function(m){ addModLine(cl, 'subj', m); });
+      (r.mods.right || []).forEach(function(m){ addModLine(cl, 'right', m); });
+    }
+  }
+  function setRowValues(rowEl, r){
+    r = r || {};
+    var form = (r.form === 'cond' || r.form === 'disj') ? r.form : 'simple';
+    rowEl.querySelector('.form').value = form;
+    var cls = rowEl.querySelectorAll('.clause'), data = r.clauses || [r];
+    setClauseValues(cls[0], data[0]);
+    setClauseValues(cls[1], data[1] || {});
     updateRow(rowEl);
   }
 
@@ -590,7 +936,9 @@
     groupsEl.querySelectorAll('.group').forEach(function(gEl){
       var rows = [];
       gEl.querySelectorAll('.row').forEach(function(row){ rows.push(rowValues(row)); });
-      groups.push(rows);
+      var g = { mode:gEl.dataset.mode || 'deduct', rows:rows };
+      if(g.mode === 'induct') g.induct = inductValues(gEl);
+      groups.push(g);
     });
     return groups;
   }
@@ -601,11 +949,11 @@
       return;
     }
     groupsEl.innerHTML = '';
-    groups.forEach(function(rows, i){ makeGroup(i + 1, rows || []); });
+    groups.forEach(function(g, i){ makeGroup(i + 1, g || []); });
   }
 
   document.getElementById('saveFileBtn').addEventListener('click', function(){
-    var payload = { type:'삼단논법-게시판', version:2, savedAt:new Date().toISOString(), groups: exportGroupsForFile() };
+    var payload = { type:'삼단논법-게시판', version:4, savedAt:new Date().toISOString(), groups: exportGroupsForFile() };
     var json = JSON.stringify(payload, null, 2);
     var blob = new Blob([json], { type:'application/json' });
     var url = URL.createObjectURL(blob);
@@ -637,14 +985,16 @@
 
   // ---------------------------------------------------------------
   // Raw statement extraction.
-  // Every statement also gets a "class view" (subj ⊂ pred): for a
+  // Every atomic statement also gets a "class view" (subj ⊂ pred): for a
   // relation "A는 B보다 크다" the pred term is the phrase "B보다 크다",
   // so all 9 categorical moods work for every statement kind.
+  // "오직 A만 B이다" is stored as its logical form "모든 B는 A이다"
+  // (the original wording is kept in .orig for display).
   // ---------------------------------------------------------------
-  function rowToRaw(row){
-    var kind = row.dataset.kind || 'class';
-    function g(sel){ var el = row.querySelector(sel); return el ? el.value : ''; }
-    var r = { kind:kind, quant:g('.quant'), subj:canonTerm(g('.wordLeft')), subjNeg:g('.subjNeg') === 'neg',
+  function clauseToRaw(cl){
+    var kind = cl.dataset.kind || 'class';
+    function g(sel){ var el = cl.querySelector(sel); return el ? el.value : ''; }
+    var r = { kind:kind, quant:g('.quant'), subj:buildTerm(canonTerm(g('.wordLeft')), readModVals(cl, 'subj')), subjNeg:g('.subjNeg') === 'neg',
       neg:g('.polarity') === 'neg', pred:'', predNeg:false, rel:'', obj:'', count:'', verb:'', vjosa:'' };
     var right = g('.wordRight').trim();
     if(kind === 'exist'){
@@ -652,23 +1002,44 @@
       return r;
     }
     if(kind === 'rel'){
-      r.rel = g('.relSel'); r.obj = right; r.verb = g('.verbIn').trim(); r.vjosa = g('.vjosa');
+      r.rel = g('.relSel'); r.obj = buildTerm(right, readModVals(cl, 'right')); r.verb = g('.verbIn').trim(); r.vjosa = g('.vjosa');
       r.count = (RELS[r.rel] && RELS[r.rel].counted) ? g('.countIn').trim() : '';
       r.filled = !!(r.subj && r.obj && (r.rel !== 'custom' || r.verb));
       r.pred = r.filled ? relPhrase(r, false) : '';
     } else {
-      r.pred = canonTerm(right);
+      r.pred = (kind === 'class' || kind === 'def') ? buildTerm(canonTerm(right), readModVals(cl, 'right')) : canonTerm(right);
       r.filled = !!(r.subj && r.pred);
     }
+    if(kind === 'def'){ r.neg = false; if(r.quant === '오직' || r.quant === '어떤') r.quant = '모든'; }
     r.predNeg = r.neg;
-    return r;
+    if(r.quant === '오직' && r.filled){
+      var orig = Object.assign({}, r);
+      var n = { kind:'class', quant:'모든', subj:r.pred, subjNeg:r.neg, pred:r.subj, neg:r.subjNeg, predNeg:r.subjNeg,
+        rel:'', obj:'', count:'', verb:'', vjosa:'', filled:true, orig:orig };
+      if(kind === 'prop') n.propTerm = r.pred;
+      return n;
+    }
+    return r;   // an unfinished 오직 row keeps its wording for the preview
   }
+
+  function rowToRaw(row){
+    var form = row.dataset.form || 'simple', cls = row.querySelectorAll('.clause');
+    if(form === 'simple') return clauseToRaw(cls[0]);
+    var a = clauseToRaw(cls[0]), b = clauseToRaw(cls[1]);
+    return { kind:form, a:a, b:b, filled:(a.filled && b.filled), quant:'', subj:'', subjNeg:false,
+      pred:'', predNeg:false, neg:false, rel:'', obj:'', count:'', verb:'', vjosa:'' };
+  }
+  function isCompound(r){ return r && (r.kind === 'cond' || r.kind === 'disj'); }
 
   function collectFlatRaw(){
     var list = [];
-    groupsEl.querySelectorAll('.row').forEach(function(row){
-      var r = rowToRaw(row);
-      if(r.filled) list.push(r);
+    groupsEl.querySelectorAll('.group').forEach(function(gEl){
+      var rows = gEl.querySelectorAll('.row'), induct = gEl.dataset.mode === 'induct';
+      rows.forEach(function(row, i){
+        if(induct && i < 2) return;   // hidden premise rows of an inductive set
+        var r = rowToRaw(row);
+        if(r.filled) list.push(r);
+      });
     });
     return list;
   }
@@ -678,18 +1049,23 @@
     groupsEl.querySelectorAll('.group').forEach(function(gEl, idx){
       var rows = [];
       gEl.querySelectorAll('.row').forEach(function(row){ rows.push(rowToRaw(row)); });
-      var complete = rows.length === 3 && rows.every(function(r){ return r.filled; });
-      groups.push({ index: idx+1, rows: rows, complete: complete });
+      var mode = gEl.dataset.mode === 'induct' ? 'induct' : 'deduct';
+      var complete = mode === 'induct' ? rows[2].filled : (rows.length === 3 && rows.every(function(r){ return r.filled; }));
+      var g = { index: idx+1, rows: rows, complete: complete, mode: mode };
+      if(mode === 'induct' && complete) g.ind = inductScore(inductInput(gEl, rows[2]));
+      groups.push(g);
     });
     return groups;
   }
 
   function labelOf(word, neg){ return word + (neg ? '×' : ''); }
+  function propKey(cl){ return '§' + stmtKey(cl); }
 
   // Edges for one input group. Classification/property statements draw
-  // subj → pred (an "is-a" arrow, as before); relation statements draw
-  // subj → obj with a labelled relation arrow, so no one-off phrase node
-  // ("B보다 크다") ever appears in the graph.
+  // subj → pred (an "is-a" arrow); relation statements draw subj → obj with
+  // a labelled relation arrow; 정의 draws a two-way ≡ arrow; 조건 draws an
+  // "이면" arrow between two proposition boxes, 선언 links both boxes to
+  // a "또는" diamond.
   function computeGroupEdges(group){
     var rewriteRowIndex = -1;
     if(group.rows.length === 3 && group.rows.every(function(r){ return r.filled; })){
@@ -700,10 +1076,30 @@
       }
     }
     var result = [];
+    var induct = group.mode === 'induct';
     group.rows.forEach(function(r, idx){
       if(!r.filled || r.kind === 'exist') return;
+      if(induct && idx < 2) return;
       var e = { rowIndex:idx, role:(idx === 2 ? 'conclusion' : 'premise'), solid:(r.quant !== '어떤'),
         rel:'isa', neg:false, count:'', verb:'', vjosa:'' };
+      if(idx === 2 && induct && group.ind){
+        e.induct = true; e.credLabel = '≈' + fmtPct(group.ind.cred.mid);
+        if(group.ind.claim.type === 'stat'){ e.solid = false; e.credLabel = '≥' + pct(group.ind.claim.theta) + '%가 · ' + e.credLabel; }
+      }
+      else if(idx === 2 && group.credOut){ e.credLabel = '≥' + fmtPct(group.credOut.min); }
+      if(isCompound(r)){
+        var ka = propKey(r.a), kb = propKey(r.b);
+        e.solid = true;
+        if(r.kind === 'cond'){
+          result.push(Object.assign({}, e, { rel:'cond', fromLabel:ka, toLabel:kb, props:[r.a, r.b] }));
+          return;
+        } else {
+          var kj = '∨' + ka + '\u0002' + kb;
+          result.push(Object.assign({}, e, { rel:'disj', fromLabel:kj, toLabel:ka, props:[r.a] }));
+          result.push(Object.assign({}, e, { rel:'disj', fromLabel:kj, toLabel:kb, props:[r.b] }));
+        }
+        return;
+      }
       if(idx === rewriteRowIndex){
         // contrapositive of "모든 subj는 pred이다": 모든 (pred가 아닌 것)은 (subj가 아닌 것)이다
         e.fromLabel = labelOf(r.pred, true);
@@ -716,6 +1112,7 @@
       } else {
         e.fromLabel = labelOf(r.subj, r.subjNeg);
         e.toLabel = labelOf(r.pred, r.predNeg);
+        if(r.kind === 'def') e.rel = 'def';
       }
       result.push(e);
     });
@@ -724,6 +1121,421 @@
 
   function edgeKey(e){
     return [e.fromLabel, e.toLabel, e.rel, e.neg ? 1 : 0, e.count || '', e.verb || '', e.vjosa || ''].join('\u0001');
+  }
+
+  // =================================================================
+  // INDUCTIVE EVALUATION ENGINE (귀납 추론 평가)
+  //
+  // Two separate outputs, on purpose:
+  //  · 신뢰도 (credence) — probability that the conclusion is true. Computed
+  //    by a Bayesian update in log-odds:
+  //        logit P = logit(prior) + Σ log(likelihood ratios) + log(background)
+  //    The sample enters through a Beta model of the proportion, the other
+  //    evidence through likelihood ratios, background knowledge as a factor.
+  //  · 품질 (quality) — 0–100 per criterion ①–⑦, describing how well the
+  //    argument was made. A weak argument can still have a likely conclusion.
+  //
+  // Every number that turns a qualitative choice into a quantity lives in
+  // INDUCT_CFG, so the conventions are visible and adjustable in one place.
+  // =================================================================
+  var INDUCT_CFG = {
+    // ① representativeness: w = probability that the sample represents the
+    //    population. With probability 1−w the pattern may be produced by the
+    //    selection itself, so the sample says nothing — however large it is.
+    //    (This is why representativeness outranks count.)
+    sampling: {
+      random:      { label:'무작위 추출', w:1.0,  wLo:0.95, wHi:1,    score:100 },
+      stratified:  { label:'층화·체계적 추출', w:0.95, wLo:0.88, wHi:1,    score:90 },
+      convenience: { label:'손에 닿는 대로 (편의 표본)', w:0.6, wLo:0.4, wHi:0.75, score:45 },
+      unknown:     { label:'추출 방식을 모름', w:0.5,  wLo:0.3,  wHi:0.7,  score:30 },
+      selfselect:  { label:'자발적 응답 (자기 선택)', w:0.3,  wLo:0.15, wHi:0.45, score:20 },
+      survivor:    { label:'결과가 남은 것만 (생존 편향)', w:0.1, wLo:0.03, wHi:0.2, score:5 }
+    },
+    // ③ discriminating power = likelihood ratio P(E | 결론) / P(E | 대안 가설)
+    lr: {
+      none:     { label:'없음 — 대안 가설에서도 똑같이 나옴', mid:1,  lo:1,   hi:1.3 },
+      weak:     { label:'약함 — 대안보다 조금 더 잘 나옴 (×2)', mid:2,  lo:1.4, hi:3 },
+      moderate: { label:'보통 — 대안에서는 드묾 (×5)', mid:5,  lo:3,   hi:8 },
+      strong:   { label:'강함 — 대안에서는 거의 안 나옴 (×15)', mid:15, lo:8,   hi:30 },
+      decisive: { label:'결정적 — 대안에서는 나올 수 없음 (×60)', mid:60, lo:30, hi:150 }
+    },
+    // ④ total evidence: if counter-evidence was not sought, the supporting
+    //    evidence counts for less (shrink applies to supporting terms only)
+    total: {
+      thorough: { label:'반대 증거까지 찾아 모두 반영했다', shrink:1.0,  score:100 },
+      partial:  { label:'반대 증거를 일부만 찾아봤다', shrink:0.8,  score:60 },
+      none:     { label:'지지하는 증거만 모았다', shrink:0.6,  score:25 },
+      omitted:  { label:'알고 있는 반대 증거를 뺐다', shrink:0.45, score:0 }
+    },
+    // ⑤ background knowledge: a likelihood-ratio-like factor on the prior
+    background: {
+      established: { label:'확립된 메커니즘이 있다', f:4,    lo:2.5,  hi:6,    score:100 },
+      plausible:   { label:'그럴듯한 메커니즘이 있다', f:2,    lo:1.4,  hi:3,    score:75 },
+      unknown:     { label:'메커니즘을 모른다', f:1,    lo:1,    hi:1,    score:45 },
+      tension:     { label:'배경지식과 다소 어긋난다', f:0.4,  lo:0.25, hi:0.6,  score:20 },
+      conflict:    { label:'확립된 지식과 충돌한다', f:0.08, lo:0.03, hi:0.15, score:5 }
+    },
+    // prior when there is no sample (base rate of claims of this kind)
+    baseRate: {
+      veryrare: { label:'매우 드묾 (약 1%)', p:0.01 },
+      rare:     { label:'드묾 (약 10%)', p:0.10 },
+      even:     { label:'반반 (50%)', p:0.50 },
+      common:   { label:'흔함 (약 80%)', p:0.80 }
+    },
+    // ⑥ the confidence the argument itself claims
+    stated: {
+      none:     { label:'표시하지 않음', p:null },
+      certain:  { label:'확실하다 (≈99%)', p:0.99 },
+      nearly:   { label:'거의 확실하다 (≈90%)', p:0.90 },
+      likely:   { label:'아마 그럴 것이다 (≈70%)', p:0.70 },
+      even:     { label:'반반이다 (≈50%)', p:0.50 },
+      unlikely: { label:'아마 아닐 것이다 (≈30%)', p:0.30 }
+    },
+    // ⑦ testability (does not change credence; an unfalsifiable claim
+    //    makes every piece of evidence non-discriminating, LR = 1)
+    testability: {
+      explicit:      { label:'틀렸다면 드러날 관찰을 명시했다', score:100 },
+      predicts:      { label:'검증 가능한 예측이 있다', score:70 },
+      vague:         { label:'예측이 모호하다', score:35 },
+      unfalsifiable: { label:'어떤 관찰로도 반박할 수 없다', score:0 }
+    },
+    // ② scope, judged by hand when there is no sample to measure it
+    scopeManual: {
+      matched: { label:'근거와 같은 범위를 말한다', score:100 },
+      wider:   { label:'근거보다 조금 넓게 말한다', score:55 },
+      leap:    { label:'몇 사례에서 전체로 비약한다', score:15 }
+    },
+    universalTheta: 0.99,   // "모든" is checked as "적어도 99%"
+    existentialTheta: 0.01, // "어떤" is checked as "적어도 1%"
+    lrRef: 15,              // an LR of 15 earns full marks for ③
+    pMin: 0.001, pMax: 0.999
+  };
+  var CRITERIA = [
+    ['rep','① 표본의 대표성'], ['scope','② 결론 범위의 적절성'], ['disc','③ 증거의 변별력'],
+    ['total','④ 총증거'], ['bg','⑤ 배경지식과의 정합성'], ['calib','⑥ 보정된 확신'], ['test','⑦ 검증 가능성']
+  ];
+
+  // ---- numerics: log-gamma, regularized incomplete beta, beta quantile ----
+  function lgammaFn(x){
+    var c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313,
+      -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if(x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - lgammaFn(1 - x);
+    x -= 1;
+    var a = c[0], t = x + 7.5;
+    for(var i = 1; i < 9; i++) a += c[i] / (x + i);
+    return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+  }
+  function betacf(a, b, x){
+    var FPMIN = 1e-300, qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+    if(Math.abs(d) < FPMIN) d = FPMIN;
+    d = 1 / d;
+    var h = d;
+    for(var m = 1; m <= 400; m++){
+      var m2 = 2 * m, aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+      d = 1 + aa * d; if(Math.abs(d) < FPMIN) d = FPMIN;
+      c = 1 + aa / c; if(Math.abs(c) < FPMIN) c = FPMIN;
+      d = 1 / d; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+      d = 1 + aa * d; if(Math.abs(d) < FPMIN) d = FPMIN;
+      c = 1 + aa / c; if(Math.abs(c) < FPMIN) c = FPMIN;
+      d = 1 / d;
+      var del = d * c;
+      h *= del;
+      if(Math.abs(del - 1) < 3e-14) break;
+    }
+    return h;
+  }
+  // I_x(a, b) = P(p ≤ x) for p ~ Beta(a, b)
+  function ibeta(x, a, b){
+    if(x <= 0) return 0;
+    if(x >= 1) return 1;
+    var bt = Math.exp(lgammaFn(a + b) - lgammaFn(a) - lgammaFn(b) + a * Math.log(x) + b * Math.log(1 - x));
+    if(x < (a + 1) / (a + b + 2)) return bt * betacf(a, b, x) / a;
+    return 1 - bt * betacf(b, a, 1 - x) / b;
+  }
+  function betaQuantile(q, a, b){
+    var lo = 0, hi = 1;
+    for(var i = 0; i < 80; i++){ var mid = (lo + hi) / 2; if(ibeta(mid, a, b) < q) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
+  function logit(p){ return Math.log(p / (1 - p)); }
+  function sigmoid(x){ return 1 / (1 + Math.exp(-x)); }
+  function clampP(p){ return Math.max(INDUCT_CFG.pMin, Math.min(INDUCT_CFG.pMax, p)); }
+  function pct(p){ return Math.round(p * 100); }
+  function fmtPct(p){ return p >= 0.995 ? '99% 이상' : (p <= 0.005 ? '1% 미만' : pct(p) + '%'); }
+  function fmtRange(c){
+    var a = c.lo <= 0.005 ? '1% 미만' : pct(c.lo) + '%', b = c.hi >= 0.995 ? '99% 이상' : pct(c.hi) + '%';
+    return a === b ? a : a + '–' + b;
+  }
+
+  // claim type from the conclusion statement (or the 통계 override)
+  function claimOf(r, scope, thetaPct){
+    if(scope === 'stat'){
+      var t = Math.max(1, Math.min(99, parseFloat(thetaPct) || 50)) / 100;
+      return { type:'stat', theta:t, label:'통계적 — 적어도 ' + pct(t) + '%' };
+    }
+    if(!r || isCompound(r) || r.kind === 'exist' || r.quant === '개체'){
+      return { type:'single', theta:null, label:'개별 사례' };
+    }
+    if(r.quant === '어떤') return { type:'existential', theta:INDUCT_CFG.existentialTheta, label:'특칭 (어떤) — 하나라도 있으면 참' };
+    return { type:'universal', theta:INDUCT_CFG.universalTheta, label:'전칭 (모든) — 반례 하나로 무너짐' };
+  }
+
+  // one pass of the Bayesian computation; scn = 'mid' | 'lo' | 'hi'
+  function inductCore(inp, scn){
+    var C = INDUCT_CFG, claim = inp.claim, s = inp.sample;
+    var hasSample = !!(s && s.n > 0);
+    var tot = C.total[inp.total] || C.total.partial;
+    var bg = C.background[inp.background] || C.background.unknown;
+    var bgF = scn === 'lo' ? bg.lo : (scn === 'hi' ? bg.hi : bg.f);
+    var out = { hasSample:hasSample, refuted:false, pFlat:null, a:null, b:null, neff:null, terms:[] };
+    var logPrior = 0;
+
+    if(hasSample){
+      var sm = C.sampling[s.method] || C.sampling.unknown;
+      var w = scn === 'lo' ? sm.wLo : (scn === 'hi' ? sm.wHi : sm.w);
+      var a = s.k + 1, b = s.n - s.k + 1, pRep, prior0;
+      out.a = a; out.b = b; out.w = w;
+      if(claim.type === 'single'){
+        prior0 = 0.5;
+        pRep = (s.k + 1) / (s.n + 2);                  // Laplace's rule of succession
+      } else {
+        prior0 = 1 - claim.theta;                       // flat prior's P(p ≥ θ)
+        pRep = 1 - ibeta(claim.theta, a, b);            // P(p ≥ θ | sample, flat prior)
+      }
+      // a real counterexample refutes "모든", a real instance proves "어떤" —
+      // whatever the sampling method
+      if(claim.type === 'universal' && s.k < s.n){ out.refuted = true; }
+      var pS = (claim.type === 'existential' && s.k >= 1) ? 0.995 : w * pRep + (1 - w) * prior0;
+      logPrior = logit(prior0);
+      out.pRep = pRep; out.pFlat = pS; out.ceiling = w + (1 - w) * prior0;
+      out.terms.push(logit(clampP(pS)) - logPrior);     // the sample's Bayes factor
+    } else {
+      logPrior = logit((C.baseRate[inp.baseRate] || C.baseRate.even).p);
+    }
+
+    // other evidence: items from the same source share one vote
+    var unfals = inp.testability === 'unfalsifiable';
+    var bySrc = {};
+    (inp.evidence || []).forEach(function(e, i){
+      var key = (e.src || '').trim() || ('#' + i);
+      (bySrc[key] = bySrc[key] || []).push(e);
+    });
+    Object.keys(bySrc).forEach(function(key){
+      var list = bySrc[key];
+      list.forEach(function(e){
+        var lv = C.lr[e.lr] || C.lr.none, forSide = e.dir !== 'against';
+        var lr = scn === 'mid' ? lv.mid : ((scn === 'lo') === forSide ? lv.lo : lv.hi);
+        if(unfals) lr = 1;
+        out.terms.push((forSide ? 1 : -1) * Math.log(lr) / list.length);
+      });
+    });
+
+    var sum = logPrior + Math.log(bgF);
+    out.terms.forEach(function(t){ sum += t > 0 ? t * tot.shrink : t; });
+    out.p = out.refuted ? 0.01 : clampP(sigmoid(sum));
+    out.logPrior = logPrior;
+    return out;
+  }
+
+  function inductScore(inp){
+    var C = INDUCT_CFG;
+    var mid = inductCore(inp, 'mid'), lo = inductCore(inp, 'lo'), hi = inductCore(inp, 'hi');
+    var cred = { mid:mid.p, lo:Math.min(lo.p, mid.p, hi.p), hi:Math.max(lo.p, mid.p, hi.p) };
+    var claim = inp.claim, s = inp.sample, general = claim.type === 'universal' || claim.type === 'stat';
+    var crit = {}, flags = [], suggestion = null;
+    function set(id, score, note){ crit[id] = { score:(score === null ? null : Math.max(0, Math.min(100, Math.round(score)))), note:note }; }
+
+    // ① representativeness — 개수보다 우선
+    if(mid.hasSample){
+      var sm = C.sampling[s.method] || C.sampling.unknown;
+      var capNote = sm.w < 1 && !mid.refuted && claim.type !== 'existential'
+        ? ' 표본이 대표적이지 않을 가능성 때문에, 관찰을 아무리 늘려도 표본만으로는 최대 ' + fmtPct(mid.ceiling) + '까지만 확신할 수 있습니다.'
+        : ' 관찰 ' + s.n + '개.';
+      set('rep', sm.score, sm.label + '.' + capNote);
+    } else if(general){
+      set('rep', 15, '일반화하는 결론인데 표본 정보가 없습니다.');
+    } else {
+      set('rep', null, '표본이 없는 개별 주장이라 해당하지 않습니다.');
+    }
+
+    // ② scope
+    if(mid.hasSample && claim.type !== 'single'){
+      if(mid.refuted){
+        set('scope', 0, '반례 ' + (s.n - s.k) + '개가 관찰되어 전칭 결론은 반박됩니다.');
+        flags.push('전칭 결론이 반례로 반박되었습니다. 통계적 결론으로 낮추세요.');
+      } else if(claim.type === 'existential'){
+        set('scope', s.k >= 1 ? 100 : mid.pRep * 100, s.k >= 1 ? '사례가 하나 이상 관찰되어 특칭 결론을 감당합니다.' : '맞는 사례가 하나도 관찰되지 않았습니다.');
+      } else {
+        set('scope', mid.pRep * 100, '표본이 대표적이라 해도, 결론이 말하는 범위(' + (claim.type === 'universal' ? '모든' : '적어도 ' + pct(claim.theta) + '%') + ')가 이 표본으로 성립할 확률은 ' + fmtPct(mid.pRep) + '입니다.');
+      }
+      if(general && (mid.refuted || mid.pRep < 0.8)){
+        var q = betaQuantile(0.10, mid.a, mid.b);
+        var floor5 = Math.floor(q * 20) * 5;
+        if(floor5 >= 5) suggestion = '표본이 90% 신뢰로 뒷받침하는 결론: “적어도 ' + floor5 + '%가 그렇다”';
+        else suggestion = '표본이 뒷받침하는 일반화 결론이 거의 없습니다.';
+      }
+    } else {
+      var sc = C.scopeManual[inp.scopeManual] || C.scopeManual.matched;
+      set('scope', sc.score, sc.label + ' (직접 판단).');
+    }
+
+    // ③ discriminating power
+    var supporting = (inp.evidence || []).filter(function(e){ return e.dir !== 'against'; });
+    var parts = [];
+    if(mid.hasSample && mid.terms.length && !mid.refuted) parts.push(Math.max(0, Math.min(1, mid.terms[0] / Math.log(C.lrRef))));
+    supporting.forEach(function(e){ parts.push(Math.log((C.lr[e.lr] || C.lr.none).mid) / Math.log(C.lrRef)); });
+    if(inp.testability === 'unfalsifiable'){
+      set('disc', 0, '반박할 수 없는 주장은 어떤 관찰과도 맞으므로, 어떤 증거도 결론과 대안을 가르지 못합니다.');
+    } else if(!parts.length){
+      set('disc', 0, '결론을 지지하는 증거가 없습니다.');
+    } else {
+      var ds = 100 * parts.reduce(function(x, y){ return x + Math.min(1, y); }, 0) / parts.length;
+      var dnote = (supporting.length ? '지지 증거 ' + supporting.length + '개' + (mid.hasSample ? '와 표본' : '') : '표본') + '의 평균 변별력.';
+      var srcs = {}, dup = 0;
+      supporting.forEach(function(e){ var k = (e.src || '').trim(); if(k){ if(srcs[k]) dup++; srcs[k] = 1; } });
+      if(dup) dnote += ' 같은 출처의 증거는 한 표로 계산했습니다.';
+      var weakItems = supporting.filter(function(e){ return e.lr === 'none'; }).length;
+      if(weakItems) dnote += ' 그중 ' + weakItems + '개는 대안 가설에서도 똑같이 나오는 증거입니다.';
+      if(supporting.length && !(inp.alt || '').trim()){ ds = Math.min(ds, 60); dnote += ' 대안 가설을 적지 않아 변별력을 판단한 근거가 없습니다 (최대 60점).'; }
+      set('disc', ds, dnote);
+    }
+
+    // ④ total evidence
+    var tot = C.total[inp.total] || C.total.partial;
+    var against = (inp.evidence || []).length - supporting.length;
+    set('total', tot.score, tot.label + '.' + (against ? ' 반대 증거 ' + against + '개를 반영했습니다.' : ''));
+    if(inp.total === 'omitted') flags.push('알고 있는 반대 증거를 뺀 추론은 결론을 지지하는 증거의 무게를 크게 깎습니다.');
+
+    // ⑤ background
+    var bg = C.background[inp.background] || C.background.unknown;
+    set('bg', bg.score, bg.label + '.' + ((inp.mech || '').trim() ? ' (' + inp.mech.trim() + ')' : ''));
+
+    // ⑥ calibration
+    var st = C.stated[inp.stated] || C.stated.none;
+    if(st.p === null){
+      set('calib', null, '주장된 확신을 입력하지 않았습니다.');
+    } else if(st.p >= cred.lo && st.p <= cred.hi){
+      set('calib', 100, '주장한 확신(' + pct(st.p) + '%)이 계산된 범위(' + fmtRange(cred) + ') 안에 있습니다.');
+    } else {
+      var edge = st.p > cred.hi ? cred.hi : cred.lo;
+      var over = st.p > cred.hi;
+      // 40 percentage points off the supported range → 0
+      set('calib', 100 * (1 - Math.abs(st.p - edge) / 0.4), (over ? '과신: ' : '과소 확신: ') + '주장한 확신은 ' + pct(st.p) + '%인데 근거가 감당하는 범위는 ' + fmtRange(cred) + '입니다.');
+      if(over) flags.push('결론을 근거보다 강하게 확신하고 있습니다.');
+    }
+
+    // ⑦ testability
+    var te = C.testability[inp.testability] || C.testability.predicts;
+    set('test', te.score, te.label + '.');
+    if(inp.testability === 'unfalsifiable') flags.push('반박할 수 없는 주장이라 증거의 변별력을 0으로 계산했습니다.');
+
+    var scored = CRITERIA.filter(function(c){ return crit[c[0]].score !== null; });
+    var quality = scored.length ? Math.round(scored.reduce(function(x, c){ return x + crit[c[0]].score; }, 0) / scored.length) : 0;
+    var weakest = scored.slice().sort(function(x, y){ return crit[x[0]].score - crit[y[0]].score; })[0];
+    var grade = quality >= 85 ? 'A' : quality >= 70 ? 'B' : quality >= 55 ? 'C' : quality >= 40 ? 'D' : 'F';
+    var m = cred.mid, word = m >= 0.95 ? '매우 높음' : m >= 0.8 ? '높음' : m >= 0.6 ? '다소 높음' : m >= 0.4 ? '반반' : m >= 0.2 ? '낮음' : '매우 낮음';
+    return { cred:cred, credWord:word, claim:claim, criteria:crit, quality:quality, grade:grade,
+      weakest:weakest ? weakest[1] : null, flags:flags, suggestion:suggestion, refuted:mid.refuted };
+  }
+
+  // ---------------------------------------------------------------
+  // Inductive panel (one per set, shown in 귀납 mode)
+  // ---------------------------------------------------------------
+  function optsFrom(map, sel){
+    return Object.keys(map).map(function(k){ return '<option value="'+k+'"'+(k === sel ? ' selected' : '')+'>'+esc(map[k].label)+'</option>'; }).join('');
+  }
+  function inductHTML(){
+    var C = INDUCT_CFG;
+    return '<div class="induct" data-hassample="0" data-scopeauto="0" data-stat="0">' +
+      '<p class="ind-intro">귀납 결론은 참·거짓 대신 신뢰도로 평가합니다. 위 ‘결론’ 칸에 결론을 쓰고, 아래에 근거를 채우세요. 번호는 평가 기준 ①–⑦입니다.</p>' +
+      '<div class="ind-sec"><span class="ind-t">① 표본 <small>결론 부류에서 관찰한 사례</small></span><div class="ind-f">' +
+        '관찰 <input type="number" class="i-n" min="0" placeholder="n">개 중 결론에 맞는 사례 <input type="number" class="i-k" min="0" placeholder="k">개' +
+        '<select class="i-method" aria-label="추출 방식">' + optsFrom(C.sampling, 'unknown') + '</select>' +
+      '</div><div class="ind-f need-nosample" style="margin-top:5px">표본이 없을 때 출발점(기저율): <select class="i-base" aria-label="기저율">' + optsFrom(C.baseRate, 'even') + '</select></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">② 결론의 범위 <small class="i-type"></small></span><div class="ind-f">' +
+        '<select class="i-scope" aria-label="결론 범위"><option value="auto">결론 문장 그대로</option><option value="stat">통계적 결론 — 비율로 주장</option></select>' +
+        '<span class="i-theta-u">적어도</span><input type="number" class="i-theta" min="1" max="99" placeholder="%" value="50"><span class="i-theta-u">%가 그렇다</span>' +
+      '</div><div class="ind-f need-scopeman" style="margin-top:5px"><select class="i-scopeman" aria-label="범위 판단">' + optsFrom(C.scopeManual, 'matched') + '</select></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">③ 증거와 변별력 <small>대안 가설에서도 나왔을 증거인가</small></span><div class="ind-f">' +
+        '<input type="text" class="i-alt" placeholder="대안 가설 — 결론이 틀렸다면 무엇이 대신 참인가?">' +
+      '</div><div class="i-evs"></div><div class="mod-actions"><button type="button" class="mod-add i-ev-add">+ 증거</button></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">④ 총증거</span><div class="ind-f"><select class="i-total" aria-label="총증거">' + optsFrom(C.total, 'partial') + '</select></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">⑤ 배경지식 <small>그럴 만한 메커니즘이 있는가</small></span><div class="ind-f"><select class="i-bg" aria-label="배경지식">' + optsFrom(C.background, 'unknown') + '</select>' +
+        '<input type="text" class="i-mech" placeholder="메커니즘 (선택)"></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">⑥ 논증이 주장하는 확신</span><div class="ind-f"><select class="i-stated" aria-label="주장된 확신">' + optsFrom(C.stated, 'none') + '</select></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">⑦ 검증 가능성</span><div class="ind-f"><select class="i-test" aria-label="검증 가능성">' + optsFrom(C.testability, 'predicts') + '</select></div></div>' +
+      '<div class="i-live"></div>' +
+    '</div>';
+  }
+  function evHTML(){
+    return '<div class="i-ev" data-dir="for">' +
+      '<input type="text" class="e-text" placeholder="증거 (예: 무작위 대조시험에서 효과)">' +
+      '<select class="e-dir" aria-label="방향"><option value="for">지지</option><option value="against">반대</option></select>' +
+      '<select class="e-lr" aria-label="변별력">' + optsFrom(INDUCT_CFG.lr, 'weak') + '</select>' +
+      '<input type="text" class="e-src" placeholder="출처">' +
+      '<button type="button" class="m-del i-ev-del" aria-label="증거 삭제">×</button>' +
+    '</div>';
+  }
+  function addEvidence(gEl, d){
+    var box = gEl.querySelector('.i-evs');
+    box.insertAdjacentHTML('beforeend', evHTML());
+    var ev = box.lastElementChild;
+    if(d){
+      ev.querySelector('.e-text').value = d.text || '';
+      ev.querySelector('.e-dir').value = d.dir === 'against' ? 'against' : 'for';
+      if(INDUCT_CFG.lr[d.lr]) ev.querySelector('.e-lr').value = d.lr;
+      ev.querySelector('.e-src').value = d.src || '';
+      ev.dataset.dir = ev.querySelector('.e-dir').value;
+    }
+    return ev;
+  }
+  function inductValues(gEl){
+    function v(sel){ var el = gEl.querySelector('.induct ' + sel); return el ? el.value : ''; }
+    var evs = [];
+    gEl.querySelectorAll('.i-ev').forEach(function(ev){
+      evs.push({ text:ev.querySelector('.e-text').value, dir:ev.querySelector('.e-dir').value,
+        lr:ev.querySelector('.e-lr').value, src:ev.querySelector('.e-src').value });
+    });
+    return { scope:v('.i-scope'), theta:v('.i-theta'), n:v('.i-n'), k:v('.i-k'), method:v('.i-method'), base:v('.i-base'),
+      alt:v('.i-alt'), evidence:evs, total:v('.i-total'), bg:v('.i-bg'), mech:v('.i-mech'),
+      stated:v('.i-stated'), test:v('.i-test'), scopeman:v('.i-scopeman') };
+  }
+  function setInductValues(gEl, d){
+    d = d || {};
+    function set(sel, val){ var el = gEl.querySelector('.induct ' + sel); if(el && val !== undefined && val !== null && val !== '') el.value = val; }
+    set('.i-scope', d.scope); set('.i-theta', d.theta); set('.i-n', d.n); set('.i-k', d.k); set('.i-method', d.method);
+    set('.i-base', d.base); set('.i-alt', d.alt); set('.i-total', d.total); set('.i-bg', d.bg); set('.i-mech', d.mech);
+    set('.i-stated', d.stated); set('.i-test', d.test); set('.i-scopeman', d.scopeman);
+    gEl.querySelector('.i-evs').innerHTML = '';
+    (d.evidence || []).forEach(function(e){ addEvidence(gEl, e); });
+  }
+  // engine input from a set's panel and its conclusion statement
+  function inductInput(gEl, concl){
+    var d = inductValues(gEl);
+    var n = parseInt(d.n, 10), k = parseInt(d.k, 10);
+    var sample = (n > 0 && !isNaN(k) && k >= 0) ? { n:n, k:Math.min(k, n), method:d.method } : null;
+    return { claim:claimOf(concl, d.scope, d.theta), sample:sample,
+      evidence:d.evidence.filter(function(e){ return e.text.trim(); }), alt:d.alt,
+      total:d.total, background:d.bg, mech:d.mech, baseRate:d.base, stated:d.stated,
+      testability:d.test, scopeManual:d.scopeman, kOverN:(n > 0 && k > n) };
+  }
+  function updateInductLive(gEl){
+    if(gEl.dataset.mode !== 'induct') return;
+    var panel = gEl.querySelector('.induct');
+    var concl = rowToRaw(gEl.querySelectorAll('.row')[2]);
+    var inp = inductInput(gEl, concl);
+    panel.dataset.hassample = inp.sample ? '1' : '0';
+    panel.dataset.stat = inp.claim.type === 'stat' ? '1' : '0';
+    panel.dataset.scopeauto = (inp.sample && inp.claim.type !== 'single') ? '1' : '0';
+    panel.querySelector('.i-type').textContent = '— ' + inp.claim.label;
+    gEl.querySelectorAll('.i-ev').forEach(function(ev){ ev.dataset.dir = ev.querySelector('.e-dir').value; });
+    var live = panel.querySelector('.i-live');
+    if(!concl.filled){ live.innerHTML = '위의 ‘결론’ 칸을 채우면 신뢰도를 바로 계산합니다.'; return; }
+    var r = inductScore(inp);
+    live.innerHTML = '신뢰도 <b>' + esc(fmtPct(r.cred.mid)) + '</b> <span>(' + esc(fmtRange(r.cred)) + ', ' + r.credWord + ')</span> · 추론 품질 <b>' + r.quality + '</b>점 (' + r.grade + ')' +
+      (inp.kOverN ? '<span class="warn">맞는 사례 수가 관찰 수보다 많습니다 — 관찰 수로 맞췄습니다.</span>' : '') +
+      r.flags.map(function(f){ return '<span class="warn">' + esc(f) + '</span>'; }).join('');
   }
 
   // ---------------------------------------------------------------
@@ -738,6 +1550,7 @@
   var CONCLUSION_COLOR = '#e8c468';
   var NO_ROLE_COLOR = '#ffffff';
   var CONTRADICTION_COLOR = '#111111';
+  var INDUCT_COLOR = '#8fcb9b';
   var PAIR_BOX_W = 52, PAIR_BOX_H = 34;
 
   function buildGraphAndTriples(groupedRaw, flatRaw){
@@ -745,6 +1558,7 @@
     groupedRaw.forEach(function(g){
       g.rows.forEach(function(r){
         if(r.filled && r.kind === 'prop'){ propLabels[r.pred] = 1; propLabels[r.pred + '×'] = 1; }
+        if(r.filled && r.propTerm){ propLabels[r.propTerm] = 1; propLabels[r.propTerm + '×'] = 1; }
       });
     });
 
@@ -757,7 +1571,10 @@
         var s1 = [ge[0].fromLabel, ge[0].toLabel], s2 = [ge[1].fromLabel, ge[1].toLabel];
         s1.forEach(function(l){ if(s2.indexOf(l) !== -1) middleLabel = l; });
       }
-      rawByGroup.push({ edges:ge, hasTriangle: !!middleLabel, middleLabel:middleLabel });
+      // a propositional set (조건·선언) has no middle term, but each arrow's
+      // role in it is still unambiguous
+      var propositional = group.rows.some(isCompound);
+      rawByGroup.push({ edges:ge, hasTriangle: !!middleLabel || propositional, middleLabel:middleLabel });
     });
 
     // 2) merge same-direction duplicate edges
@@ -767,10 +1584,12 @@
         var key = edgeKey(e);
         if(!mergedMap.has(key)){
           mergedMap.set(key, { fromLabel:e.fromLabel, toLabel:e.toLabel, solid:false, occurrences:[],
-            rel:e.rel, neg:e.neg, count:e.count, verb:e.verb, vjosa:e.vjosa });
+            rel:e.rel, neg:e.neg, count:e.count, verb:e.verb, vjosa:e.vjosa, credLabel:'', induct:false });
         }
         var m = mergedMap.get(key);
         if(e.solid) m.solid = true;
+        if(e.induct){ m.induct = true; m.credLabel = e.credLabel; }
+        else if(e.credLabel && !m.credLabel) m.credLabel = e.credLabel;
         m.occurrences.push({ role:e.role, hasTriangle:gInfo.hasTriangle });
       });
     });
@@ -791,7 +1610,8 @@
         if(roleKeys.length === 1) colorRole = roleKeys[0];
       }
       mergedEdges.push({ id:id, fromLabel:m.fromLabel, toLabel:m.toLabel, solid:m.solid,
-        statsRole:statsRole, colorRole:colorRole, rel:m.rel, neg:m.neg, count:m.count, verb:m.verb, vjosa:m.vjosa });
+        statsRole:statsRole, colorRole:colorRole, rel:m.rel, neg:m.neg, count:m.count, verb:m.verb, vjosa:m.vjosa,
+        credLabel:m.credLabel, induct:m.induct });
       edgeKeyToId[key] = id;
     });
 
@@ -849,11 +1669,80 @@
       }
     });
 
+    // compound (modifier) concepts: a small junction dot with thin grey
+    // "definition" links to its head noun and to each modifier concept
+    var compEdges = [], cc = 0;
+    function compEdge(from, to, label){
+      var o = { id:'c' + (cc++), from:from, to:to, arrows:{ to:{ enabled:true, scaleFactor:0.45 } },
+        color:{ color:'#6f7d7b', highlight:'#a9b6b4' }, width:1.2, dashes:false, length:70,
+        smooth:{ type:'continuous' } };
+      if(label){ o.label = label; o.font = { face:'IBM Plex Mono', size:10.5, color:'#c9bfd0', strokeWidth:3, strokeColor:'#212b2d', align:'middle' }; }
+      return o;
+    }
+    // proposition boxes (parts of 조건·선언) and 또는 diamonds; each box is
+    // tied to the concepts it talks about by the same grey links
+    var PROPS = {};
+    rawByGroup.forEach(function(gInfo){
+      gInfo.edges.forEach(function(e){ (e.props || []).forEach(function(pr){ PROPS[propKey(pr)] = pr; }); });
+    });
+    nodes.slice().forEach(function(n){
+      if(n.key.charAt(0) === '∨'){ n.isProp = true; n.isJunction = true; return; }
+      var pr = PROPS[n.key];
+      if(!pr) return;
+      n.isProp = true;
+      n.propText = clauseSentence(pr);
+      compEdges.push(compEdge(n.id, ensureNode(labelOf(pr.subj, pr.subjNeg)), ''));
+      if(pr.kind === 'rel') compEdges.push(compEdge(n.id, ensureNode(pr.obj), ''));
+      else if(pr.kind !== 'exist'){
+        if(pr.kind === 'prop'){ propLabels[pr.pred] = 1; propLabels[pr.pred + '×'] = 1; }
+        if(pr.propTerm){ propLabels[pr.propTerm] = 1; propLabels[pr.propTerm + '×'] = 1; }
+        compEdges.push(compEdge(n.id, ensureNode(labelOf(pr.pred, pr.predNeg)), ''));
+      }
+    });
+    nodes.slice().forEach(function(n){
+      var d = COMPOUNDS[n.key];
+      if(!d) return;
+      n.isCompound = true;
+      compEdges.push(compEdge(n.id, ensureNode(d.head), ''));
+      d.mods.forEach(function(m){
+        var base = modBase(m);
+        if(m.obj){
+          compEdges.push(compEdge(n.id, ensureNode(m.obj), ((m.neg ? '¬ ' : '') + mjosaFor(m.obj, m.josa) + ' ' + base).trim()));
+        } else {
+          propLabels[base] = 1; propLabels[base + '×'] = 1;
+          compEdges.push(compEdge(n.id, ensureNode(m.neg ? base + '×' : base), ''));
+        }
+      });
+    });
+    nodes.forEach(function(n){
+      if(n.isJunction){
+        n.shape = 'diamond'; n.size = 11; n.borderWidth = 2; n.label = '또는';
+        n.color = { background:'#e2a6c5', border:'#b97a9a', highlight:{ background:'#ecbfd6', border:'#b97a9a' } };
+        n.font = { face:'IBM Plex Mono', size:12, color:'#e2a6c5' };
+      } else if(n.isProp){
+        n.shape = 'box'; n.label = n.propText; n.borderWidth = 2; n.margin = 8;
+        n.shapeProperties = { borderRadius:6 };
+        n.widthConstraint = { maximum:170 };
+        n.color = { background:'#1b2325', border:'#7fb3d5', highlight:{ background:'#26333a', border:'#9fc6e0' } };
+        n.font = { face:'IBM Plex Sans KR', size:13, color:'#f3f1e7' };
+        n.title = '명제: ' + n.propText;
+      } else if(n.isCompound){
+        n.shape = 'dot'; n.size = 8; n.borderWidth = 2;
+        n.color = { background:'#a9b6b4', border:'#e2a6c5', highlight:{ background:'#c9d3d1', border:'#e2a6c5' } };
+        n.font = { face:'IBM Plex Mono', size:12, color:'#c9d3d1' };
+        n.title = '수식어 교차점: ' + n.key;
+      } else {
+        var st = styleFor(n.key);
+        n.color = st.color;
+        n.font = Object.assign({ face:'IBM Plex Mono', size:16 }, st.font);
+      }
+    });
+
     var keyToNode = {};
     nodes.forEach(function(n){ keyToNode[n.key] = n; });
     var pairs = [];
     nodes.forEach(function(n){
-      if(n.key.indexOf('×') !== -1) return;
+      if(n.key.indexOf('×') !== -1 || n.isCompound || n.isProp) return;
       var negNode = keyToNode[n.key + '×'];
       if(negNode){ pairs.push({ baseId:n.id, negId:negNode.id, baseNode:n, negNode:negNode }); }
     });
@@ -887,20 +1776,35 @@
         color:{ color:color, highlight:color },
         width: contradictionIds[e.id] ? 3 : 2,
         smooth:{ type:'continuous' } };
-      if(e.rel !== 'isa'){
+      if(e.rel === 'cond'){
+        o.label = '이면'; o.width = 3;
+        o.font = { face:'IBM Plex Mono', size:12, color:'#f3f1e7', strokeWidth:4, strokeColor:'#212b2d', align:'middle' };
+      } else if(e.rel === 'disj'){
+        o.arrows = ''; o.width = 2.5;
+      } else if(e.rel === 'def'){
+        o.label = '≡'; o.arrows = 'to, from';
+        o.font = { face:'IBM Plex Mono', size:14, color:'#f3f1e7', strokeWidth:4, strokeColor:'#212b2d', align:'middle' };
+      } else if(e.rel !== 'isa'){
         var spec = RELS[e.rel];
         o.label = relShort(e);
         o.font = { face:'IBM Plex Mono', size:12, color:(spec ? spec.color : '#f3f1e7'),
           strokeWidth:4, strokeColor:'#212b2d', align:'middle' };
         if(spec && spec.sym) o.arrows = 'to, from';
       }
+      if(e.credLabel){
+        o.label = (o.label ? o.label + ' · ' : '') + e.credLabel;
+        o.font = Object.assign({ face:'IBM Plex Mono', size:12, strokeWidth:4, strokeColor:'#212b2d', align:'middle' }, o.font || {}, { color:'#8fcb9b' });
+      }
+      if(e.induct && !contradictionIds[e.id]){ o.color = { color:INDUCT_COLOR, highlight:INDUCT_COLOR }; }
       return o;
     });
+
+    visEdges = visEdges.concat(compEdges);
 
     // 7) triples for the double-click show/hide behaviour
     var triples = [];
     rawByGroup.forEach(function(gInfo){
-      if(!gInfo.hasTriangle || gInfo.edges.length !== 3) return;
+      if(!gInfo.middleLabel || gInfo.edges.length !== 3) return;
       var eid1 = edgeKeyToId[edgeKey(gInfo.edges[0])];
       var eid2 = edgeKeyToId[edgeKey(gInfo.edges[1])];
       var eid3 = edgeKeyToId[edgeKey(gInfo.edges[2])];
@@ -981,6 +1885,7 @@
   function analyzeTriangles(groupedRaw){
     var noTriangle = 0, dashedOnly = 0, xOnly = 0, totalDefective = 0;
     groupedRaw.forEach(function(group){
+      if(group.mode === 'induct' || group.rows.some(isCompound)) return;
       var filledCount = group.rows.filter(function(r){ return r.filled; }).length;
       if(filledCount === 0) return;
       var defective = false;
@@ -1178,6 +2083,7 @@
   }
 
   function stmtKey(r){
+    if(isCompound(r)) return r.kind + '(' + stmtKey(r.a) + ')(' + stmtKey(r.b) + ')';
     if(r.kind === 'rel'){
       var v = relCanon(r), s = RELS[v.rel], x = v.subj, y = v.obj;
       if(s && s.sym && v.quant !== '어떤' && !v.subjNeg && y < x){ var t = x; x = y; y = t; }
@@ -1208,8 +2114,224 @@
     return null;
   }
 
+  // ---------------------------------------------------------------
+  // Subsumption engine: every universal statement is an arrow X ⊂ Y
+  // (plus its contrapositive Y× ⊂ X×), every compound C ⊂ head and
+  // C ⊂ each modifier class, and C1 ⊂ C2 when C1's head ⊂ C2's head and
+  // C1 carries all of C2's modifiers. Then:
+  //   모든 S는 P (아님)  ⇐  S ⊂* P (P×)
+  //   어떤 S는 P (아님)  ⇐  어떤 X는 Y, X ⊂* S, Y ⊂* P   (or swapped)
+  //                     ⇐  모든 M…, M ⊂* S, M ⊂* P   (existential import,
+  //                         same assumption as forms 2·3·5)
+  // ---------------------------------------------------------------
+  function flipLit(t){ return t.slice(-1) === '×' ? t.slice(0, -1) : t + '×'; }
+  function stripLit(t){ return t.replace(/×$/, ''); }
+  function reachPath(adj, a, b){
+    if(a === b) return [a];
+    var parent = {}, seen = {}, queue = [a]; seen[a] = 1;
+    while(queue.length){
+      var cur = queue.shift(), nx = adj[cur] || [];
+      for(var i = 0; i < nx.length; i++){
+        var t = nx[i];
+        if(seen[t]) continue;
+        seen[t] = 1; parent[t] = cur;
+        if(t === b){
+          var path = [b], p = cur;
+          while(p !== undefined){ path.unshift(p); p = parent[p]; }
+          return path;
+        }
+        queue.push(t);
+      }
+    }
+    return null;
+  }
+  function matchSubsumption(rows){
+    if(rows.length !== 3 || !rows.every(function(r){ return r.filled && r.kind !== 'exist' && !isCompound(r); })) return null;
+    function litOf(r){ return { S:labelOf(r.subj, r.subjNeg), P: r.neg ? r.pred + '×' : r.pred }; }
+    var uni = [], part = [];
+    [rows[0], rows[1]].forEach(function(r){
+      var l = litOf(r);
+      (r.quant === '어떤' ? part : uni).push(l);
+      if(r.kind === 'def') uni.push({ S:l.P, P:l.S });
+    });
+    var adj = {};
+    function add(a, b){ adj[a] = adj[a] || []; if(adj[a].indexOf(b) === -1) adj[a].push(b); }
+    function addBoth(a, b){ add(a, b); add(flipLit(b), flipLit(a)); }
+    uni.forEach(function(l){ addBoth(l.S, l.P); });
+
+    var comps = {};
+    function collect(t){
+      t = stripLit(t);
+      var d = COMPOUNDS[t];
+      if(!d || comps[t]) return;
+      comps[t] = d;
+      d.mods.forEach(function(m){ collect(modTerm(m)); });
+    }
+    rows.forEach(function(r){ var l = litOf(r); collect(l.S); collect(l.P); });
+    Object.keys(comps).forEach(function(c){
+      var d = comps[c];
+      addBoth(c, d.head);
+      d.mods.forEach(function(m){ addBoth(c, modTerm(m)); });
+    });
+    var names = Object.keys(comps);
+    for(var pass = 0; pass < 2; pass++){
+      names.forEach(function(c1){
+        names.forEach(function(c2){
+          if(c1 === c2) return;
+          var d1 = comps[c1], d2 = comps[c2];
+          if(!reachPath(adj, d1.head, d2.head)) return;
+          var keys1 = d1.mods.map(modKey);
+          if(d2.mods.every(function(m){ return keys1.indexOf(modKey(m)) !== -1; })) addBoth(c1, c2);
+        });
+      });
+    }
+
+    var C = litOf(rows[2]);
+    if(rows[2].kind === 'def'){
+      var fw = reachPath(adj, C.S, C.P), bw = reachPath(adj, C.P, C.S);
+      return (fw && bw && fw.length >= 2) ? { kind:'uni', path:fw.concat(bw.slice(1)) } : null;
+    }
+    if(rows[2].quant !== '어떤'){
+      var path = reachPath(adj, C.S, C.P);
+      return (path && path.length >= 2) ? { kind:'uni', path:path } : null;
+    }
+    function reach(a, b){ return !!reachPath(adj, a, b); }
+    for(var i = 0; i < part.length; i++){
+      var X = part[i].S, Y = part[i].P;
+      if((reach(X, C.S) && reach(Y, C.P)) || (reach(Y, C.S) && reach(X, C.P))){
+        return { kind:'part', note:'‘' + X + '’와 ‘' + Y + '’에 함께 속하는 것이 있으므로 ‘' + C.S + '’와 ‘' + C.P + '’에도 함께 속하는 것이 있습니다' };
+      }
+    }
+    for(var k = 0; k < uni.length; k++){
+      var M = uni[k].S;
+      if(reach(M, C.S) && reach(M, C.P)){
+        return { kind:'part', note:'‘' + M + '’는 ‘' + C.S + '’와 ‘' + C.P + '’에 모두 포함됩니다 (‘' + M + '’가 존재한다고 가정)' };
+      }
+    }
+    return null;
+  }
+
+  // ---------------------------------------------------------------
+  // Propositional rules (조건·선언). Two readings:
+  //  · 명제 단위: the two parts are separate propositions. Negating
+  //    "모든 S는 P" gives its contradictory "어떤 S는 P가 아니다".
+  //  · 대상 단위: both parts share a general subject ("모든 새가 날지
+  //    않으면 펭귄이다" = for each bird…). Then a rule is applied at the
+  //    quantity of the other premise, and negation keeps the quantity.
+  // ---------------------------------------------------------------
+  function sameSubj(a, b){ return a.subj === b.subj && !!a.subjNeg === !!b.subjNeg; }
+  function perIndividual(c){
+    return sameSubj(c.a, c.b) && c.a.quant !== '개체' && c.b.quant !== '개체' &&
+      c.a.kind !== 'exist' && c.b.kind !== 'exist' && !c.a.orig && !c.b.orig;
+  }
+  function negOf(cl, ind){
+    if(!cl || cl.kind === 'def' || isCompound(cl)) return null;
+    var c = Object.assign({}, cl, { orig:null });
+    if(c.orig === null && cl.orig) c.orig = null;
+    if(!ind && c.quant !== '개체' && c.kind !== 'exist') c.quant = c.quant === '어떤' ? '모든' : '어떤';
+    c.neg = !c.neg; c.predNeg = c.neg;
+    return c;
+  }
+  // x is at least as strong as y (same statement, or y is x's "어떤" version)
+  function entails(x, y){
+    if(!x || !y || isCompound(x) || isCompound(y)) return false;
+    var ky = stmtKey(y);
+    if(stmtKey(x) === ky) return true;
+    return x.quant !== '어떤' && x.kind !== 'exist' && y.quant === '어떤' &&
+      stmtKey(Object.assign({}, x, { quant:'어떤' })) === ky;
+  }
+  function matchPropositional(rows){
+    if(rows.length !== 3 || !rows.every(function(r){ return r.filled; }) || !rows.some(isCompound)) return null;
+    var C = rows[2], orders = [[0,1],[1,0]];
+    var S = function(r){ return clauseSentence(r); };
+    for(var oi = 0; oi < orders.length; oi++){
+      var K = rows[orders[oi][0]], X = rows[orders[oi][1]];
+      if(K.kind === 'cond' && X.kind === 'cond' && C.kind === 'cond' &&
+         stmtKey(K.b) === stmtKey(X.a) && stmtKey(K.a) === stmtKey(C.a) && stmtKey(X.b) === stmtKey(C.b)){
+        return { ok:true, name:'가언 삼단논법', desc:'P이면 Q · Q이면 R → P이면 R' };
+      }
+      if(!isCompound(K) || isCompound(X) || isCompound(C)) continue;
+      var ind = perIndividual(K);
+      if(ind && !sameSubj(X, K.a)) continue;
+      var inst = function(cl){ return ind ? Object.assign({}, cl, { quant:X.quant }) : cl; };
+      var A = inst(K.a), B = inst(K.b), nA = negOf(A, ind), nB = negOf(B, ind);
+      var note = ind ? ' (주어 ‘' + K.a.subj + '’의 각 대상마다 적용)' : '';
+      if(K.kind === 'cond'){
+        if(entails(X, A) && entails(B, C)) return { ok:true, name:'전건 긍정', desc:'P이면 Q · P → Q' + note };
+        if(nA && nB && entails(X, nB) && entails(nA, C)) return { ok:true, name:'후건 부정', desc:'P이면 Q · Q가 아니다 → P가 아니다' + note };
+        if(entails(X, B) && entails(A, C)) return { ok:false, name:'후건 긍정의 오류',
+          desc:'‘' + S(K.b) + '’가 참이어도 ‘' + S(K.a) + '’ 말고 다른 이유로 참일 수 있으므로, 전건이 참이라고 결론 낼 수 없습니다' };
+        if(nA && nB && entails(X, nA) && entails(nB, C)) return { ok:false, name:'전건 부정의 오류',
+          desc:'‘' + S(K.a) + '’가 거짓이어도 ‘' + S(K.b) + '’는 다른 이유로 참일 수 있으므로, 후건이 거짓이라고 결론 낼 수 없습니다' };
+      } else {
+        var pairs = [[A, B, nA, nB], [B, A, nB, nA]];
+        for(var pi = 0; pi < 2; pi++){
+          var P = pairs[pi][0], Q = pairs[pi][1], nP = pairs[pi][2], nQ = pairs[pi][3];
+          if(nP && entails(X, nP) && entails(Q, C)) return { ok:true, name:'선언 삼단논법', desc:'P 또는 Q · P가 아니다 → Q' + note };
+          if(nQ && entails(X, P) && entails(nQ, C)) return { ok:false, name:'선언지 긍정의 오류',
+            desc:'‘또는’은 둘 다 참인 경우도 포함하므로, 한쪽이 참이라고 다른 쪽이 거짓이 되지는 않습니다' };
+        }
+      }
+    }
+    return null;
+  }
+
+  // ---------------------------------------------------------------
+  // Credence through deduction. If the premises of a valid deduction
+  // have credences p1, p2 (from inductive sets), the conclusion is at
+  // least 1 − (1−p1) − (1−p2) (Boole's inequality — holds however the
+  // premises depend on each other), and about p1·p2 if they are
+  // independent. Premises with no inductive backing count as given (1).
+  // ---------------------------------------------------------------
+  function propagateCredence(grouped, results){
+    var credMap = {};
+    grouped.forEach(function(g){
+      // a statistical conclusion ("적어도 θ%") is weaker than the sentence's
+      // "모든", so it must not stand in for that premise
+      if(g.mode === 'induct' && g.ind && g.ind.claim.type !== 'stat'){
+        credMap[stmtKey(g.rows[2])] = { min:g.ind.cred.lo, indep:g.ind.cred.mid, from:'세트 ' + g.index };
+      }
+    });
+    for(var pass = 0; pass < 6; pass++){
+      var changed = false;
+      grouped.forEach(function(g, i){
+        if(g.mode === 'induct' || results[i].status !== 'valid') return;
+        var ps = [g.rows[0], g.rows[1]].map(function(r){ return credMap[stmtKey(r)] || null; });
+        if(!ps[0] && !ps[1]) return;
+        var min = 1, indep = 1, src = [];
+        ps.forEach(function(c){ if(c){ min -= (1 - c.min); indep *= c.indep; src.push(c.from); } });
+        var out = { min:Math.max(0, min), indep:indep, sources:src };
+        var key = stmtKey(g.rows[2]), old = credMap[key];
+        if(!g.credOut || out.min > g.credOut.min + 1e-9 || out.indep > g.credOut.indep + 1e-9){ g.credOut = out; changed = true; }
+        if(!old || out.min > old.min + 1e-9){
+          credMap[key] = { min:out.min, indep:Math.max(out.indep, old ? old.indep : 0), from:'세트 ' + g.index };
+          changed = true;
+        }
+      });
+      if(!changed) break;
+    }
+  }
+
+  function inductSentence(group){
+    var s = sentenceOf(group.rows[2]);
+    if(group.ind && group.ind.claim.type === 'stat') return '적어도 ' + pct(group.ind.claim.theta) + '%의 ' + s.replace(/^(모든|어떤) /, '');
+    return s;
+  }
+
   function evaluateGroupSyllogism(group){
+    if(group.mode === 'induct'){
+      return group.complete ? { status:'inductive', groupIndex:group.index, ind:group.ind, sentence:inductSentence(group) }
+                            : { status:'incomplete', groupIndex:group.index };
+    }
     if(!group.complete) return { status:'incomplete', groupIndex:group.index };
+    if(group.rows.some(isCompound)){
+      var pm = matchPropositional(group.rows);
+      var lines = group.rows.map(sentenceOf);
+      if(pm && pm.ok) return { status:'valid', groupIndex:group.index, templateId:'명제', ruleName:pm.name,
+        templateDesc:pm.desc, diagramType:'lines', lines:lines };
+      if(pm) return { status:'invalid', groupIndex:group.index, fallacy:pm.name, fallacyDesc:pm.desc };
+      return { status:'invalid', groupIndex:group.index };
+    }
     var m = matchGroup(group.rows);
     if(m){
       var id = m.template.id;
@@ -1235,6 +2357,19 @@
         templateDesc:'X와 Y가 같으면, X에 대해 참인 것은 Y에 대해서도 참이다',
         diagramType:'identity', x:idm.x, y:idm.y, lines:[sentenceOf(idm.q), sentenceOf(idm.c)] };
     }
+    var sub = matchSubsumption(group.rows);
+    if(sub){
+      var usesCompound = group.rows.some(function(r){ return COMPOUNDS[r.subj] || COMPOUNDS[r.pred] || COMPOUNDS[r.obj]; });
+      var why = usesCompound ? '수식어가 붙은 개념은 머리 명사와 각 수식어에 모두 포함됩니다' : '전제들의 포함 관계를 이어 붙였습니다';
+      if(sub.kind === 'uni'){
+        return { status:'valid', groupIndex:group.index, templateId:'포함', ruleName:'포함 관계 추론',
+          templateDesc: sub.path.join(' ⊂ ') + ' (' + why + ')',
+          diagramType:'relchain', nodes:sub.path, relLabel:'⊂', relColor:'#a9b6b4' };
+      }
+      return { status:'valid', groupIndex:group.index, templateId:'포함', ruleName:'포함 관계 추론',
+        templateDesc: sub.note + ' (' + why + ')', diagramType:'lines',
+        lines:[sentenceOf(group.rows[0]), sentenceOf(group.rows[1]), sentenceOf(group.rows[2])] };
+    }
     return { status:'invalid', groupIndex:group.index };
   }
 
@@ -1245,7 +2380,7 @@
     var issues = [];
     var map = {};
     rawList.forEach(function(r){
-      if(r.kind === 'exist') return;
+      if(r.kind === 'exist' || isCompound(r)) return;
       var key = labelOf(r.subj, r.subjNeg) + '\u0001' + r.pred;
       map[key] = map[key] || [];
       map[key].push(r);
@@ -1261,7 +2396,7 @@
         if(!all && r.neg) hasO = true;
       });
       var base = list[0];
-      function variant(q, neg){ return sentenceOf(Object.assign({}, base, { quant:q, neg:neg, predNeg:neg })); }
+      function variant(q, neg){ return sentenceOf(Object.assign({}, base, { quant:q, neg:neg, predNeg:neg, orig:null, kind:(base.kind === 'def' ? 'class' : base.kind) })); }
       var uq = base.quant === '개체' ? '개체' : '모든';
       if(hasA && hasO) issues.push('모순: "' + variant(uq, false) + '"와 "' + variant('어떤', true) + '"는 함께 성립할 수 없습니다.');
       if(hasE && hasI) issues.push('모순: "' + variant(uq, true) + '"와 "' + variant('어떤', false) + '"는 함께 성립할 수 없습니다.');
@@ -1391,6 +2526,7 @@
     return { issues:issues, derived:derived };
   }
 
+  var groupedForEval = null;
   function renderEvalList(groupResults, contradictions, cycles, relInfo){
     var ul = document.getElementById('evalList');
     ul.innerHTML = '';
@@ -1401,12 +2537,21 @@
       ul.appendChild(li);
     }
     var anyProblem = false;
-    groupResults.forEach(function(g){
-      if(g.status === 'valid'){
+    groupResults.forEach(function(g, gi){
+      if(g.status === 'inductive'){
+        addLi('세트 ' + g.groupIndex + ': 귀납 추론 — “' + g.sentence + '”의 신뢰도 ' + fmtPct(g.ind.cred.mid) + ' (' + fmtRange(g.ind.cred) + '), 추론 품질 ' + g.ind.quality + '점 (' + g.ind.grade + ')' + (g.ind.weakest ? ', 가장 약한 고리: ' + g.ind.weakest : '') + '. 참·거짓이 아니라 신뢰도로 평가합니다.', 'info');
+      } else if(g.status === 'valid'){
         addLi('세트 ' + g.groupIndex + ': 올바른 추론입니다 (' + g.ruleName + ' — ' + g.templateDesc + ')', 'ok');
+        var co = groupedForEval && groupedForEval[gi] && groupedForEval[gi].credOut;
+        if(co){
+          addLi('세트 ' + g.groupIndex + ': 형식은 타당하지만 전제가 귀납 결론(' + co.sources.join(', ') + ')이므로, 결론의 신뢰도는 최소 ' + fmtPct(co.min) + '입니다 (전제가 서로 독립이면 약 ' + fmtPct(co.indep) + ').', 'info');
+        }
+      } else if(g.status === 'invalid' && g.fallacy){
+        anyProblem = true;
+        addLi('세트 ' + g.groupIndex + ': ' + g.fallacy + '입니다 — ' + g.fallacyDesc + '.', null);
       } else if(g.status === 'invalid'){
         anyProblem = true;
-        addLi('세트 ' + g.groupIndex + ': 정언삼단논법 9형식, 이행 관계 추론, 동일자 대체 중 어느 것과도 일치하지 않습니다 — 틀린 논법입니다.', null);
+        addLi('세트 ' + g.groupIndex + ': 정언삼단논법 9형식, 포함 관계 추론, 이행 관계 추론, 동일자 대체, 조건·선언 추론 규칙 중 어느 것과도 일치하지 않습니다 — 틀린 논법입니다.', null);
       }
     });
     contradictions.forEach(function(msg){ anyProblem = true; addLi(msg, null); });
@@ -1416,6 +2561,32 @@
     if(relInfo.derived.length){
       addLi('입력하지 않았지만 이행 관계로 도출되는 사실: ' + relInfo.derived.join(' / '), 'info');
     }
+  }
+
+  function scoreColor(s){ return s >= 70 ? '#8fcb9b' : (s >= 40 ? '#e8c468' : '#e08585'); }
+  function renderInductCard(groupResults){
+    var card = document.getElementById('inductCard'), list = document.getElementById('inductList');
+    var items = groupResults.filter(function(g){ return g.status === 'inductive'; });
+    card.classList.toggle('hidden', items.length === 0);
+    list.innerHTML = items.map(function(g){
+      var r = g.ind, c = r.cred;
+      var crit = CRITERIA.map(function(cr){
+        var x = r.criteria[cr[0]], s = x.score;
+        return '<li><span class="cn">' + esc(cr[1]) + '</span>' +
+          '<span class="cb"><i style="width:' + (s === null ? 0 : s) + '%;background:' + (s === null ? 'transparent' : scoreColor(s)) + '"></i></span>' +
+          '<span class="cs" style="color:' + (s === null ? 'var(--chalk-dim)' : scoreColor(s)) + '">' + (s === null ? '—' : s) + '</span>' +
+          '<p>' + esc(x.note) + '</p></li>';
+      }).join('');
+      return '<div class="ind-item">' +
+        '<div class="ind-head"><span class="tag">세트 ' + g.groupIndex + '</span>' + esc(g.sentence) + '<span class="ctype">결론 유형: ' + esc(r.claim.label) + '</span></div>' +
+        '<div class="ind-cred"><div class="cred-bar"><i class="band" style="left:' + (c.lo * 100) + '%;width:' + Math.max(0.8, (c.hi - c.lo) * 100) + '%"></i><i class="mark" style="left:' + (c.mid * 100) + '%"></i></div>' +
+          '<div class="cred-num">' + esc(fmtPct(c.mid)) + '<small>' + esc(fmtRange(c)) + ' · ' + r.credWord + '</small></div></div>' +
+        '<div class="ind-quality">추론 품질 <b>' + r.quality + '</b>점 (' + r.grade + ')' + (r.weakest ? ' · 가장 약한 고리: ' + esc(r.weakest) : '') + '</div>' +
+        '<ul class="crit">' + crit + '</ul>' +
+        r.flags.map(function(f){ return '<div class="ind-flag">⚠ ' + esc(f) + '</div>'; }).join('') +
+        (r.suggestion ? '<div class="ind-sugg">→ ' + esc(r.suggestion) + '</div>' : '') +
+      '</div>';
+    }).join('');
   }
 
   // =================================================================
@@ -1522,7 +2693,7 @@
       lx = hasChild ? (f.x - f.r*0.28) : (f.x + f.r*0.42);
       ly = f.y - (hasChild ? f.r*0.12 : 0);
     }
-    var label = '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="'+(negated?'#e08585':'#f3f1e7')+'" style="pointer-events:none;">'+esc(f.label)+'</text>';
+    var label = '<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="'+(negated?'#e08585':'#f3f1e7')+'" style="pointer-events:none;">'+esc(trunc(f.label, 11))+'</text>';
     return '<g class="diagram-shape" data-fidx="'+idx+'">' + shapeMarkup + label + '</g>';
   }
 
@@ -1620,18 +2791,34 @@
       '<text x="'+x+'" y="'+y+'" text-anchor="middle" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="#f3f1e7">'+esc(trunc(label, 12))+'</text>';
   }
 
-  function relChainMarkup(g){
-    var cx = CELL_W/2 - 22, ys = [40, 118, 196], bw = 116, bh = 30, col = g.relColor || '#f3f1e7';
+  function chainMarkup(nodes, label, col){
+    if(nodes.length > 5) nodes = nodes.slice(0, 2).concat(['…']).concat(nodes.slice(-2));
+    var cx = CELL_W/2 - 22, bw = 116, bh = 30, n = nodes.length, ys = [];
+    col = col || '#f3f1e7';
+    for(var i = 0; i < n; i++) ys.push(n === 1 ? 120 : 34 + (206 - 34) * i / (n - 1));
     var out = '';
-    [0,1].forEach(function(i){
-      var a = ys[i] + bh/2 + 2, b = ys[i+1] - bh/2 - 4;
+    for(var k = 0; k < n - 1; k++){
+      var a = ys[k] + bh/2 + 2, b = ys[k+1] - bh/2 - 4;
       out += '<line x1="'+cx+'" y1="'+a+'" x2="'+cx+'" y2="'+b+'" stroke="#7fb3d5" stroke-width="2" marker-end="url(#mkBlue)"/>' +
-        '<text x="'+(cx-9)+'" y="'+((a+b)/2)+'" text-anchor="end" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+col+'">'+esc(g.relLabel)+'</text>';
+        '<text x="'+(cx-9)+'" y="'+((a+b)/2)+'" text-anchor="end" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+col+'">'+esc(label)+'</text>';
+    }
+    if(n >= 3){
+      var x1 = cx + bw/2, mid = (ys[0] + ys[n-1]) / 2;
+      out += '<path d="M '+(x1+2)+','+ys[0]+' C '+(x1+64)+','+ys[0]+' '+(x1+64)+','+ys[n-1]+' '+(x1+6)+','+ys[n-1]+'" fill="none" stroke="#e8c468" stroke-width="2" marker-end="url(#mkGold)"/>' +
+        '<text x="'+(x1+52)+'" y="'+mid+'" text-anchor="start" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+col+'">'+esc(label)+'</text>';
+    }
+    nodes.forEach(function(nd, i){ out += diagBox(nd, cx, ys[i], bw); });
+    return out;
+  }
+
+  function relChainMarkup(g){ return chainMarkup(g.nodes, g.relLabel, g.relColor); }
+
+  function linesMarkup(g){
+    var cx = CELL_W/2, out = '';
+    g.lines.forEach(function(line, i){
+      var last = i === g.lines.length - 1;
+      out += '<text x="'+cx+'" y="'+(70 + i*46)+'" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11" fill="'+(last ? '#e8c468' : '#7fb3d5')+'">'+esc((last ? '∴ ' : '') + trunc(line, 30))+'</text>';
     });
-    var x1 = cx + bw/2;
-    out += '<path d="M '+(x1+2)+','+ys[0]+' C '+(x1+64)+','+ys[0]+' '+(x1+64)+','+ys[2]+' '+(x1+6)+','+ys[2]+'" fill="none" stroke="#e8c468" stroke-width="2" marker-end="url(#mkGold)"/>' +
-      '<text x="'+(x1+52)+'" y="'+ys[1]+'" text-anchor="start" dominant-baseline="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+col+'">'+esc(g.relLabel)+'</text>';
-    g.nodes.forEach(function(n, i){ out += diagBox(n, cx, ys[i], bw); });
     return out;
   }
 
@@ -1694,9 +2881,9 @@
 
       var cx = CELL_W/2;
       if(g.status === 'valid'){
-        if(g.diagramType === 'relchain' || g.diagramType === 'identity'){
+        if(g.diagramType === 'relchain' || g.diagramType === 'identity' || g.diagramType === 'lines'){
           var relG = document.createElementNS(svgNS,'g');
-          relG.innerHTML = g.diagramType === 'relchain' ? relChainMarkup(g) : identityMarkup(g);
+          relG.innerHTML = g.diagramType === 'relchain' ? relChainMarkup(g) : (g.diagramType === 'lines' ? linesMarkup(g) : identityMarkup(g));
           cellG.appendChild(relG);
         } else {
           var shapesG = document.createElementNS(svgNS,'g');
@@ -1717,11 +2904,28 @@
         cap2.setAttribute('font-family','IBM Plex Sans KR, sans-serif'); cap2.setAttribute('font-size','10'); cap2.setAttribute('fill','#a9b6b4');
         cap2.textContent = trunc(g.templateDesc, 44);
         cellG.appendChild(cap2);
+      } else if(g.status === 'inductive'){
+        var ri = g.ind, bx = 34, bw2 = CELL_W - 68;
+        var svgI = '<text x="'+cx+'" y="48" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="30" font-weight="700" fill="#8fcb9b">'+esc(fmtPct(ri.cred.mid))+'</text>' +
+          '<text x="'+cx+'" y="66" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="10.5" fill="#a9b6b4">신뢰도 '+esc(fmtRange(ri.cred))+'</text>' +
+          '<rect x="'+bx+'" y="76" width="'+bw2+'" height="8" rx="4" fill="#1b2325" stroke="rgba(243,241,231,0.16)"/>' +
+          '<rect x="'+(bx + bw2*ri.cred.lo)+'" y="76" width="'+Math.max(2, bw2*(ri.cred.hi-ri.cred.lo))+'" height="8" rx="4" fill="rgba(143,203,155,0.4)"/>' +
+          '<rect x="'+(bx + bw2*ri.cred.mid - 1.5)+'" y="73" width="3" height="14" rx="1.5" fill="#8fcb9b"/>';
+        CRITERIA.forEach(function(cr, ci){
+          var sc = ri.criteria[cr[0]].score, yy = 104 + ci * 19;
+          svgI += '<text x="'+bx+'" y="'+(yy+4)+'" font-family="IBM Plex Sans KR, sans-serif" font-size="9.5" fill="#f3f1e7">'+esc(cr[1].slice(0, 9))+'</text>' +
+            '<rect x="'+(bx+92)+'" y="'+(yy-3)+'" width="'+(bw2-120)+'" height="6" rx="3" fill="#1b2325"/>' +
+            (sc === null ? '' : '<rect x="'+(bx+92)+'" y="'+(yy-3)+'" width="'+((bw2-120)*sc/100)+'" height="6" rx="3" fill="'+scoreColor(sc)+'"/>') +
+            '<text x="'+(bx+bw2)+'" y="'+(yy+4)+'" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="'+(sc === null ? '#a9b6b4' : scoreColor(sc))+'">'+(sc === null ? '—' : sc)+'</text>';
+        });
+        svgI += '<text x="'+cx+'" y="260" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#8fcb9b">세트 '+g.groupIndex+' · 귀납 · 품질 '+ri.quality+' ('+ri.grade+')</text>' +
+          '<text x="'+cx+'" y="278" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="10" fill="#a9b6b4">'+esc(trunc(g.sentence, 30))+'</text>';
+        cellG.innerHTML = svgI;
       } else if(g.status === 'invalid'){
         cellG.innerHTML =
           '<rect x="26" y="55" width="'+(CELL_W-52)+'" height="130" rx="10" fill="rgba(224,133,133,0.07)" stroke="#e08585" stroke-width="1.5" stroke-dasharray="6 5"/>' +
           '<text x="'+cx+'" y="115" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="24" fill="#e08585">×</text>' +
-          '<text x="'+cx+'" y="145" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" fill="#e08585">인정된 추론 형식이 아닙니다</text>' +
+          '<text x="'+cx+'" y="145" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" fill="#e08585">'+esc(g.fallacy || '인정된 추론 형식이 아닙니다')+'</text>' +
           '<text x="'+cx+'" y="260" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="#e08585">세트 '+g.groupIndex+'</text>';
       } else {
         cellG.innerHTML =
@@ -1891,6 +3095,8 @@
     }).join('');
     document.getElementById('legendBox').innerHTML =
       '<span><i class="ls-solid"></i> 모든·개체</span>' +
+      '<span><i style="border-top:3px solid #8fcb9b"></i> 귀납 결론 (≈ 신뢰도)</span>' +
+      '<span>≥ 연역으로 전파된 신뢰도 하한</span>' +
       '<span><i class="ls-dashed"></i> 어떤 (특칭)</span>' +
       '<span><i class="ls-premise"></i> 가정 화살표</span>' +
       '<span><i class="ls-conclusion"></i> 결론 화살표</span>' +
@@ -1901,7 +3107,11 @@
       '<span><b>×</b> 부정(아니다)</span>' +
       '<span>∃ 존재 · ∅ 비존재</span>' +
       '<span style="width:100%;margin-top:2px;">관계 라벨 색:</span>' + catChips +
-      '<span>¬ 부정된 관계</span>';
+      '<span>¬ 부정된 관계</span>' +
+      '<span>≡ 정의·동치</span>' +
+      '<span><em class="dot" style="background:#1b2325;border:2px solid #7fb3d5"></em>명제 상자 (조건·선언의 구성 명제) — ‘이면’ 화살표</span>' +
+      '<span><em class="dot" style="background:#e2a6c5;transform:rotate(45deg)"></em>또는</span>' +
+      '<span><em class="dot" style="background:#a9b6b4;border-radius:50%;border:2px solid #e2a6c5"></em>수식어 교차점 (회색 선 = 그 개념의 정의)</span>';
   }
 
   function renderDiagramView(){
@@ -1929,11 +3139,14 @@
   var resultView = document.getElementById('resultView');
 
   document.getElementById('doneBtn').addEventListener('click', function(){
+    resetCompounds();
     var flat = collectFlatRaw();
     if(flat.length === 0){ alert('최소 한 문장 이상 입력해주세요.'); return; }
     var grouped = collectGroupedRaw();
-    currentGraphBundle = buildGraphAndTriples(grouped, flat);
     currentGroupResults = grouped.map(evaluateGroupSyllogism);
+    propagateCredence(grouped, currentGroupResults);
+    groupedForEval = grouped;
+    currentGraphBundle = buildGraphAndTriples(grouped, flat);
 
     var contradictions = findContradictions(flat);
     var cycles = findCycles(flat);
@@ -1948,6 +3161,7 @@
     renderCurrentView();
     renderGraphStats(computeGraphStats(currentGraphBundle, grouped));
     renderEvalList(currentGroupResults, contradictions, cycles, relInfo);
+    renderInductCard(currentGroupResults);
   });
 
   document.getElementById('toggleBtn').addEventListener('click', function(){
@@ -1995,10 +3209,13 @@
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   }
 
+  addGroup();   // first empty set — after every definition above has run
+
   // test hook (harmless in production)
   window.__board = { addGroup:addGroup, setRowValues:setRowValues, collectGroupedRaw:collectGroupedRaw,
     collectFlatRaw:collectFlatRaw, evaluateGroupSyllogism:evaluateGroupSyllogism, buildGraphAndTriples:buildGraphAndTriples,
-    findContradictions:findContradictions, findRelationIssues:findRelationIssues, sentenceOf:sentenceOf, groupsEl:groupsEl, importGroupsFromFile:importGroupsFromFile };
+    findContradictions:findContradictions, findRelationIssues:findRelationIssues, sentenceOf:sentenceOf, groupsEl:groupsEl, importGroupsFromFile:importGroupsFromFile,
+    inductScore:inductScore, propagateCredence:propagateCredence, exportGroupsForFile:exportGroupsForFile };
 
 })();
 </script>
