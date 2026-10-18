@@ -1199,11 +1199,13 @@
       vague:         { label:'예측이 모호하다', score:35 },
       unfalsifiable: { label:'어떤 관찰로도 반박할 수 없다', score:0 }
     },
-    // ② scope, judged by hand when there is no sample to measure it
+    // ② scope, judged by hand when there is no sample to measure it.
+    //    f discounts the supporting evidence: evidence about a narrower
+    //    claim supports a broader one less.
     scopeManual: {
-      matched: { label:'근거와 같은 범위를 말한다', score:100 },
-      wider:   { label:'근거보다 조금 넓게 말한다', score:55 },
-      leap:    { label:'몇 사례에서 전체로 비약한다', score:15 }
+      matched: { label:'근거와 같은 범위를 말한다', score:100, f:1 },
+      wider:   { label:'근거보다 조금 넓게 말한다', score:55, f:0.75 },
+      leap:    { label:'몇 사례에서 전체로 비약한다', score:15, f:0.4 }
     },
     universalTheta: 0.99,   // "모든" is checked as "적어도 99%"
     existentialTheta: 0.01, // "어떤" is checked as "적어도 1%"
@@ -1332,8 +1334,12 @@
       });
     });
 
+    var scopeF = 1;
+    if(!(hasSample && claim.type !== 'single')){
+      scopeF = (C.scopeManual[inp.scopeManual] || C.scopeManual.matched).f;
+    }
     var sum = logPrior + Math.log(bgF);
-    out.terms.forEach(function(t){ sum += t > 0 ? t * tot.shrink : t; });
+    out.terms.forEach(function(t){ sum += t > 0 ? t * tot.shrink * scopeF : t; });
     out.p = out.refuted ? 0.01 : clampP(sigmoid(sum));
     out.logPrior = logPrior;
     return out;
@@ -1378,7 +1384,7 @@
       }
     } else {
       var sc = C.scopeManual[inp.scopeManual] || C.scopeManual.matched;
-      set('scope', sc.score, sc.label + ' (직접 판단).');
+      set('scope', sc.score, sc.label + ' (직접 판단).' + (sc.f < 1 ? ' 결론이 근거보다 넓은 만큼 지지 증거의 무게를 깎았습니다.' : ''));
     }
 
     // ③ discriminating power
@@ -2401,6 +2407,13 @@
       var uq = base.quant === '개체' ? '개체' : '모든';
       if(hasA && hasO) issues.push('모순: "' + variant(uq, false) + '"와 "' + variant('어떤', true) + '"는 함께 성립할 수 없습니다.');
       if(hasE && hasI) issues.push('모순: "' + variant(uq, true) + '"와 "' + variant('어떤', false) + '"는 함께 성립할 수 없습니다.');
+      // A and E on the same subject: for a single individual they are
+      // contradictories; for "모든" they are contraries (both can be false,
+      // but not both true as long as the subject exists)
+      if(hasA && hasE){
+        if(uq === '개체') issues.push('모순: "' + variant(uq, false) + '"와 "' + variant(uq, true) + '"는 함께 성립할 수 없습니다.');
+        else issues.push('반대 관계: "' + variant(uq, false) + '"와 "' + variant(uq, true) + '"는 둘 다 참일 수 없습니다 (주어가 하나라도 존재한다면).');
+      }
     });
     return issues;
   }
