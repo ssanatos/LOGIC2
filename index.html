@@ -65,6 +65,21 @@
   .group-remove:hover{ opacity:1; text-decoration:underline; }
   .group-label .gl-left{ display:flex; align-items:center; gap:8px; min-width:0; }
   .group-label .set-src{ text-transform:none; letter-spacing:0; color:var(--chalk-dim); opacity:0.8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:46vw; }
+  .sg-card details.sg-sec{ border-top:1px solid var(--line); padding:8px 0; }
+  .sg-card summary{ cursor:pointer; color:var(--chalk); font-size:13.5px; }
+  .sg-card summary b{ color:var(--accent); margin-left:4px; }
+  .sg-card .sg-sub{ font-size:11.5px; color:var(--chalk-dim); line-height:1.6; margin:4px 0 6px; }
+  .sg-card ul{ margin:0; padding-left:18px; }
+  .sg-card li{ font-size:12.5px; line-height:1.65; margin:4px 0; color:var(--chalk); word-break:keep-all; }
+  .sg-card .sg-why{ color:var(--chalk-dim); font-size:11px; }
+  .sg-card .sg-link{ color:var(--accent); font-size:10.5px; border:1px dashed var(--accent); border-radius:3px; padding:0 3px; }
+  .sg-card .sg-btn{ background:none; border:1px solid var(--line); color:var(--ok); border-radius:4px; font-size:11px; padding:1px 6px; cursor:pointer; margin-left:2px; }
+  .sg-card .sg-btn:disabled{ opacity:0.5; cursor:default; }
+  .sg-card .sg-more{ list-style:none; color:var(--chalk-dim); }
+  .group.is-link{ border-style:dashed; opacity:0.82; }
+  .group-label .g-link{ display:inline-flex; align-items:center; gap:3px; text-transform:none; letter-spacing:0; color:var(--chalk-dim); cursor:pointer; white-space:nowrap; }
+  .group.is-link .group-label .g-link{ color:var(--accent); }
+  .group-label .g-link input{ margin:0; accent-color:var(--accent); }
   select.g-mode{ color:var(--ok); font-size:11px; letter-spacing:0; text-transform:none; font-family:'IBM Plex Mono', monospace; max-width:none; }
   .group[data-mode="induct"]{ border-color:rgba(143,203,155,0.35); }
   .group[data-mode="induct"] .row[data-role="전제 1"], .group[data-mode="induct"] .row[data-role="전제 2"]{ display:none; }
@@ -298,6 +313,8 @@
         <tr><th>오직 ~만</th><td>양화사 ‘오직’ — 오직 사람만 글을 쓴다 = 모든 글을 쓰는 것은 사람이다. 그래프에는 이 논리적 방향(쓰다 → 사람)으로 그립니다.</td></tr>
         <tr><th>조건 · 선언</th><td>문장 위쪽의 형식을 ‘조건’이나 ‘선언’으로 바꾸면 명제 칸이 두 개가 됩니다. 각 명제는 그래프에서 상자 하나가 되고, 조건은 ‘이면’ 화살표, 선언은 ‘또는’ 마름모로 잇습니다. 판정 규칙: 전건 긍정 · 후건 부정 · 가언 삼단논법 · 선언 삼단논법. 후건 긍정, 전건 부정, 선언지 긍정은 오류로 지적합니다. 두 명제의 주어가 같은 일반 명사(모든 새가 ~이면 ~)이면 ‘그 주어의 각 대상마다’로 읽습니다.</td></tr>
         <tr><th>귀납 세트</th><td>세트 이름 옆에서 ‘귀납 세트’를 고르면, 전제 두 칸 대신 결론 하나와 근거 입력판이 나옵니다. 귀납 결론은 참·거짓 대신 <b>신뢰도</b>(참일 확률)를 계산합니다 — 표본은 베타 분포로, 다른 증거는 우도비로, 배경지식은 사전 확률에 곱하는 배수로 반영하는 베이즈 갱신입니다. 이와 따로 ①–⑧ 기준별 <b>추론 품질</b> 점수를 매깁니다. ⑧ 재현성은 증거마다 매기며, 독립적으로 재현되지 않은 소규모 연구나 일화는 반론이 없어도 무게를 깎습니다. 증거마다 <b>상태</b>(유효·정정·우려 표명·철회)와 확인일도 적을 수 있습니다. 오류나 조작으로 철회된 근거는 줄을 지우지 않고 취소선으로 남긴 채 계산에서만 빼며, 반대 증거로 세지 않고 ④ 총증거도 바꾸지 않습니다. 조작으로 철회된 근거와 출처가 같은 근거에는 경고를 띄웁니다. 결론이 서로 모순·반대인 귀납 세트들의 신뢰도 합이 확률 규칙을 어기면 ‘확률 불일치’로 알려 줍니다. 결론이 인과 주장(‘~를 늘린다’, ‘~ 때문이다’ 등)이면, 근거마다 표시한 <b>연구 설계</b>를 보고 상관·관찰 자료나 사례는 변별력을 ‘약함’까지만 인정하며(상관≠인과), 실험 근거가 하나도 없으면 경고합니다. 전칭(모든) 결론에 반대 근거가 붙으면 반례인지 확인하라고 알려 줍니다. 귀납 결론을 다른 연역 세트의 전제로 쓰면, 그 연역 결론의 신뢰도 하한도 계산합니다.</td></tr>
+        <tr><th>연결용 명제</th><td>세트 이름 옆의 ‘연결용’을 체크하면, 책이나 글에 그대로 있는 주장이 아니라 그래프를 잇기 위해 덧붙인 문장(숨은 전제일 수도 있음)으로 표시됩니다. 점선 테두리로 보이고, 결과 화면의 ‘연결용 명제 빼고 보기’로 이 문장들을 빼거나 넣으며 그래프가 몇 조각으로 나뉘는지 비교할 수 있습니다. 빼고 볼 때는 논증 판정·모순 찾기에서도 함께 빠집니다. 파일로 저장해도 표시가 남습니다.</td></tr>
+        <tr><th>삼단논법 제안</th><td>결과 화면 아래쪽 ‘삼단논법 제안’은 단일 명제들을 글자와 구조만으로 훑어 후보를 냅니다. ① 표현이 비슷한 개념(표기만 다르거나, 수식어만 다른데 한 낱말로 입력된 것, 글자가 거의 같은 것) — 같은 개념이면 버튼으로 한쪽으로 통일합니다. ② 흩어진 명제 둘이 이어지는 삼단논법: 결론이 이미 있으면 ‘묶을 수 있음’, 반대 문장이 있으면 ‘충돌’, 어디에도 없으면 ‘따라 나오지만 적혀 있지 않은 결론’으로 나눕니다. ‘A는 B다’와 ‘A는 C다’를 잇는 빠진 전제 ‘B는 C다’는 숨은 전제 후보로 보여 주고, 연결용 명제가 책에 이미 있는 결론을 이끌어 내면 숨은 전제 노릇을 한다고 따로 알려 줍니다. 단일 주어에 대한 문장(‘패러다임은 …’)을 그 부류 전체의 말로 읽은 제안에는 그 점을 표시합니다. 같은 뜻인지, 책이 그 추론을 했는지는 코드가 판단하지 못하므로 버튼으로 논증 세트를 만든 뒤 직접 확인하세요.</td></tr>
         <tr><th>수식어</th><td>이름이 없는 개념은 <b>머리 명사 + 수식어</b>로 조립합니다. “바람에 흔들리는 꽃” = 머리 ‘꽃’ + 수식어 ‘흔들리는’(개념: 흔들리다 · 대상: 바람 · 조사: 에). 그래프에서는 회색 점(●) 하나가 되고, 꽃·흔들리다·바람으로 뻗은 회색 선이 그 정의를 나타냅니다. 수식어가 붙은 개념은 머리 명사와 각 수식어 모두에 포함되므로(교집합), “칼은 위험한 도구다”에서 “칼은 위험하다”와 “칼은 도구다”를 그대로 꺼내 쓸 수 있습니다. 수식어 순서가 달라도 같은 개념으로 합쳐집니다.</td></tr>
       </table>
       <p>양화사: <b>모든</b>(전칭) · <b>어떤</b>(특칭) · <b>개체</b>(소크라테스, 지구처럼 하나뿐인 대상 — 논리상 전칭처럼 다룹니다)</p>
@@ -346,8 +363,15 @@
       <ul id="evalList"></ul>
     </div>
 
+    <div class="eval-card sg-card">
+      <h3>삼단논법 제안</h3>
+      <p class="sg-sub" id="suggestNote"></p>
+      <div id="suggestList"></div>
+    </div>
+
     <div class="actions">
       <button id="toggleBtn" class="btn btn-secondary">다이어그램으로 보기</button>
+      <button id="linkToggleBtn" class="btn btn-secondary" style="display:none" title="그래프를 잇기 위해 덧붙인 연결용 명제를 빼거나 넣고 다시 봅니다.">연결용 명제 빼고 보기</button>
       <button id="backBtn" class="btn btn-ghost">다시 입력하기</button>
     </div>
   </main>
@@ -509,6 +533,8 @@
   }
 
   function negateProp(p){
+    if(/(^| )있다$/.test(p)) return p.replace(/있다$/, '없다');
+    if(/(^| )있었다$/.test(p)) return p.replace(/있었다$/, '없었다');
     if(/하다$/.test(p)) return p.replace(/하다$/, '하지 않다');
     if(/는다$/.test(p)) return p.replace(/는다$/, '지 않는다');
     // noun + 이다: ~것이다 → ~것이 아니다, 모순이다 → 모순이 아니다 (받침 있는 명사 + 이다)
@@ -521,7 +547,7 @@
     if(/했다$/.test(p)) return p.replace(/했다$/, '하지 않았다');
     if(/(되었|됐)다$/.test(p)) return p.replace(/(되었|됐)다$/, '되지 않았다');
     if(/졌다$/.test(p)) return p.replace(/졌다$/, '지지 않았다');
-    var contracted = { '왔':'오', '갔':'가', '났':'나', '봤':'보', '줬':'주', '췄':'추', '웠':'우', '렸':'리', '쳤':'치', '혔':'히', '켰':'키', '겼':'기', '셨':'시', '녔':'니', '렀':'르', '쳐':'치' };
+    var contracted = { '왔':'오', '갔':'가', '났':'나', '봤':'보', '줬':'주', '췄':'추', '웠':'우', '렸':'리', '쳤':'치', '혔':'히', '켰':'키', '겼':'기', '셨':'시', '녔':'니', '렀':'르', '쳐':'치', '냈':'내', '였':'이', '섰':'서', '썼':'쓰', '컸':'크', '꿨':'꾸', '뒀':'두', '맸':'매', '샜':'새' };
     var lc = p.length >= 2 ? p.charAt(p.length - 2) : '';
     if(/다$/.test(p) && contracted[lc]) return p.slice(0, -2) + contracted[lc] + '지 않았다';
     if(/[가-힣][었았]다$/.test(p)) return p.replace(/[었았]다$/, '지 않았다');
@@ -828,7 +854,8 @@
     g.dataset.mode = mode;
     var removeBtn = index > 1 ? '<button type="button" class="group-remove" onclick="this.closest(\'.group\').remove(); window.__renumber();">삭제</button>' : '';
     g.innerHTML = '<div class="group-label"><span class="gl-left"><span class="set-name">세트 ' + index + '</span>' +
-      '<select class="g-mode" aria-label="세트 종류"><option value="deduct">연역 세트</option><option value="induct">귀납 세트</option></select></span>' + removeBtn + '</div>' +
+      '<select class="g-mode" aria-label="세트 종류"><option value="deduct">연역 세트</option><option value="induct">귀납 세트</option></select>' +
+      '<label class="g-link" title="그래프를 잇기 위해 덧붙인 명제(책에 그대로 있지 않은 연결 문장)로 표시합니다. 결과 화면에서 빼고 볼 수 있습니다."><input type="checkbox" class="g-link-cb">연결용</label></span>' + removeBtn + '</div>' +
       ROLES.map(rowHTML).join('') + inductHTML();
     groupsEl.appendChild(g);
     g.querySelector('.g-mode').value = mode;
@@ -840,6 +867,8 @@
     if(data && !Array.isArray(data)){
       if(data.source) g.dataset.source = data.source;
       if(data.chapter) g.dataset.chapter = data.chapter;
+      if(data.link){ g.dataset.link = '1'; g.classList.add('is-link'); g.querySelector('.g-link-cb').checked = true; }
+      if(data.linkReason){ g.dataset.linkReason = data.linkReason; g.querySelector('.g-link').title = '연결용 명제 — ' + data.linkReason; }
       if(data.source || data.chapter){
         var tag = document.createElement('span'); tag.className = 'set-src';
         tag.textContent = (data.source ? '[' + data.source + '] ' : '') + (data.chapter || '');
@@ -906,6 +935,12 @@
     }
   });
   groupsEl.addEventListener('change', function(e){
+    if(e.target.classList.contains('g-link-cb')){
+      var gl = e.target.closest('.group');
+      if(e.target.checked){ gl.dataset.link = '1'; gl.classList.add('is-link'); }
+      else { delete gl.dataset.link; gl.classList.remove('is-link'); }
+      return;
+    }
     if(e.target.classList.contains('g-mode')){
       var gm = e.target.closest('.group');
       gm.dataset.mode = e.target.value;
@@ -976,6 +1011,7 @@
       var g = { mode:gEl.dataset.mode || 'deduct', rows:rows };
       if(gEl.dataset.source) g.source = gEl.dataset.source;
       if(gEl.dataset.chapter) g.chapter = gEl.dataset.chapter;
+      if(gEl.dataset.link === '1'){ g.link = true; if(gEl.dataset.linkReason) g.linkReason = gEl.dataset.linkReason; }
       if(g.mode === 'induct') g.induct = inductValues(gEl);
       groups.push(g);
     });
@@ -1100,9 +1136,13 @@
   }
   function isCompound(r){ return r && (r.kind === 'cond' || r.kind === 'disj'); }
 
+  // 연결용 명제(그래프를 잇기 위해 덧붙인 문장)를 결과에서 뺄지
+  var includeLinks = true;
+  function isExcludedLink(gEl){ return !includeLinks && gEl.dataset.link === '1'; }
   function collectFlatRaw(){
     var list = [];
     groupsEl.querySelectorAll('.group').forEach(function(gEl){
+      if(isExcludedLink(gEl)) return;
       var rows = gEl.querySelectorAll('.row'), induct = gEl.dataset.mode === 'induct';
       rows.forEach(function(row, i){
         if(induct && i < 2) return;   // hidden premise rows of an inductive set
@@ -1117,7 +1157,8 @@
     var groups = [];
     groupsEl.querySelectorAll('.group').forEach(function(gEl, idx){
       var rows = [];
-      gEl.querySelectorAll('.row').forEach(function(row){ rows.push(rowToRaw(row)); });
+      var skip = isExcludedLink(gEl);
+      gEl.querySelectorAll('.row').forEach(function(row){ var r = rowToRaw(row); if(skip) r.filled = false; rows.push(r); });
       var mode = gEl.dataset.mode === 'induct' ? 'induct' : 'deduct';
       var complete = mode === 'induct' ? rows[2].filled : (rows.length === 3 && rows.every(function(r){ return r.filled; }));
       var g = { index: idx+1, rows: rows, complete: complete, mode: mode };
@@ -2130,7 +2171,8 @@
     grid.innerHTML =
       '<div class="stat-chip' + (stats.components > 1 ? ' warn' : ' ok') + '">' +
         '<div class="stat-value">' + stats.components + '<b>개</b></div>' +
-        '<div class="stat-label">분리된 그룹(연결 요소)</div>' +
+        '<div class="stat-label">분리된 그룹(연결 요소)' + (stats.links ? (stats.links.included ? ' — 연결용 명제 포함' : ' — 연결용 명제 제외') : '') + '</div>' +
+        (stats.links ? '<div class="stat-sub">연결용 명제 ' + stats.links.count + '개를 ' + (stats.links.included ? '빼면 ' : '넣으면 ') + stats.links.otherComponents + '개</div>' : '') +
       '</div>' +
       '<div class="stat-chip' + (stats.weakBridges > 0 ? ' warn' : '') + '">' +
         '<div class="stat-value">' + stats.weakBridges + '<b>개</b></div>' +
@@ -3378,7 +3420,25 @@
   var inputView = document.getElementById('inputView');
   var resultView = document.getElementById('resultView');
 
-  document.getElementById('doneBtn').addEventListener('click', function(){
+  function linkInfo(){
+    var n = groupsEl.querySelectorAll('.group[data-link="1"]').length;
+    if(!n) return null;
+    var keep = includeLinks;
+    includeLinks = !keep;
+    var g2 = collectGroupedRaw(), f2 = collectFlatRaw();
+    var other = countComponents.apply(null, (function(b){ return [b.nodes, b.edges]; })(buildGraphAndTriples(g2, f2)));
+    includeLinks = keep;
+    return { count:n, included:keep, otherComponents:other };
+  }
+  function updateLinkToggle(info){
+    var btn = document.getElementById('linkToggleBtn');
+    if(!btn) return;
+    if(!info){ btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    btn.textContent = includeLinks ? '연결용 명제 ' + info.count + '개 빼고 보기' : '연결용 명제 ' + info.count + '개 포함해 보기';
+  }
+  document.getElementById('doneBtn').addEventListener('click', function(){ runAnalysis(true); });
+  function runAnalysis(fromInput){
     resetCompounds();
     var flat = collectFlatRaw();
     if(flat.length === 0){ alert('최소 한 문장 이상 입력해주세요.'); return; }
@@ -3392,17 +3452,26 @@
     var cycles = findCycles(flat);
     var relInfo = findRelationIssues(flat);
 
-    isDiagram = false;
+    if(fromInput){
+      isDiagram = false;
+      document.getElementById('viewTitle').textContent = '논리 그래프';
+      document.getElementById('toggleBtn').textContent = '다이어그램으로 보기';
+    }
     inputView.classList.add('hidden');
     resultView.classList.remove('hidden');
-    document.getElementById('viewTitle').textContent = '논리 그래프';
-    document.getElementById('toggleBtn').textContent = '다이어그램으로 보기';
 
     renderCurrentView();
-    renderGraphStats(computeGraphStats(currentGraphBundle, grouped));
+    var li = linkInfo();
+    var st = computeGraphStats(currentGraphBundle, grouped); st.links = li;
+    renderGraphStats(st);
+    updateLinkToggle(li);
     renderEvalList(currentGroupResults, contradictions, cycles, relInfo);
     renderInductCard(currentGroupResults);
-  });
+    try{ renderSuggestions(); }catch(err){ console.error(err); }
+  }
+  window.__runAnalysis = runAnalysis;
+  window.__setIncludeLinks = function(v){ includeLinks = !!v; };
+  document.getElementById('linkToggleBtn').addEventListener('click', function(){ includeLinks = !includeLinks; runAnalysis(false); });
 
   document.getElementById('toggleBtn').addEventListener('click', function(){
     isDiagram = !isDiagram;
@@ -3449,13 +3518,228 @@
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   }
 
+  // ---------------------------------------------------------------
+  // 삼단논법 제안 — 표현이 비슷한 개념(1)과 구조상 빈자리(2)
+  //   코드가 내는 것은 후보일 뿐, 같은 뜻인지·책이 그 추론을 했는지는 사람이 판단한다.
+  // ---------------------------------------------------------------
+  function sgNorm(t){ return String(t || '').replace(/[‘’“”『』「」'"]/g, '').replace(/\s+/g, ' ').trim().replace(/들$/, ''); }
+  function sgBigrams(t){ t = t.replace(/\s/g, ''); var a = []; for(var i = 0; i < t.length - 1; i++) a.push(t.substr(i, 2)); return a; }
+  function sgDice(a, b){
+    var x = sgBigrams(a), y = sgBigrams(b); if(!x.length || !y.length) return 0;
+    var m = {}, hit = 0; x.forEach(function(k){ m[k] = (m[k] || 0) + 1; });
+    y.forEach(function(k){ if(m[k]){ m[k]--; hit++; } });
+    return 2 * hit / (x.length + y.length);
+  }
+  // b가 a의 머리 명사구(a = 수식어 + b)이면 a ⊂ b
+  function sgHeadOf(a, b){ var na = sgNorm(a), nb = sgNorm(b); return na.length > nb.length && nb.length >= 2 && na.slice(-(nb.length + 1)) === ' ' + nb; }
+  function sgFacts(){
+    var out = [];
+    groupsEl.querySelectorAll('.group').forEach(function(gEl, idx){
+      if(gEl.dataset.mode === 'induct') return;
+      var rows = gEl.querySelectorAll('.row');
+      var raws = Array.prototype.map.call(rows, rowToRaw);
+      if(!raws[0] || !raws[0].filled || raws[1].filled || raws[2].filled) return;
+      var r = raws[0];
+      if(['class', 'def', 'prop', 'rel'].indexOf(r.kind) === -1 || r.quant === '오직') return;
+      out.push({ set: idx + 1, el: gEl, row: rows[0], raw: r, s: r.subj, p: r.pred, neg: !!r.neg, quant: r.quant || '모든', kind: r.kind, link: gEl.dataset.link === '1' });
+    });
+    return out;
+  }
+  function findSuggestions(){
+    var F = sgFacts();
+    var terms = {}, direct = {}, typed = {};
+    groupsEl.querySelectorAll('.wordLeft, .wordRight').forEach(function(inp){ var v = inp.value.trim(); if(v) typed[v] = true; });
+    F.forEach(function(f){
+      [f.s, f.kind === 'rel' ? f.raw.obj : (f.kind === 'prop' ? '' : f.p)].forEach(function(t){ if(t && t.length <= 14) terms[t] = (terms[t] || 0) + 1; });
+      if(f.kind === 'rel') direct[f.s + '\u0001' + f.raw.obj] = direct[f.raw.obj + '\u0001' + f.s] = true;
+      direct[f.s + '\u0001' + f.p] = direct[f.p + '\u0001' + f.s] = true;
+    });
+    // (1) 표현이 비슷한 개념
+    var T = Object.keys(terms), sim = [], same = {};
+    for(var i = 0; i < T.length; i++) for(var j = i + 1; j < T.length; j++){
+      var a = T[i], b = T[j], why = null;
+      if(direct[a + '\u0001' + b]) continue;
+      if(sgNorm(a) === sgNorm(b)) why = '표기만 다름 (따옴표·띄어쓰기·‘들’)';
+      else if(sgHeadOf(a, b) || sgHeadOf(b, a)){
+        var longer = sgHeadOf(a, b) ? a : b;
+        if(!typed[longer]) continue;   // 수식어 칸으로 조립한 개념은 게시판이 이미 머리 명사와 잇는다
+        why = '수식어만 다름 — 수식어가 붙은 쪽이 더 좁은 개념 (지금은 한 낱말로 입력돼 이어지지 않음)';
+      }
+      else if(Math.min(a.length, b.length) >= 3 && sgDice(a, b) >= 0.75) why = '글자가 거의 같음';
+      if(why){ sim.push({ a:a, b:b, why:why, ta:!!typed[a], tb:!!typed[b] }); if(why.charAt(0) === '표') same[a] = same[b] = sgNorm(a); }
+    }
+    // (2) 구조상 빈자리 — 전제 A⊂B와 B'⊂C(또는 B'∩C=∅)가 이어지면 결론 A⊂C(또는 A∩C=∅)
+    function key(t){ return same[t] || t; }
+    var bySubj = {}, stmt = {};
+    F.forEach(function(f){
+      (bySubj[key(f.s)] = bySubj[key(f.s)] || []).push(f);
+      stmt[key(f.s) + '\u0001' + key(f.p)] = stmt[key(f.s) + '\u0001' + key(f.p)] || [];
+      stmt[key(f.s) + '\u0001' + key(f.p)].push(f);
+      if(f.kind === 'def' && !f.neg){ (bySubj[key(f.p)] = bySubj[key(f.p)] || []).push({ set:f.set, el:f.el, row:f.row, raw:f.raw, s:f.p, p:f.s, neg:false, quant:'모든', kind:'def', link:f.link, flipped:true }); }
+    });
+    var generic = {};
+    F.forEach(function(f){ if(f.kind === 'class' && !f.neg) generic[key(f.p)] = true; });
+    function middles(B){
+      var out = [];
+      Object.keys(bySubj).forEach(function(M){
+        if(M === key(B)) out.push({ m:M, via:null });
+        else if(sgHeadOf(B, M)) out.push({ m:M, via:'‘' + B + '’는 ‘' + M + '’에 수식어가 붙은 말이라 그 일부로 봄' });
+      });
+      return out;
+    }
+    // 논증·귀납 세트에 쓰인 문장도 ‘이미 있는 결론’으로 친다
+    var argPairs = {};
+    groupsEl.querySelectorAll('.group').forEach(function(gEl, idx){
+      var raws = Array.prototype.map.call(gEl.querySelectorAll('.row'), rowToRaw).filter(function(r){ return r.filled && !isCompound(r); });
+      if(raws.length < 2 && gEl.dataset.mode !== 'induct') return;
+      raws.forEach(function(r){
+        if(['class', 'def', 'prop'].indexOf(r.kind) === -1) return;
+        var kk = key(r.subj) + '\u0001' + key(r.pred);
+        (stmt[kk] = stmt[kk] || []).push({ set: idx + 1, el: gEl, row: null, raw: r, s: r.subj, p: r.pred, neg: !!r.neg, quant: r.quant || '모든', kind: r.kind, link: false, inArg: true });
+      });
+      var ks = raws.map(function(r){ return key(r.subj) + '\u0001' + key(r.pred) + (r.neg ? '×' : ''); });
+      ks.forEach(function(x){ ks.forEach(function(y){ argPairs[x + '|' + y] = true; }); });
+    });
+    var chains = [], seen = {};
+    F.forEach(function(f1){
+      if(f1.neg || f1.quant === '어떤' || (f1.kind !== 'class' && f1.kind !== 'def')) return;
+      middles(f1.p).forEach(function(mm){
+        bySubj[mm.m].forEach(function(f2){
+          if(f2.set === f1.set || f2.quant === '어떤') return;
+          var gen = f2.quant !== '모든';
+          if(gen && !generic[key(f2.s)]) return;          // 개체 주어는 일반 개념(다른 문장의 분류 대상)일 때만 상속
+          var A = f1.s, C = f2.p, neg = f2.neg;
+          if(key(A) === key(C)) return;
+          var k = f1.set + '/' + f2.set; if(seen[k]) return; seen[k] = true;
+          if(argPairs[key(f1.s) + '\u0001' + key(f1.p) + '|' + key(f2.s) + '\u0001' + key(f2.p) + (f2.neg ? '×' : '')]) return;   // 이미 논증 세트로 묶여 있음
+          var have = (stmt[key(A) + '\u0001' + key(C)] || []);
+          var same = have.filter(function(f){ return f.neg === neg && f.quant !== '어떤'; });
+          var opp = have.filter(function(f){ return f.neg !== neg && f.quant !== '어떤'; });
+          var type = same.length ? 'bind' : opp.length ? 'clash' : 'missing';
+          var via = [mm.via, gen ? '‘' + f2.s + '’에 대한 문장을 그 부류 전체에 대한 말로 읽음' : null].filter(Boolean).join(' · ') || null;
+          chains.push({ type:type, p1:f1, p2:f2, concl:same[0] || opp[0] || null, A:A, C:C, neg:neg, quant:f1.quant, via:via });
+        });
+      });
+    });
+    // (2-나) 숨은 전제 후보 — A⊂B와 A⊂C가 있는데 B⊂C가 없을 때. B가 다른 문장의 주어로도 쓰이는 개념일 때만
+    var hidden = [];
+    Object.keys(bySubj).forEach(function(A){
+      var fs = bySubj[A].filter(function(f){ return !f.neg && f.quant !== '어떤' && !f.flipped; });
+      for(var i = 0; i < fs.length; i++) for(var j = 0; j < fs.length; j++){
+        if(i === j) continue;
+        var B = fs[i].p, C = fs[j].p;
+        if(key(B) === key(C) || !bySubj[key(B)] || stmt[key(B) + '\u0001' + key(C)] || stmt[key(C) + '\u0001' + key(B)]) continue;
+        if(fs[i].kind !== 'class' || fs[j].kind !== 'class' || B.length > 14 || C.length > 14) continue;
+        hidden.push({ p2:fs[i], concl:fs[j], B:B, C:C });
+      }
+    });
+    // 연결용 명제가 숨은 전제 노릇을 하는 경우 — 연결용 명제가 이은 삼단논법의 결론이 책에 이미 있을 때
+    var linkRoles = chains.filter(function(c){ return c.type === 'bind' && (c.p1.link || c.p2.link) && !(c.concl && c.concl.link); });
+    return { sim:sim, chains:chains, hidden:hidden, linkRoles:linkRoles, factCount:F.length };
+  }
+  function sgSentence(base, subj, pred, neg, quant){
+    var r = {}; for(var k in base) r[k] = base[k];
+    r.kind = 'class'; r.subj = subj; r.pred = pred; r.neg = r.predNeg = !!neg; r.quant = quant; r.subjNeg = false; r.filled = true;
+    return sentenceOf(r);
+  }
+  function sgDerived(c){
+    var r = {}; for(var k in c.p2.raw) r[k] = c.p2.raw[k];
+    r.subj = c.p1.s; r.quant = c.p1.quant; r.subjNeg = false; if(r.kind === 'def') r.kind = 'class';
+    if(r.kind === 'rel') r.pred = relPhrase(r, false);
+    return sentenceOf(r);
+  }
+  function sgDerivedClause(c){
+    var a = sgClauseValues(c.p1.row), v = sgClauseValues(c.p2.row);
+    if(c.p2.flipped){ v.wordLeft = v.wordRight; }
+    v.wordLeft = a.wordLeft; v.mods = { subj: a.mods.subj, right: c.p2.flipped ? [] : v.mods.right };
+    if(c.p2.flipped){ v.wordRight = c.p2.p; v.kind = 'class'; }
+    v.quant = c.p1.quant; v.subjNeg = 'pos'; if(v.kind === 'def') v.kind = 'class';
+    return v;
+  }
+  function sgClauseValues(rowEl){ return rowValues(rowEl).clauses[0]; }
+  function sgAddArg(rows, note){
+    var n = groupsEl.querySelectorAll('.group').length + 1;
+    var g = makeGroup(n, { mode:'deduct', rows:rows.map(function(c){ return { form:'simple', clauses:[c] }; }), chapter:'[제안] ' + note });
+    return n;
+  }
+  function sgSyntheticClause(from, subj, pred, neg, quant){
+    var c = sgClauseValues(from.row);
+    c.kind = 'class'; c.wordLeft = subj; c.wordRight = pred; c.polarity = neg ? 'neg' : 'pos'; c.quant = quant; c.subjNeg = 'pos';
+    c.mods = { subj:[], right:[] };
+    return c;
+  }
+  var lastSuggestions = null;
+  function renderSuggestions(){
+    var box = document.getElementById('suggestList'); if(!box) return;
+    var S = lastSuggestions = findSuggestions();
+    var esc = function(t){ return String(t).replace(/[&<>]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;' }[c]; }); };
+    var tag = function(f){ return '세트 ' + f.set + (f.link ? ' <span class="sg-link">연결용</span>' : ''); };
+    var LIM = 40, html = '';
+    function section(title, sub, items, fn){
+      html += '<details class="sg-sec"' + (items.length && items.length <= 12 ? ' open' : '') + '><summary>' + title + ' <b>' + items.length + '</b></summary><p class="sg-sub">' + sub + '</p><ul>';
+      items.slice(0, LIM).forEach(function(it, i){ html += '<li>' + fn(it, i) + '</li>'; });
+      if(items.length > LIM) html += '<li class="sg-more">… 외 ' + (items.length - LIM) + '개</li>';
+      html += '</ul></details>';
+    }
+    var linkSet = S.linkRoles;
+    section('연결용 명제가 숨은 전제 노릇을 함', '연결용으로 표시된 명제를 전제로 쓰면, 책에 이미 있는 결론이 삼단논법으로 따라 나옵니다. 이 연결용 명제는 억지 연결이 아니라 책이 생략한 전제일 가능성이 큽니다.', linkSet, function(c){
+      return esc(sentenceOf(c.p1.raw)) + ' (' + tag(c.p1) + ') · ' + esc(sentenceOf(c.p2.raw)) + ' (' + tag(c.p2) + ') → ' + esc(sentenceOf(c.concl.raw)) + ' (' + tag(c.concl) + ')';
+    });
+    section('① 표현이 비슷한 개념', '글자 규칙으로만 찾은 후보입니다. 같은 개념이면 한쪽으로 통일하세요 — 통일하면 그래프가 이어지고 삼단논법이 생길 수 있습니다. 뜻이 다른데 글자만 비슷한 경우도 섞여 있습니다.', S.sim, function(s, i){
+      return '‘' + esc(s.a) + '’ ↔ ‘' + esc(s.b) + '’ <span class="sg-why">' + s.why + '</span>' +
+        (s.tb ? ' <button type="button" class="sg-btn" data-act="unify" data-i="' + i + '" data-dir="ab">‘' + esc(s.b) + '’ → ‘' + esc(s.a) + '’</button>' : '') +
+        (s.ta ? ' <button type="button" class="sg-btn" data-act="unify" data-i="' + i + '" data-dir="ba">‘' + esc(s.a) + '’ → ‘' + esc(s.b) + '’</button>' : '');
+    });
+    var byVia = function(x, y){ return (x.via ? 1 : 0) - (y.via ? 1 : 0); };
+    S.chains.sort(byVia);
+    var bind = S.chains.filter(function(c){ return c.type === 'bind'; }),
+        clash = S.chains.filter(function(c){ return c.type === 'clash'; }),
+        miss = S.chains.filter(function(c){ return c.type === 'missing'; });
+    var chainLine = function(c, kind){
+      var concl = c.concl ? esc(sentenceOf(c.concl.raw)) + ' (' + tag(c.concl) + ')' : '<i>' + esc(sgDerived(c)) + '</i> (없음)';
+      var idx = S.chains.indexOf(c);
+      return esc(sentenceOf(c.p2.raw)) + ' (' + tag(c.p2) + ') · ' + esc(sentenceOf(c.p1.raw)) + ' (' + tag(c.p1) + ') → ' + concl +
+        (c.via ? ' <span class="sg-why">' + esc(c.via) + '</span>' : '') +
+        (kind ? ' <button type="button" class="sg-btn" data-act="chain" data-i="' + idx + '">논증 세트로 추가</button>' : '');
+    };
+    section('② 묶을 수 있는 삼단논법 — 결론이 이미 있음', '흩어진 단일 명제 셋이 실제로는 하나의 타당한 삼단논법입니다. 책이 이 추론을 했을 가능성이 큽니다.', bind, function(c){ return chainLine(c, true); });
+    section('② 결론과 반대되는 문장이 있음', '두 전제에서 따라 나오는 결론의 반대가 이미 있습니다. 전제 하나가 틀렸거나, 개념을 다른 뜻으로 썼을 수 있습니다.', clash, function(c){ return chainLine(c, true); });
+    section('② 따라 나오지만 적혀 있지 않은 결론', '두 전제에서 타당하게 따라 나오는데 어디에도 없는 결론입니다. 책이 말하지 않은 함의이거나, 개념이 너무 넓게 쓰였다는 신호일 수 있습니다.', miss, function(c){ return chainLine(c, true); });
+    section('② 숨은 전제 후보', '‘A는 B다’와 ‘A는 C다’가 있을 때 ‘B는 C다’가 있으면 앞의 둘이 하나의 삼단논법이 됩니다. 그 빠진 전제의 후보입니다. 대부분은 참이 아니니 골라 보세요.', S.hidden, function(h, i){
+      return '<i>' + esc(sgSentence(h.p2.raw, h.B, h.C, false, '모든')) + '</i> ? — ' + esc(sentenceOf(h.p2.raw)) + ' (' + tag(h.p2) + ') 와 ' + esc(sentenceOf(h.concl.raw)) + ' (' + tag(h.concl) + ') 를 잇는 전제 <button type="button" class="sg-btn" data-act="hidden" data-i="' + i + '">이 전제로 논증 세트 추가</button>';
+    });
+    box.innerHTML = '<p class="sg-sub">단일 명제 ' + S.factCount + '개(분류·성질·정의·관계)를 대상으로 찾았습니다. 제안은 글자와 구조만 본 후보이며, 같은 뜻인지와 책이 그 추론을 했는지는 직접 판단해야 합니다.</p>' + html;
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.sg-btn'); if(!b || !lastSuggestions) return;
+    var S = lastSuggestions, i = +b.dataset.i, msg = '';
+    if(b.dataset.act === 'unify'){
+      var s = S.sim[i], from = b.dataset.dir === 'ab' ? s.b : s.a, to = b.dataset.dir === 'ab' ? s.a : s.b, n = 0;
+      groupsEl.querySelectorAll('.wordLeft, .wordRight').forEach(function(inp){
+        if(inp.value.trim() === from){ inp.value = to; n++; var row = inp.closest('.row'); if(row) updateRow(row); }
+      });
+      msg = '‘' + from + '’ ' + n + '곳을 ‘' + to + '’로 바꿨습니다. (수식어로 조립된 개념은 바뀌지 않습니다)';
+    } else if(b.dataset.act === 'chain'){
+      var c = S.chains[i];
+      var concl = (c.concl && c.concl.row) ? sgClauseValues(c.concl.row) : sgDerivedClause(c);
+      var n2 = sgAddArg([sgClauseValues(c.p2.row), sgClauseValues(c.p1.row), concl], '세트 ' + c.p2.set + '·' + c.p1.set + (c.concl ? '·' + c.concl.set : '') + '로 만든 삼단논법');
+      msg = '세트 ' + n2 + '로 추가했습니다.';
+    } else if(b.dataset.act === 'hidden'){
+      var h = S.hidden[i];
+      var n3 = sgAddArg([sgSyntheticClause(h.p2, h.B, h.C, false, '모든'), sgClauseValues(h.p2.row), sgClauseValues(h.concl.row)], '숨은 전제 후보로 만든 삼단논법');
+      msg = '세트 ' + n3 + '로 추가했습니다. 첫 전제는 책에 없는 가정입니다.';
+    }
+    b.disabled = true; b.textContent = '완료';
+    var note = document.getElementById('suggestNote'); if(note) note.textContent = msg + ' ‘다시 입력하기’에서 확인하고 다시 분석하세요.';
+  });
+
   addGroup();   // first empty set — after every definition above has run
 
   // test hook (harmless in production)
   window.__board = { findInductCoherence:findInductCoherence, addGroup:addGroup, setRowValues:setRowValues, collectGroupedRaw:collectGroupedRaw,
     collectFlatRaw:collectFlatRaw, evaluateGroupSyllogism:evaluateGroupSyllogism, buildGraphAndTriples:buildGraphAndTriples,
     findContradictions:findContradictions, findRelationIssues:findRelationIssues, sentenceOf:sentenceOf, groupsEl:groupsEl, importGroupsFromFile:importGroupsFromFile,
-    inductScore:inductScore, propagateCredence:propagateCredence, exportGroupsForFile:exportGroupsForFile };
+    inductScore:inductScore, propagateCredence:propagateCredence, exportGroupsForFile:exportGroupsForFile, findSuggestions:findSuggestions };
 
 })();
 </script>
