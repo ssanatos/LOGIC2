@@ -511,11 +511,13 @@
   function negateProp(p){
     if(/하다$/.test(p)) return p.replace(/하다$/, '하지 않다');
     if(/는다$/.test(p)) return p.replace(/는다$/, '지 않는다');
+    // noun + 이다: ~것이다 → ~것이 아니다, ~때문이다 → ~때문이 아니다
+    if(/(것|때문|탓|덕분|뿐|셈|편|중)이다$/.test(p)) return p.replace(/이다$/, '이 아니다');
     // past tense: 줄었다 → 줄지 않았다, 했다 → 하지 않았다, 커졌다 → 커지지 않았다
     if(/했다$/.test(p)) return p.replace(/했다$/, '하지 않았다');
     if(/(되었|됐)다$/.test(p)) return p.replace(/(되었|됐)다$/, '되지 않았다');
     if(/졌다$/.test(p)) return p.replace(/졌다$/, '지지 않았다');
-    var contracted = { '왔':'오', '갔':'가', '났':'나', '봤':'보', '줬':'주', '췄':'추', '웠':'우' };
+    var contracted = { '왔':'오', '갔':'가', '났':'나', '봤':'보', '줬':'주', '췄':'추', '웠':'우', '렸':'리', '쳤':'치', '혔':'히', '켰':'키', '겼':'기', '셨':'시', '녔':'니', '렀':'르', '쳐':'치' };
     var lc = p.length >= 2 ? p.charAt(p.length - 2) : '';
     if(/다$/.test(p) && contracted[lc]) return p.slice(0, -2) + contracted[lc] + '지 않았다';
     if(/[가-힣][었았]다$/.test(p)) return p.replace(/[었았]다$/, '지 않았다');
