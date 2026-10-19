@@ -312,7 +312,7 @@
         <tr><th>정의·동치</th><td>두 개념이 같은 것을 가리킴 — 포유류는 곧 젖을 먹여 새끼를 기르는 동물이다. 양쪽 방향 포함(≡)이므로 어느 쪽으로든 바꿔 쓸 수 있습니다.</td></tr>
         <tr><th>오직 ~만</th><td>양화사 ‘오직’ — 오직 사람만 글을 쓴다 = 모든 글을 쓰는 것은 사람이다. 그래프에는 이 논리적 방향(쓰다 → 사람)으로 그립니다.</td></tr>
         <tr><th>조건 · 선언</th><td>문장 위쪽의 형식을 ‘조건’이나 ‘선언’으로 바꾸면 명제 칸이 두 개가 됩니다. 각 명제는 그래프에서 상자 하나가 되고, 조건은 ‘이면’ 화살표, 선언은 ‘또는’ 마름모로 잇습니다. 판정 규칙: 전건 긍정 · 후건 부정 · 가언 삼단논법 · 선언 삼단논법. 후건 긍정, 전건 부정, 선언지 긍정은 오류로 지적합니다. 두 명제의 주어가 같은 일반 명사(모든 새가 ~이면 ~)이면 ‘그 주어의 각 대상마다’로 읽습니다.</td></tr>
-        <tr><th>귀납 세트</th><td>세트 이름 옆에서 ‘귀납 세트’를 고르면, 전제 두 칸 대신 결론 하나와 근거 입력판이 나옵니다. 귀납 결론은 참·거짓 대신 <b>신뢰도</b>(참일 확률)를 계산합니다 — 표본은 베타 분포로, 다른 증거는 우도비로, 배경지식은 사전 확률에 곱하는 배수로 반영하는 베이즈 갱신입니다. 이와 따로 ①–⑧ 기준별 <b>추론 품질</b> 점수를 매깁니다. ⑧ 재현성은 증거마다 매기며, 독립적으로 재현되지 않은 소규모 연구나 일화는 반론이 없어도 무게를 깎습니다. 증거마다 <b>상태</b>(유효·정정·우려 표명·철회)와 확인일도 적을 수 있습니다. 오류나 조작으로 철회된 근거는 줄을 지우지 않고 취소선으로 남긴 채 계산에서만 빼며, 반대 증거로 세지 않고 ④ 총증거도 바꾸지 않습니다. 조작으로 철회된 근거와 출처가 같은 근거에는 경고를 띄웁니다. 결론이 서로 모순·반대인 귀납 세트들의 신뢰도 합이 확률 규칙을 어기면 ‘확률 불일치’로 알려 줍니다. 결론이 인과 주장(‘~를 늘린다’, ‘~ 때문이다’ 등)이면, 근거마다 표시한 <b>연구 설계</b>를 보고 상관·관찰 자료나 사례는 변별력을 ‘약함’까지만 인정하며(상관≠인과), 실험 근거가 하나도 없으면 경고합니다. 전칭(모든) 결론에 반대 근거가 붙으면 반례인지 확인하라고 알려 줍니다. 귀납 결론을 다른 연역 세트의 전제로 쓰면, 그 연역 결론의 신뢰도 하한도 계산합니다.</td></tr>
+        <tr><th>귀납 세트</th><td>세트 이름 옆에서 ‘귀납 세트’를 고르면, 전제 두 칸 대신 결론 하나와 근거 입력판이 나옵니다. 귀납 결론은 참·거짓 대신 <b>신뢰도</b>(참일 확률)를 계산합니다 — 표본은 베타 분포로, 다른 증거는 우도비로, 배경지식은 사전 확률에 곱하는 배수로 반영하는 베이즈 갱신입니다. 이와 따로 ①–⑧ 기준별 <b>추론 품질</b> 점수를 매깁니다. ⑧ 재현성은 증거마다 매기며, 독립적으로 재현되지 않은 소규모 연구나 일화는 반론이 없어도 무게를 깎습니다. 증거마다 <b>상태</b>(유효·정정·우려 표명·철회)와 확인일도 적을 수 있습니다. 오류나 조작으로 철회된 근거는 줄을 지우지 않고 취소선으로 남긴 채 계산에서만 빼며, 반대 증거로 세지 않고 ④ 총증거도 바꾸지 않습니다. 조작으로 철회된 근거와 출처가 같은 근거에는 경고를 띄웁니다. 결론이 서로 모순·반대인 귀납 세트들의 신뢰도 합이 확률 규칙을 어기면 ‘확률 불일치’로 알려 줍니다. 결론이 인과 주장(‘~를 늘린다’, ‘~ 때문이다’ 등)이면, 근거마다 표시한 <b>연구 설계</b>를 보고 개입 없이 얻은 근거(상관·관찰 자료, 사례, 이론·기전 추론)는 변별력을 ‘약함’까지만, 교란 배제 분석(보정·민감도 분석·용량-반응)을 거친 관찰 자료는 ‘보통’까지만 인정합니다(상관≠인과). 같은 설계의 근거는 같은 편향을 공유하므로 가장 강한 하나만 세고, 실험 근거가 하나도 없으면 경고합니다. 이론·기전 근거와 배경지식의 메커니즘은 같은 지식이라 한 번만 셉니다. 근거가 판단을 거의 움직이지 못하면, 그 신뢰도가 사전확률이 남은 값이라고 알려 줍니다. 전칭(모든) 결론에 반대 근거가 붙으면 반례인지 확인하라고 알려 줍니다. 귀납 결론을 다른 연역 세트의 전제로 쓰면, 그 연역 결론의 신뢰도 하한도 계산합니다.</td></tr>
         <tr><th>연결용 명제</th><td>세트 이름 옆의 ‘연결용’을 체크하면, 책이나 글에 그대로 있는 주장이 아니라 그래프를 잇기 위해 덧붙인 문장(숨은 전제일 수도 있음)으로 표시됩니다. 점선 테두리로 보이고, 결과 화면의 ‘연결용 명제 빼고 보기’로 이 문장들을 빼거나 넣으며 그래프가 몇 조각으로 나뉘는지 비교할 수 있습니다. 빼고 볼 때는 논증 판정·모순 찾기에서도 함께 빠집니다. 파일로 저장해도 표시가 남습니다.</td></tr>
         <tr><th>삼단논법 제안</th><td>결과 화면 아래쪽 ‘삼단논법 제안’은 단일 명제들을 글자와 구조만으로 훑어 후보를 냅니다. ① 표현이 비슷한 개념(표기만 다르거나, 수식어만 다른데 한 낱말로 입력된 것, 글자가 거의 같은 것) — 같은 개념이면 버튼으로 한쪽으로 통일합니다. ② 흩어진 명제 둘이 이어지는 삼단논법: 결론이 이미 있으면 ‘묶을 수 있음’, 반대 문장이 있으면 ‘충돌’, 어디에도 없으면 ‘따라 나오지만 적혀 있지 않은 결론’으로 나눕니다. ‘A는 B다’와 ‘A는 C다’를 잇는 빠진 전제 ‘B는 C다’는 숨은 전제 후보로 보여 주고, 연결용 명제가 책에 이미 있는 결론을 이끌어 내면 숨은 전제 노릇을 한다고 따로 알려 줍니다. 단일 주어에 대한 문장(‘패러다임은 …’)을 그 부류 전체의 말로 읽은 제안에는 그 점을 표시합니다. 같은 뜻인지, 책이 그 추론을 했는지는 코드가 판단하지 못하므로 버튼으로 논증 세트를 만든 뒤 직접 확인하세요.</td></tr>
         <tr><th>수식어</th><td>이름이 없는 개념은 <b>머리 명사 + 수식어</b>로 조립합니다. “바람에 흔들리는 꽃” = 머리 ‘꽃’ + 수식어 ‘흔들리는’(개념: 흔들리다 · 대상: 바람 · 조사: 에). 그래프에서는 회색 점(●) 하나가 되고, 꽃·흔들리다·바람으로 뻗은 회색 선이 그 정의를 나타냅니다. 수식어가 붙은 개념은 머리 명사와 각 수식어 모두에 포함되므로(교집합), “칼은 위험한 도구다”에서 “칼은 위험하다”와 “칼은 도구다”를 그대로 꺼내 쓸 수 있습니다. 수식어 순서가 달라도 같은 개념으로 합쳐집니다.</td></tr>
@@ -398,7 +398,7 @@
   // from whether the last syllable has a final consonant (받침).
   // ===============================================================
   function hasBatchim(w){
-    w = String(w || '').trim();
+    w = String(w || '').trim().replace(/[』」’”'")\]]+$/, '');
     if(!w) return false;
     var ch = w.charCodeAt(w.length - 1);
     if(ch >= 0xAC00 && ch <= 0xD7A3) return (ch - 0xAC00) % 28 !== 0;
@@ -407,7 +407,7 @@
     return /[lmnrLMNR]/.test(c);
   }
   function isRieul(w){
-    w = String(w || '').trim();
+    w = String(w || '').trim().replace(/[』」’”'")\]]+$/, '');
     if(!w) return false;
     var ch = w.charCodeAt(w.length - 1);
     return ch >= 0xAC00 && ch <= 0xD7A3 && (ch - 0xAC00) % 28 === 8;
@@ -535,12 +535,17 @@
   function negateProp(p){
     if(/(^| )있다$/.test(p)) return p.replace(/있다$/, '없다');
     if(/(^| )있었다$/.test(p)) return p.replace(/있었다$/, '없었다');
+    // 알다: 안다 → 알지 못한다, 알았다 → 알지 못했다
+    if(/(^| )(확실히 |분명히 |직접 |이미 |잘 )?안다$/.test(p)) return p.replace(/안다$/, '알지 못한다');
+    if(/(^| )(확실히 |분명히 |직접 |이미 |잘 )?알았다$/.test(p)) return p.replace(/알았다$/, '알지 못했다');
     if(/하다$/.test(p)) return p.replace(/하다$/, '하지 않다');
     if(/는다$/.test(p)) return p.replace(/는다$/, '지 않는다');
     // noun + 이다: ~것이다 → ~것이 아니다, 모순이다 → 모순이 아니다 (받침 있는 명사 + 이다)
     if(/적이다$/.test(p)) return p.replace(/이다$/, '이지 않다');
     if(/(것|때문|탓|덕분|뿐|셈|편|중)이다$/.test(p)) return p.replace(/이다$/, '이 아니다');
     if(/[가-힣]이다$/.test(p) && p.length >= 3 && jongIndex(p.charCodeAt(p.length - 3)) > 0) return p.replace(/이다$/, '이 아니다');
+    // 받침 없는 명사 + 이다: 술어이다 → 술어가 아니다 (보이다·줄이다 같은 동사는 제외)
+    if(/[가-힣]이다$/.test(p) && p.length >= 3 && jongIndex(p.charCodeAt(p.length - 3)) === 0 && !/(보|쓰|놓|쌓|섞|덮|줄|높|먹|붙|녹|속|죽|기울|끓|숙|깎|꺾|낚|볶|들|살|절|졸|썩|트)이다$/.test(p)) return p.replace(/이다$/, '가 아니다');
     // ~할 수 있다 → ~할 수 없다
     if(/수 있다$/.test(p)) return p.replace(/수 있다$/, '수 없다');
     // past tense: 줄었다 → 줄지 않았다, 했다 → 하지 않았다, 커졌다 → 커지지 않았다
@@ -553,6 +558,10 @@
     if(/[가-힣][었았]다$/.test(p)) return p.replace(/[었았]다$/, '지 않았다');
     // ㄴ다 present of a vowel stem: 낸다 → 내지 않는다, 늘어난다 → 늘어나지 않는다
     // (ㄹ-dropping short verbs like 판다·산다 are ambiguous and left alone)
+    // ㄹ 탈락 동사의 ㄴ다: 만든다 → 만들지 않는다, 연다 → 열지 않는다
+    var rieul = { '든':'들', '연':'열', '논':'놀', '운':'울', '분':'불', '민':'밀', '빈':'빌', '먼':'멀', '단':'달', '판':'팔' };
+    var lw = p.split(' ').pop();
+    if(/다$/.test(lw) && lw.length >= 2 && rieul[lw.charAt(lw.length - 2)] && !/^(판|단)다$/.test(lw)) return p.slice(0, -2) + rieul[lw.charAt(lw.length - 2)] + '지 않는다';
     if(/다$/.test(p) && p.length >= 2){
       var pc = p.charCodeAt(p.length - 2), lastWord = p.split(' ').pop();
       if(jongIndex(pc) === 4 && !/^[판산안만논분운든난건연단민빈]다$/.test(lastWord)) return p.slice(0, -2) + String.fromCharCode(pc - 4) + '지 않는다';
@@ -1325,16 +1334,19 @@
       ret_other:  { label:'철회 — 기타 사유 (저자 분쟁·중복 게재 등, 결과는 유지)', f:1, note:'retother' }
     },
     // study design of each piece of evidence. For a causal conclusion,
-    //    correlational or anecdotal evidence cannot tell the cause apart
-    //    from a confounder or reverse causation, so its likelihood ratio is
-    //    capped at 'weak' (상관 ≠ 인과). Non-causal conclusions are unaffected.
+    //    evidence without intervention (correlation, cases, theory/mechanism)
+    //    cannot tell the cause apart from a confounder or reverse causation,
+    //    so its likelihood ratio is capped at 'weak' (상관 ≠ 인과); observational
+    //    evidence with confounder control (Cornfield, Hill, back-door
+    //    adjustment) is capped at 'moderate'. Non-causal conclusions are unaffected.
     design: {
       unknown: { label:'설계 미표시' },
       rct:     { label:'무작위 실험', exp:true },
       natural: { label:'자연 실험·준실험', exp:true },
+      adjusted:{ label:'관찰 자료 + 교란 배제 분석 (보정·민감도·용량-반응)', cap:'moderate' },
       corr:    { label:'상관·관찰 자료', cap:true },
       case:    { label:'사례·일화', cap:true },
-      theory:  { label:'이론·모형·계산' }
+      theory:  { label:'이론·모형·계산·기전 추론', cap:true }
     },
     causalSel: {
       auto: { label:'인과 주장인지 자동 판단' },
@@ -1476,25 +1488,36 @@
       var key = (e.src || '').trim() || ('#' + i);
       (bySrc[key] = bySrc[key] || []).push(e);
     });
+    // 인과 결론에서 개입 없이 얻은 근거(상관·사례·이론, 교란 배제 분석을 거친 관찰)는
+    // 같은 설계끼리 같은 편향(교란·역인과)을 공유한다. 편향은 연구를 늘려도 줄지 않으므로
+    // 같은 설계에서는 가장 강한 근거 하나만 센다. 다른 설계끼리는 서로 다른 편향을 가지므로 따로 센다.
+    // 이론·기전 근거와 ⑤ 배경지식(메커니즘)은 같은 지식이므로 한 번만 센다(둘 중 큰 쪽).
+    var classBest = {}, theoryOnce = 0;
     Object.keys(bySrc).forEach(function(key){
       var list = bySrc[key];
       list.forEach(function(e){
-        var lv = C.lr[e.lr] || C.lr.none, forSide = e.dir !== 'against';
-        if(inp.causal && forSide && C.design[e.design] && C.design[e.design].cap && lv.mid > C.lr.weak.mid) lv = C.lr.weak;
+        var lv = C.lr[e.lr] || C.lr.none, forSide = e.dir !== 'against', dz = C.design[e.design];
+        if(inp.causal && forSide && dz && dz.cap){ var capLv = C.lr[dz.cap === true ? 'weak' : dz.cap]; if(lv.mid > capLv.mid) lv = capLv; }
         var lr = scn === 'mid' ? lv.mid : ((scn === 'lo') === forSide ? lv.lo : lv.hi);
         if(unfals) lr = 1;
         var rb = C.robust[e.rob] || C.robust.none;
         var rf = scn === 'mid' ? rb.f : ((scn === 'lo') === forSide ? rb.lo : rb.hi);
-        out.terms.push((forSide ? 1 : -1) * Math.log(lr) * rf * statusF(e) / list.length);
+        var t = (forSide ? 1 : -1) * Math.log(lr) * rf * statusF(e) / list.length;
+        if(forSide && e.design === 'theory' && bgF > 1){ theoryOnce = Math.max(theoryOnce, Math.exp(t)); return; }
+        if(inp.causal && forSide && dz && dz.cap){ classBest[e.design] = Math.max(classBest[e.design] || 0, t); return; }
+        out.terms.push(t);
       });
     });
+    Object.keys(classBest).forEach(function(k){ out.terms.push(classBest[k]); });
+    if(theoryOnce) bgF = Math.max(bgF, theoryOnce);
 
     var scopeF = 1;
     if(!(hasSample && claim.type !== 'single')){
       scopeF = (C.scopeManual[inp.scopeManual] || C.scopeManual.matched).f;
     }
-    var sum = logPrior + Math.log(bgF);
-    out.terms.forEach(function(t){ sum += t > 0 ? t * tot.shrink * scopeF : t; });
+    var sum = logPrior + Math.log(bgF), evShift = 0;
+    out.terms.forEach(function(t){ var d = t > 0 ? t * tot.shrink * scopeF : t; sum += d; evShift += d; });
+    out.evShift = evShift; out.bgF = bgF;
     out.p = out.refuted ? 0.01 : clampP(sigmoid(sum));
     out.logPrior = logPrior;
     return out;
@@ -1502,7 +1525,7 @@
 
   // a conclusion that says one thing changes / produces another
   var CAUSAL_VERB = /(늘리|줄이|높이|낮추|낳|일으키|만들|바꾸|깎|좌우하|막|유발|초래|키우|부추기|떨어뜨리|올리|해치|돕|앞당기|늦추|악화|개선|감소시키|증가시키|약화|강화|이끌)/;
-  var CAUSAL_PRED = /(때문|덕분|탓|원인|효과가 있|낳는다|일으킨다|초래|유발)/;
+  var CAUSAL_PRED = /(때문|덕분|탓|원인|효과가 있|효과를 내|억제|낳는다|일으킨다|초래|유발|막는다|줄인다|늘린다|높인다|낮춘다|돕는다|해친다)/;
   function isCausalClaim(r){
     if(!r || !r.filled || isCompound(r)) return false;
     if(r.kind === 'rel') return r.rel === 'causes' || (r.rel === 'custom' && CAUSAL_VERB.test(r.verb || ''));
@@ -1535,10 +1558,13 @@
     // 상관 ≠ 인과
     if(inp.causal){
       var sup = inp.evidence.filter(function(e){ return e.dir !== 'against'; });
-      var capped = sup.filter(function(e){ return C.design[e.design] && C.design[e.design].cap && (C.lr[e.lr] || C.lr.none).mid > C.lr.weak.mid; });
+      var capped = sup.filter(function(e){ var dz = C.design[e.design]; return dz && dz.cap && (C.lr[e.lr] || C.lr.none).mid > C.lr[dz.cap === true ? 'weak' : dz.cap].mid; });
+      var byDesign = {};
+      sup.forEach(function(e){ var dz = C.design[e.design]; if(dz && dz.cap) (byDesign[e.design] = byDesign[e.design] || []).push(e); });
+      Object.keys(byDesign).forEach(function(d){ if(byDesign[d].length > 1) statusFlags.push('같은 설계: ‘' + C.design[d].label + '’ 근거 ' + byDesign[d].length + '개는 같은 편향(교란·역인과)을 공유하고, 편향은 연구를 늘려도 줄지 않으므로 가장 강한 하나만 셌습니다.'); });
       var rated = sup.filter(function(e){ return e.design && e.design !== 'unknown'; });
       var expN = sup.filter(function(e){ return C.design[e.design] && C.design[e.design].exp; }).length;
-      if(capped.length) statusFlags.push('상관≠인과: 인과 결론인데 ' + capped.map(function(e){ return '‘' + e.text + '’'; }).join(', ') + '은(는) 상관·관찰 자료나 사례라서, 교란 변수나 역인과를 배제하지 못하므로 변별력을 ‘약함’으로 낮춰 계산했습니다.');
+      if(capped.length) statusFlags.push('상관≠인과: 인과 결론인데 ' + capped.map(function(e){ return '‘' + e.text + '’'; }).join(', ') + '은(는) 개입 없이 얻은 근거(상관·관찰 자료, 사례, 이론·기전 추론)라서 교란 변수나 역인과나 다른 경로를 배제하지 못하므로 변별력을 ‘약함’(교란 배제 분석을 거친 관찰은 ‘보통’)까지만 인정했습니다.');
       if(sup.length && rated.length === sup.length && !expN) statusFlags.push('상관≠인과: 인과 결론을 무작위 실험이나 자연 실험 없이 상관·사례·이론 근거만으로 뒷받침하고 있습니다.');
       else if(sup.length && rated.length < sup.length) statusFlags.push('인과 결론입니다 — 근거마다 연구 설계(무작위 실험·자연 실험·상관 자료·사례)를 표시하면 상관과 인과를 혼동했는지 검사합니다.');
     }
@@ -1548,6 +1574,14 @@
       if(against.length) if(!(inp.sample && inp.sample.n > 0)) statusFlags.push('전칭 결론(모든)에 반대 근거 ' + against.length + '개가 있습니다 — 그것이 결론에 맞지 않는 사례(반례)라면 반례 하나로 전칭은 무너집니다. 관찰한 사례라면 ① 표본에 ‘관찰 n개 중 맞는 사례 k개’로 넣으세요(반례가 있으면 반박으로 계산합니다). 아니면 결론을 ‘어떤’이나 통계적 결론으로 낮추세요.');
     }
     var mid = inductCore(inp, 'mid'), lo = inductCore(inp, 'lo'), hi = inductCore(inp, 'hi');
+    var bgCfg = C.background[inp.background] || C.background.unknown;
+    var thSup = inp.evidence.filter(function(e){ return e.dir !== 'against' && e.design === 'theory'; });
+    if(thSup.length && bgCfg.f > 1) statusFlags.push('같은 지식은 한 번만: 이론·기전 근거(' + thSup.map(function(e){ return '‘' + e.text + '’'; }).join(', ') + ')와 ⑤ 배경지식의 메커니즘은 같은 지식이므로 둘 중 큰 쪽 하나만 셌습니다.');
+    if(!mid.refuted && Math.abs(mid.evShift) < Math.log(1.25)){
+      var pTxt = fmtPct(mid.p), pJ = /[0-9]%$/.test(pTxt) ? '는' : '은';
+      if(Math.abs(mid.bgF - 1) < 1e-9) statusFlags.push('근거가 판단을 거의 움직이지 못했습니다. 신뢰도 ' + pTxt + pJ + ' 출발점인 사전확률(' + fmtPct(sigmoid(mid.logPrior)) + ')이 그대로 남은 값이지, 결론이 그만큼 지지된다는 뜻이 아닙니다. 근거가 결론과 대안을 가르지 못합니다.');
+      else statusFlags.push('근거가 판단을 거의 움직이지 못했습니다. 신뢰도 ' + pTxt + pJ + ' 사전확률(' + fmtPct(sigmoid(mid.logPrior)) + ')에 배경지식(메커니즘·이론)만 반영한 값이지, 결론을 직접 시험한 근거로 얻은 값이 아닙니다.');
+    }
     var cred = { mid:mid.p, lo:Math.min(lo.p, mid.p, hi.p), hi:Math.max(lo.p, mid.p, hi.p) };
     var claim = inp.claim, s = inp.sample, general = claim.type === 'universal' || claim.type === 'stat';
     var crit = {}, flags = [], suggestion = null;
@@ -1608,7 +1642,11 @@
       if(inp.causal){
         var nonExp = supporting.filter(function(e){ return C.design[e.design] && !C.design[e.design].exp && e.design !== 'unknown'; }).length;
         var anyExp = supporting.some(function(e){ return C.design[e.design] && C.design[e.design].exp; });
-        if(!anyExp && nonExp === supporting.length){ ds = Math.min(ds, 30); dnote += ' 인과 결론인데 실험·자연 실험 근거가 없어, 교란 변수와 역인과를 가르지 못합니다 (최대 30점).'; }
+        var anyAdj = supporting.some(function(e){ return e.design === 'adjusted'; });
+        if(!anyExp && nonExp === supporting.length){
+          if(anyAdj){ ds = Math.min(ds, 60); dnote += ' 인과 결론인데 실험 근거가 없고, 교란 배제 분석을 거친 관찰 근거가 있습니다 (최대 60점).'; }
+          else { ds = Math.min(ds, 30); dnote += ' 인과 결론인데 실험·자연 실험 근거가 없어, 교란 변수와 역인과를 가르지 못합니다 (최대 30점).'; }
+        }
       }
       set('disc', ds, dnote);
     }
