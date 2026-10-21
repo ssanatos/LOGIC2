@@ -307,6 +307,13 @@
 <link rel="alternate" hreflang="it" href="https://ssanatos.github.io/LOGIC2/syllogism_board_it.html">
 <link rel="alternate" hreflang="ru" href="https://ssanatos.github.io/LOGIC2/syllogism_board_ru.html">
 <link rel="alternate" hreflang="ar" href="https://ssanatos.github.io/LOGIC2/syllogism_board_ar.html">
+<link rel="alternate" hreflang="hi" href="https://ssanatos.github.io/LOGIC2/syllogism_board_hi.html">
+<link rel="alternate" hreflang="id" href="https://ssanatos.github.io/LOGIC2/syllogism_board_id.html">
+<link rel="alternate" hreflang="nl" href="https://ssanatos.github.io/LOGIC2/syllogism_board_nl.html">
+<link rel="alternate" hreflang="tr" href="https://ssanatos.github.io/LOGIC2/syllogism_board_tr.html">
+<link rel="alternate" hreflang="vi" href="https://ssanatos.github.io/LOGIC2/syllogism_board_vi.html">
+<link rel="alternate" hreflang="th" href="https://ssanatos.github.io/LOGIC2/syllogism_board_th.html">
+<link rel="alternate" hreflang="bn" href="https://ssanatos.github.io/LOGIC2/syllogism_board_bn.html">
 <link rel="alternate" hreflang="x-default" href="https://ssanatos.github.io/LOGIC2/">
 </head>
 <body>
@@ -327,6 +334,13 @@
         <option value="it" data-href="syllogism_board_it.html">Italiano</option>
         <option value="ru" data-href="syllogism_board_ru.html">Русский</option>
         <option value="ar" data-href="syllogism_board_ar.html">العربية</option>
+        <option value="hi" data-href="syllogism_board_hi.html">हिन्दी</option>
+        <option value="id" data-href="syllogism_board_id.html">Bahasa Indonesia</option>
+        <option value="nl" data-href="syllogism_board_nl.html">Nederlands</option>
+        <option value="tr" data-href="syllogism_board_tr.html">Türkçe</option>
+        <option value="vi" data-href="syllogism_board_vi.html">Tiếng Việt</option>
+        <option value="th" data-href="syllogism_board_th.html">ภาษาไทย</option>
+        <option value="bn" data-href="syllogism_board_bn.html">বাংলা</option>
       </select>
     </nav>
     <script>
@@ -3410,7 +3424,8 @@
         var positions = network.getPositions(baseIds);
         currentGraphBundle.pairs.forEach(function(p){
           var basePos = positions[p.baseId];
-          if(basePos){ network.moveNode(p.negId, basePos.x + PAIR_BOX_W, basePos.y); }
+          // X× sits after X in reading order: to the right, or to the left on a right-to-left page
+          if(basePos){ network.moveNode(p.negId, basePos.x + (document.documentElement.dir === 'rtl' ? -PAIR_BOX_W : PAIR_BOX_W), basePos.y); }
         });
       });
     }

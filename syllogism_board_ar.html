@@ -310,6 +310,13 @@
 <link rel="alternate" hreflang="it" href="https://ssanatos.github.io/LOGIC2/syllogism_board_it.html">
 <link rel="alternate" hreflang="ru" href="https://ssanatos.github.io/LOGIC2/syllogism_board_ru.html">
 <link rel="alternate" hreflang="ar" href="https://ssanatos.github.io/LOGIC2/syllogism_board_ar.html">
+<link rel="alternate" hreflang="hi" href="https://ssanatos.github.io/LOGIC2/syllogism_board_hi.html">
+<link rel="alternate" hreflang="id" href="https://ssanatos.github.io/LOGIC2/syllogism_board_id.html">
+<link rel="alternate" hreflang="nl" href="https://ssanatos.github.io/LOGIC2/syllogism_board_nl.html">
+<link rel="alternate" hreflang="tr" href="https://ssanatos.github.io/LOGIC2/syllogism_board_tr.html">
+<link rel="alternate" hreflang="vi" href="https://ssanatos.github.io/LOGIC2/syllogism_board_vi.html">
+<link rel="alternate" hreflang="th" href="https://ssanatos.github.io/LOGIC2/syllogism_board_th.html">
+<link rel="alternate" hreflang="bn" href="https://ssanatos.github.io/LOGIC2/syllogism_board_bn.html">
 <link rel="alternate" hreflang="x-default" href="https://ssanatos.github.io/LOGIC2/">
 </head>
 <body>
@@ -330,6 +337,13 @@
         <option value="it" data-href="syllogism_board_it.html">Italiano</option>
         <option value="ru" data-href="syllogism_board_ru.html">Русский</option>
         <option value="ar" data-href="syllogism_board_ar.html">العربية</option>
+        <option value="hi" data-href="syllogism_board_hi.html">हिन्दी</option>
+        <option value="id" data-href="syllogism_board_id.html">Bahasa Indonesia</option>
+        <option value="nl" data-href="syllogism_board_nl.html">Nederlands</option>
+        <option value="tr" data-href="syllogism_board_tr.html">Türkçe</option>
+        <option value="vi" data-href="syllogism_board_vi.html">Tiếng Việt</option>
+        <option value="th" data-href="syllogism_board_th.html">ภาษาไทย</option>
+        <option value="bn" data-href="syllogism_board_bn.html">বাংলা</option>
       </select>
     </nav>
     <script>
@@ -902,10 +916,10 @@
     if(r.kind === 'disj') return clauseSentence(r.a) + ' أو ' + clauseSentence(r.b);
     return simpleClause(r);
   }
-  // "ما لا يقل عن 60 % مما هو موجة يحتاج إلى وسط"
+  // "ما لا يقل عن 60% مما هو موجة يحتاج إلى وسط"
   function statSentence(r, theta){
     var sp = subjPhrase(r);
-    return contract('ما لا يقل عن ' + theta + ' % ' + sp.plural + ' ' + copPred(r, r.neg, 'ms')) + '.';
+    return contract('ما لا يقل عن ' + theta + '% ' + sp.plural + ' ' + copPred(r, r.neg, 'ms')) + '.';
   }
 
   // ===============================================================
@@ -1486,7 +1500,7 @@
         rel:'isa', neg:false, count:'', verb:'', vjosa:'' };
       if(idx === 2 && induct && group.ind){
         e.induct = true; e.credLabel = '≈' + fmtPct(group.ind.cred.mid);
-        if(group.ind.claim.type === 'stat'){ e.solid = false; e.credLabel = '≥' + pct(group.ind.claim.theta) + ' % · ' + e.credLabel; }
+        if(group.ind.claim.type === 'stat'){ e.solid = false; e.credLabel = '≥' + pct(group.ind.claim.theta) + '% · ' + e.credLabel; }
       }
       else if(idx === 2 && group.credOut){ e.credLabel = '≥' + fmtPct(group.credOut.min); }
       if(isCompound(r)){
@@ -1579,19 +1593,19 @@
     },
     // prior when there is no sample (base rate of claims of this kind)
     baseRate: {
-      veryrare: { label:'نادر جدًا (نحو 1 %)', p:0.01 },
-      rare:     { label:'نادر (نحو 10 %)', p:0.10 },
-      even:     { label:'مناصفة (50 %)', p:0.50 },
-      common:   { label:'شائع (نحو 80 %)', p:0.80 }
+      veryrare: { label:'نادر جدًا (نحو 1%)', p:0.01 },
+      rare:     { label:'نادر (نحو 10%)', p:0.10 },
+      even:     { label:'مناصفة (50%)', p:0.50 },
+      common:   { label:'شائع (نحو 80%)', p:0.80 }
     },
     // ⑥ the confidence the argument itself claims
     stated: {
       none:     { label:'غير مذكورة', p:null },
-      certain:  { label:'يقيني (≈99 %)', p:0.99 },
-      nearly:   { label:'شبه يقيني (≈90 %)', p:0.90 },
-      likely:   { label:'مرجَّح (≈70 %)', p:0.70 },
-      even:     { label:'مناصفة (≈50 %)', p:0.50 },
-      unlikely: { label:'مستبعد (≈30 %)', p:0.30 }
+      certain:  { label:'يقيني (≈99%)', p:0.99 },
+      nearly:   { label:'شبه يقيني (≈90%)', p:0.90 },
+      likely:   { label:'مرجَّح (≈70%)', p:0.70 },
+      even:     { label:'مناصفة (≈50%)', p:0.50 },
+      unlikely: { label:'مستبعد (≈30%)', p:0.30 }
     },
     // ⑧ robustness of each piece of evidence. A single small study tends to
     //    overstate its effect (winner's curse, publication bias), so its
@@ -1710,9 +1724,9 @@
   function sigmoid(x){ return 1 / (1 + Math.exp(-x)); }
   function clampP(p){ return Math.max(INDUCT_CFG.pMin, Math.min(INDUCT_CFG.pMax, p)); }
   function pct(p){ return Math.round(p * 100); }
-  function fmtPct(p){ return p >= 0.995 ? 'أكثر من 99 %' : (p <= 0.005 ? 'أقل من 1 %' : pct(p) + ' %'); }
+  function fmtPct(p){ return p >= 0.995 ? 'أكثر من 99%' : (p <= 0.005 ? 'أقل من 1%' : pct(p) + '%'); }
   function fmtRange(c){
-    function f(p){ return p >= 0.995 ? 'أكثر من 99 %' : (p <= 0.005 ? 'أقل من 1 %' : pct(p) + ' %'); }
+    function f(p){ return p >= 0.995 ? 'أكثر من 99%' : (p <= 0.005 ? 'أقل من 1%' : pct(p) + '%'); }
     var a = f(c.lo), b = f(c.hi);
     return a === b ? a : a + '–' + b;
   }
@@ -1721,7 +1735,7 @@
   function claimOf(r, scope, thetaPct){
     if(scope === 'stat'){
       var t = Math.max(1, Math.min(99, parseFloat(thetaPct) || 50)) / 100;
-      return { type:'stat', theta:t, label:'إحصائية — ' + pct(t) + ' % على الأقل' };
+      return { type:'stat', theta:t, label:'إحصائية — ' + pct(t) + '% على الأقل' };
     }
     if(!r || isCompound(r) || r.kind === 'exist' || r.quant === '개체'){
       return { type:'single', theta:null, label:'حالة فردية' };
@@ -1899,12 +1913,12 @@
       } else if(claim.type === 'existential'){
         set('scope', s.k >= 1 ? 100 : mid.pRep * 100, s.k >= 1 ? 'رُصدت حالة واحدة على الأقل، وهذا يؤيد نتيجة جزئية.' : 'لم تُرصد ولا حالة موافقة واحدة.');
       } else {
-        set('scope', mid.pRep * 100, 'حتى لو كانت العيّنة ممثِّلة، فاحتمال أن يصدق النطاق المدّعى (' + (claim.type === 'universal' ? 'كل' : pct(claim.theta) + ' % على الأقل') + ') بهذه العيّنة هو ' + fmtPct(mid.pRep) + '.');
+        set('scope', mid.pRep * 100, 'حتى لو كانت العيّنة ممثِّلة، فاحتمال أن يصدق النطاق المدّعى (' + (claim.type === 'universal' ? 'كل' : pct(claim.theta) + '% على الأقل') + ') بهذه العيّنة هو ' + fmtPct(mid.pRep) + '.');
       }
       if(general && (mid.refuted || mid.pRep < 0.8)){
         var q = betaQuantile(0.10, mid.a, mid.b);
         var floor5 = Math.floor(q * 20) * 5;
-        if(floor5 >= 5) suggestion = 'نتيجة تؤيدها العيّنة بثقة 90 %: «' + floor5 + ' % على الأقل كذلك»';
+        if(floor5 >= 5) suggestion = 'نتيجة تؤيدها العيّنة بثقة 90%: «' + floor5 + '% على الأقل كذلك»';
         else suggestion = 'لا تكاد العيّنة تؤيد أي نتيجة عامة.';
       }
     } else {
@@ -1957,12 +1971,12 @@
     if(st.p === null){
       set('calib', null, 'لم تُدخل ثقة معلنة.');
     } else if(st.p >= cred.lo && st.p <= cred.hi){
-      set('calib', 100, 'الثقة المعلنة (' + pct(st.p) + ' %) داخل المدى المحسوب (' + fmtRange(cred) + ').');
+      set('calib', 100, 'الثقة المعلنة (' + pct(st.p) + '%) داخل المدى المحسوب (' + fmtRange(cred) + ').');
     } else {
       var edge = st.p > cred.hi ? cred.hi : cred.lo;
       var over = st.p > cred.hi;
       // 40 percentage points off the supported range → 0
-      set('calib', 100 * (1 - Math.abs(st.p - edge) / 0.4), (over ? 'إفراط في الثقة: ' : 'تفريط في الثقة: ') + 'الثقة المعلنة ' + pct(st.p) + ' %، لكن الأدلة تؤيد ' + fmtRange(cred) + '.');
+      set('calib', 100 * (1 - Math.abs(st.p - edge) / 0.4), (over ? 'إفراط في الثقة: ' : 'تفريط في الثقة: ') + 'الثقة المعلنة ' + pct(st.p) + '%، لكن الأدلة تؤيد ' + fmtRange(cred) + '.');
       if(over) flags.push('النتيجة مدّعاة بثقة أكبر مما تسمح به الأدلة.');
     }
 
@@ -3010,7 +3024,7 @@
       var bad = kind === 'contradictory' ? Math.abs(sum - 1) > 0.1 : sum > 1.05;
       if(!bad) continue;
       out.push('عدم اتساق الاحتمالات: المجموعة ' + x.g.groupIndex + ' «' + x.g.sentence + '» (' + fmtPct(px) + ') والمجموعة ' + y.g.groupIndex + ' «' + y.g.sentence + '» (' + fmtPct(py) + ') ' +
-        (kind === 'contradictory' ? 'متناقضتان، فيجب أن يكون مجموع درجتي تصديقهما 100 %،' : 'متضادتان، فلا يجوز أن يتجاوز مجموع درجتي تصديقهما 100 %،') + ' لكن مجموعهما ' + Math.round(sum * 100) + ' %. ' +
+        (kind === 'contradictory' ? 'متناقضتان، فيجب أن يكون مجموع درجتي تصديقهما 100%،' : 'متضادتان، فلا يجوز أن يتجاوز مجموع درجتي تصديقهما 100%،') + ' لكن مجموعهما ' + Math.round(sum * 100) + '%. ' +
         'قُوِّمت المجموعتان كلٌّ على حدة دون رؤية أدلة الأخرى — انقل أدلة كل منهما إلى الأخرى بوصفها «مضادة» وقوّمهما مجموعةً واحدة.');
     }
     return out;
@@ -3672,7 +3686,8 @@
         var positions = network.getPositions(baseIds);
         currentGraphBundle.pairs.forEach(function(p){
           var basePos = positions[p.baseId];
-          if(basePos){ network.moveNode(p.negId, basePos.x + PAIR_BOX_W, basePos.y); }
+          // X× sits after X in reading order: to the right, or to the left on a right-to-left page
+          if(basePos){ network.moveNode(p.negId, basePos.x + (document.documentElement.dir === 'rtl' ? -PAIR_BOX_W : PAIR_BOX_W), basePos.y); }
         });
       });
     }
