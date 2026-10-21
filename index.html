@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Syllogism Board</title>
-<meta name="description" content="Syllogism Board — draw categorical, relational and inductive arguments as graphs and check them. Available in 10 languages.">
+<meta name="description" content="Syllogism Board — draw categorical, relational and inductive arguments as graphs and check them. Available in 11 languages.">
 <script>
 // Pick a board: the language chosen last time, else the browser's language, else English.
 (function(){
   var FILES = { en:'syllogism_board_en.html', ko:'syllogism_board.html', zh:'syllogism_board_zh.html', ja:'syllogism_board_ja.html',
                 es:'syllogism_board_es.html', pt:'syllogism_board_pt.html', fr:'syllogism_board_fr.html', de:'syllogism_board_de.html',
-                it:'syllogism_board_it.html', ru:'syllogism_board_ru.html' };
+                it:'syllogism_board_it.html', ru:'syllogism_board_ru.html', ar:'syllogism_board_ar.html' };
   var pick = null;
   try { var saved = localStorage.getItem('syllogismBoardLang'); if(FILES[saved]) pick = saved; } catch(e){}
   if(!pick){
@@ -42,6 +42,7 @@
 <link rel="alternate" hreflang="de" href="https://ssanatos.github.io/LOGIC2/syllogism_board_de.html">
 <link rel="alternate" hreflang="it" href="https://ssanatos.github.io/LOGIC2/syllogism_board_it.html">
 <link rel="alternate" hreflang="ru" href="https://ssanatos.github.io/LOGIC2/syllogism_board_ru.html">
+<link rel="alternate" hreflang="ar" href="https://ssanatos.github.io/LOGIC2/syllogism_board_ar.html">
 <link rel="alternate" hreflang="x-default" href="https://ssanatos.github.io/LOGIC2/">
 </head>
 <body>
@@ -59,6 +60,7 @@
     <li><a href="syllogism_board_de.html" hreflang="de">Deutsch</a></li>
     <li><a href="syllogism_board_it.html" hreflang="it">Italiano</a></li>
     <li><a href="syllogism_board_ru.html" hreflang="ru">Русский</a></li>
+    <li><a href="syllogism_board_ar.html" hreflang="ar">العربية</a></li>
   </ul>
 </main>
 </body>
