@@ -1574,6 +1574,13 @@
       if(against.length) if(!(inp.sample && inp.sample.n > 0)) statusFlags.push('전칭 결론(모든)에 반대 근거 ' + against.length + '개가 있습니다 — 그것이 결론에 맞지 않는 사례(반례)라면 반례 하나로 전칭은 무너집니다. 관찰한 사례라면 ① 표본에 ‘관찰 n개 중 맞는 사례 k개’로 넣으세요(반례가 있으면 반박으로 계산합니다). 아니면 결론을 ‘어떤’이나 통계적 결론으로 낮추세요.');
     }
     var mid = inductCore(inp, 'mid'), lo = inductCore(inp, 'lo'), hi = inductCore(inp, 'hi');
+    // 재현되지 않은 단일 '결정적' 근거가 결론을 좌우하는지 (경고만, 신뢰도는 그대로)
+    inp.evidence.forEach(function(e){
+      if(e.lr !== 'decisive' || e.rob === 'replicated' || e.rob === 'large') return;
+      var rest = Object.assign({}, inp, { evidence: inp.evidence.filter(function(x){ return x !== e; }) });
+      var without = inductCore(rest, 'mid');
+      if(Math.abs(without.p - mid.p) >= 0.2) statusFlags.push('단일 결정적 근거: 독립적으로 재현되지 않은 ‘' + e.text + '’ 하나가 ‘결정적’으로 매겨져 결론을 좌우합니다(이 근거를 빼면 ' + fmtPct(without.p) + '). 그 근거가 어떻게 나왔는지 — 계산 과정, 독립성 가정, 대안 가설에서의 확률 — 를 직접 확인하세요. 신뢰도는 바꾸지 않았습니다.');
+    });
     var bgCfg = C.background[inp.background] || C.background.unknown;
     var thSup = inp.evidence.filter(function(e){ return e.dir !== 'against' && e.design === 'theory'; });
     if(thSup.length && bgCfg.f > 1) statusFlags.push('같은 지식은 한 번만: 이론·기전 근거(' + thSup.map(function(e){ return '‘' + e.text + '’'; }).join(', ') + ')와 ⑤ 배경지식의 메커니즘은 같은 지식이므로 둘 중 큰 쪽 하나만 셌습니다.');
@@ -1696,6 +1703,7 @@
     var te = C.testability[inp.testability] || C.testability.predicts;
     set('test', te.score, te.label + '.');
     if(inp.testability === 'unfalsifiable') flags.push('반박할 수 없는 주장이라 증거의 변별력을 0으로 계산했습니다.');
+    if(inp.idle === 'yes') flags.push('놀고 있는 가정: 결론이 상정하는 것을 빼도 예측이 하나도 달라지지 않습니다. 어떤 근거도 이 가정을 시험할 수 없으므로 신뢰도는 근거가 아니라 출발점과 배경지식에서 나온 값입니다. 같은 예측을 더 적은 가정으로 하는 이론이 있다면 함께 비교하세요(신뢰도는 바꾸지 않았습니다).');
 
     var scored = CRITERIA.filter(function(c){ return crit[c[0]].score !== null; });
     var quality = scored.length ? Math.round(scored.reduce(function(x, c){ return x + crit[c[0]].score; }, 0) / scored.length) : 0;
@@ -1732,7 +1740,8 @@
         '<input type="text" class="i-mech" placeholder="메커니즘 (선택)"></div></div>' +
       '<div class="ind-sec"><span class="ind-t">⑥ 논증이 주장하는 확신</span><div class="ind-f"><select class="i-stated" aria-label="주장된 확신">' + optsFrom(C.stated, 'none') + '</select></div></div>' +
       '<div class="ind-sec"><span class="ind-t">인과 여부 <small>인과 결론이면 상관·사례 근거의 변별력을 ‘약함’까지만 인정</small></span><div class="ind-f"><select class="i-causal" aria-label="인과 여부">' + optsFrom(C.causalSel, 'auto') + '</select> <small class="i-causal-auto"></small></div></div>' +
-      '<div class="ind-sec"><span class="ind-t">⑦ 검증 가능성</span><div class="ind-f"><select class="i-test" aria-label="검증 가능성">' + optsFrom(C.testability, 'predicts') + '</select></div></div>' +
+      '<div class="ind-sec"><span class="ind-t">⑦ 검증 가능성</span><div class="ind-f"><select class="i-test" aria-label="검증 가능성">' + optsFrom(C.testability, 'predicts') + '</select></div>' +
+      '<div class="ind-f" style="margin-top:5px"><select class="i-idle" aria-label="놀고 있는 가정"><option value="">놀고 있는 가정: 표시하지 않음</option><option value="no">결론이 상정하는 것을 빼면 예측이 달라진다</option><option value="yes">결론이 상정하는 것을 빼도 예측이 같다 (놀고 있는 가정)</option></select></div></div>' +
       '<div class="i-live"></div>' +
     '</div>';
   }
@@ -1778,14 +1787,14 @@
     });
     return { scope:v('.i-scope'), theta:v('.i-theta'), n:v('.i-n'), k:v('.i-k'), method:v('.i-method'), base:v('.i-base'),
       alt:v('.i-alt'), evidence:evs, total:v('.i-total'), bg:v('.i-bg'), mech:v('.i-mech'),
-      stated:v('.i-stated'), test:v('.i-test'), scopeman:v('.i-scopeman'), causal:v('.i-causal') };
+      stated:v('.i-stated'), test:v('.i-test'), scopeman:v('.i-scopeman'), causal:v('.i-causal'), idle:v('.i-idle') };
   }
   function setInductValues(gEl, d){
     d = d || {};
     function set(sel, val){ var el = gEl.querySelector('.induct ' + sel); if(el && val !== undefined && val !== null && val !== '') el.value = val; }
     set('.i-scope', d.scope); set('.i-theta', d.theta); set('.i-n', d.n); set('.i-k', d.k); set('.i-method', d.method);
     set('.i-base', d.base); set('.i-alt', d.alt); set('.i-total', d.total); set('.i-bg', d.bg); set('.i-mech', d.mech);
-    set('.i-stated', d.stated); set('.i-test', d.test); set('.i-scopeman', d.scopeman); set('.i-causal', d.causal);
+    set('.i-stated', d.stated); set('.i-test', d.test); set('.i-scopeman', d.scopeman); set('.i-causal', d.causal); set('.i-idle', d.idle);
     gEl.querySelector('.i-evs').innerHTML = '';
     (d.evidence || []).forEach(function(e){ addEvidence(gEl, e); });
   }
@@ -1798,7 +1807,7 @@
     return { causal:causal, claim:claimOf(concl, d.scope, d.theta), sample:sample,
       evidence:d.evidence.filter(function(e){ return e.text.trim(); }), alt:d.alt,
       total:d.total, background:d.bg, mech:d.mech, baseRate:d.base, stated:d.stated,
-      testability:d.test, scopeManual:d.scopeman, kOverN:(n > 0 && k > n) };
+      testability:d.test, scopeManual:d.scopeman, idle:d.idle, kOverN:(n > 0 && k > n) };
   }
   function updateInductLive(gEl){
     if(gEl.dataset.mode !== 'induct') return;
